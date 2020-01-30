@@ -12,5 +12,6 @@ import javax.persistence.Entity;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Apartment extends AbstractHouse {
+// Radhus? Värt att ha vet ej
+public class Terrace extends AbstractHouse {
 }

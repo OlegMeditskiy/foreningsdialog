@@ -12,5 +12,5 @@ import javax.persistence.Entity;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Apartment extends AbstractHouse {
+public class Villa extends AbstractHouse {
 }
