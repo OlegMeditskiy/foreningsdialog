@@ -21,6 +21,4 @@ public class Member {
     private String Surname;
 
     private String LastName;
-
-
 }

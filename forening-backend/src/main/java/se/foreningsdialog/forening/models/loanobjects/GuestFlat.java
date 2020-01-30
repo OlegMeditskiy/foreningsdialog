@@ -1,6 +1,7 @@
 package se.foreningsdialog.forening.models.loanobjects;
 
 import lombok.*;
+import se.foreningsdialog.forening.models.loanobjects.constants.TimeLoanType;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -17,4 +18,5 @@ import javax.persistence.Entity;
  * 'Key' används av databasen för att hitta objektets data
  */
 public class GuestFlat extends AbstractLoanObject{
+
 }

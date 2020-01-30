@@ -13,6 +13,6 @@ import javax.persistence.Entity;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@DiscriminatorValue("A")
-public class Apartment extends AbstractHouse {
+@DiscriminatorValue("V")
+public class Villa extends AbstractHouse {
 }
