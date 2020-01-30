@@ -3,9 +3,10 @@ package se.foreningsdialog.forening.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import se.foreningsdialog.forening.models.loanobjects.AbstractLoanObject;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -13,8 +14,8 @@ import java.util.Set;
 @Entity
 public class Organization {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue
+    private long id;
 
     private String organizationName;
 
@@ -23,6 +24,9 @@ public class Organization {
     private String organizationIdentificationName;
 
     @OneToMany
-    Set<House> houses;
+    List<House> houses;
+
+    @OneToMany
+    List<AbstractLoanObject> loanObjects;
 
 }
