@@ -14,7 +14,8 @@ import java.util.Set;
 @Setter
 @EqualsAndHashCode
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "HOUSE_TYPE")
 public class AbstractHouse {
 
     @Id

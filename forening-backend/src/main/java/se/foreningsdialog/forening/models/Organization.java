@@ -29,5 +29,4 @@ public class Organization {
 
     @OneToMany
     List<AbstractLoanObject> loanObjects;
-
 }
