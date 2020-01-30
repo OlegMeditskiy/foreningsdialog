@@ -3,6 +3,7 @@ package se.foreningsdialog.forening.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import se.foreningsdialog.forening.models.embedded.Adress;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -16,7 +17,8 @@ public class House {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String address;
+    @Embedded
+    private Adress address;
 
     @OneToMany
     Set<Flat> flats;
