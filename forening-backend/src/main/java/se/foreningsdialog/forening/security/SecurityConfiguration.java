@@ -8,15 +8,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .antMatchers("/h2-console/**").permitAll() /*Part of Development for H2 Console with Spring Security*/
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic();
+                .authorizeRequests().antMatchers("/").permitAll().and() /*Part of Development for H2 Console with Spring Security*/
+                .authorizeRequests().antMatchers("/console/**").permitAll();/*Part of Development for H2 Console with Spring Security*/
 
-        http.cors();
+
+
         http.csrf().disable(); /*Part of Development for H2 Console with Spring Security*/
         http.headers().frameOptions().disable(); /*Part of Development for H2 Console with Spring Security*/
-
     }
 }
