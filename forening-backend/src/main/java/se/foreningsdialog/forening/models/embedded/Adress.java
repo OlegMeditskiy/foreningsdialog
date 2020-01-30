@@ -1,9 +1,6 @@
 package se.foreningsdialog.forening.models.embedded;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 
@@ -12,6 +9,7 @@ import javax.persistence.Embeddable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Adress {
     private String street;
     private String city;
