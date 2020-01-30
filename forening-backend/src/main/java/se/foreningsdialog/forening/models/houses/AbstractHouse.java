@@ -1,5 +1,6 @@
-package se.foreningsdialog.forening.models;
+package se.foreningsdialog.forening.models.houses;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,16 +12,15 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
 @Entity
-public class House {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class AbstractHouse {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     @Embedded
     private Adress address;
-
-    @OneToMany
-    Set<Flat> flats;
-
 }

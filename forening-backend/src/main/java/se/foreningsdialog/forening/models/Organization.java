@@ -3,6 +3,7 @@ package se.foreningsdialog.forening.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import se.foreningsdialog.forening.models.houses.AbstractHouse;
 import se.foreningsdialog.forening.models.loanobjects.AbstractLoanObject;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public class Organization {
     private String organizationIdentificationName;
 
     @OneToMany
-    List<House> houses;
+    List<AbstractHouse> houses;
 
     @OneToMany
     List<AbstractLoanObject> loanObjects;
