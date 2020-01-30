@@ -13,5 +13,6 @@ public class OrganizationRepoService {
     @Autowired
     private OrganizationRepo organizationRepo;
 
-
+    public OrganizationRepoService() {
+    }
 }
