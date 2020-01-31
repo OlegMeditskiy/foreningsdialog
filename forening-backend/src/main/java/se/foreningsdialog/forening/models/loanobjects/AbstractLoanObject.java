@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Entity(name = "LOAN_OBJECT")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "LOAN_TYPE",discriminatorType = DiscriminatorType.INTEGER)
+@DiscriminatorColumn(name = "LOAN_TYPE")
 @NoArgsConstructor
 @EqualsAndHashCode
 @Getter

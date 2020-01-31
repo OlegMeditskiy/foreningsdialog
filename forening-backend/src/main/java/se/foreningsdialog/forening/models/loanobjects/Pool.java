@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 import java.time.LocalDate;
 
 @Entity
-@DiscriminatorValue(value = "5")
+@DiscriminatorValue(value = "POOL")
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter

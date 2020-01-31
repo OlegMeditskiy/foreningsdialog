@@ -9,7 +9,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue(value = "1")
+@DiscriminatorValue(value = "GUEST_FLAT")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter

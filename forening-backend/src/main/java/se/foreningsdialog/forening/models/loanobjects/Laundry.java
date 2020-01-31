@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@DiscriminatorValue(value = "2")
+@DiscriminatorValue(value = "LAUNDRY")
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter

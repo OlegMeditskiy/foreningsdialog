@@ -9,7 +9,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue(value = "4")
+@DiscriminatorValue(value = "PARTY_PLACE")
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
