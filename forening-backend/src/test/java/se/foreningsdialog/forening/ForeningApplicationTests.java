@@ -8,6 +8,7 @@ class ForeningApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

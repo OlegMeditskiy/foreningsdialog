@@ -7,7 +7,6 @@ import lombok.Setter;
 import se.foreningsdialog.forening.models.embedded.Adress;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @NoArgsConstructor
 @Getter

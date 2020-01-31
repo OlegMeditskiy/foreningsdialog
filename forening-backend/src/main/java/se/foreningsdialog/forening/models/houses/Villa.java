@@ -4,9 +4,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import se.foreningsdialog.forening.models.Member;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 @NoArgsConstructor
 @Getter
@@ -15,4 +17,7 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("V")
 public class Villa extends AbstractHouse {
+
+    @OneToOne
+    private Member member;
 }

@@ -3,11 +3,9 @@ package se.foreningsdialog.forening.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import se.foreningsdialog.forening.models.houses.AbstractHouse;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @NoArgsConstructor
 @Getter
@@ -18,7 +16,13 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String Surname;
+    private String surName;
 
-    private String LastName;
+    private String lastName;
+
+    private String password;
+
+    @OneToOne
+    private AbstractHouse house;
+
 }
