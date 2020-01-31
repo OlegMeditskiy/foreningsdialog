@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@DiscriminatorValue("A")
+@DiscriminatorValue("APARTMENT")
 public class Apartment extends AbstractHouse {
 
     @OneToMany

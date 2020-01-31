@@ -15,7 +15,7 @@ import javax.persistence.OneToOne;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@DiscriminatorValue("V")
+@DiscriminatorValue("VILLA")
 public class Villa extends AbstractHouse {
 
     @OneToOne
