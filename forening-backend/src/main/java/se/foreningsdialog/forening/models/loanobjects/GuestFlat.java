@@ -14,6 +14,5 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-public class GuestFlat extends AbstractLoanObject{
-
+public class GuestFlat extends AbstractLoanObject {
 }

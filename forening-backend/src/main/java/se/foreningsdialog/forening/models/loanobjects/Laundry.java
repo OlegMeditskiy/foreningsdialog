@@ -17,16 +17,4 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class Laundry extends AbstractLoanObject {
-
-    private int passLength;
-
-    public Laundry(int passLength) {
-        this.passLength = passLength;
-    }
-
-
-    private LocalDateTime to;
-    private LocalDateTime from;
-    @ManyToOne
-    private Member member;
 }

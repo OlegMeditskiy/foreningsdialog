@@ -14,7 +14,6 @@ import javax.persistence.Entity;
 @Getter
 @Setter
 @NoArgsConstructor
-
 public class Parking extends AbstractLoanObject{
 
 }
