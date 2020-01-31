@@ -1,4 +1,4 @@
-package se.foreningsdialog.forening.models.embedded;
+package se.foreningsdialog.forening.models.houses.embedded;
 
 import lombok.*;
 

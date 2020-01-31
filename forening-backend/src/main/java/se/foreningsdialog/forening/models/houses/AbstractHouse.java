@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import se.foreningsdialog.forening.models.embedded.Adress;
+import se.foreningsdialog.forening.models.houses.embedded.Adress;
 
 import javax.persistence.*;
 
