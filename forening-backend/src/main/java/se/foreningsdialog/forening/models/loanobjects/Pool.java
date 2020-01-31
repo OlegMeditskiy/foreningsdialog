@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import java.time.LocalDate;
 
 @Entity
 @DiscriminatorValue(value = "5")
@@ -14,10 +15,6 @@ import javax.persistence.Entity;
 @Getter
 @Setter
 @NoArgsConstructor
-/*
- * @DiscriminatorValue(value = "Key")
- * Databasen "hålla reda på" värde för detta objekt,
- * 'Key' används av databasen för att hitta objektets data
- */
 public class Pool extends AbstractLoanObject {
+
 }

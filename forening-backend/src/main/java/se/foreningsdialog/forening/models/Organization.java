@@ -27,6 +27,8 @@ public class Organization {
     @OneToMany
     List<AbstractHouse> houses;
 
+
+
     @OneToMany
     List<AbstractLoanObject> loanObjects;
 }

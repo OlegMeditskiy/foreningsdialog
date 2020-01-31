@@ -4,9 +4,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import se.foreningsdialog.forening.models.Member;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @DiscriminatorValue(value = "2")
@@ -14,10 +16,17 @@ import javax.persistence.Entity;
 @Getter
 @Setter
 @NoArgsConstructor
-/*
- * @DiscriminatorValue(value = "Key")
- * Databasen "hålla reda på" värde för detta objekt,
- * 'Key' används av databasen för att hitta objektets data
- */
 public class Laundry extends AbstractLoanObject {
+
+    private int passLength;
+
+    public Laundry(int passLength) {
+        this.passLength = passLength;
+    }
+
+
+    private LocalDateTime to;
+    private LocalDateTime from;
+    @ManyToOne
+    private Member member;
 }

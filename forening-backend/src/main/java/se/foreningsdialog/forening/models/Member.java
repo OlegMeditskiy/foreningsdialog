@@ -24,5 +24,4 @@ public class Member {
 
     @OneToOne
     private AbstractHouse house;
-
 }

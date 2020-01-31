@@ -14,11 +14,7 @@ import javax.persistence.Entity;
 @Getter
 @Setter
 @NoArgsConstructor
-/*
- * @DiscriminatorValue(value = "Key")
- * Databasen "hålla reda på" värde för detta objekt,
- * 'Key' används av databasen för att hitta objektets data
- */
+
 public class Parking extends AbstractLoanObject{
 
 }
