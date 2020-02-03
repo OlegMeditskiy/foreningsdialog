@@ -1,0 +1,41 @@
+.btn-grayButton{
+    background-color: #4a4a4a;
+    color: white;
+    height: 45px;
+    font-family: "Bebas Neue";
+    font-size: 24px;
+}
+
+.bebasStyle{
+    font-size: 24px;
+    font-family: "Bebas Neue";
+}
+
+/*
+Login
+*/
+
+.login{
+    margin-top: 100px;
+}
+
+.login-block{
+    padding: 25px;
+    margin: 0 auto;
+    max-width: 500px;
+}
+.navbar{
+    height: 50px;
+    background-color: #4a4a4a;
+}
+
+
+/*
+MAIN CONTENT
+*/
+
+.logoAB{
+    height: 50px;
+    width: auto;
+    margin-left: 50px;
+}
