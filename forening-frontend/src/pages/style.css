@@ -24,6 +24,9 @@ Login
     margin: 0 auto;
     max-width: 500px;
 }
+.login-logo{
+    width: 100%;
+}
 .navbar{
     height: 50px;
     background-color: #4a4a4a;

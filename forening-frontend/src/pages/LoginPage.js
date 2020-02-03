@@ -16,7 +16,7 @@ class LoginPage extends  Component{
                     <Container>
                         <Row>
                             <Col>
-                                <Image src={logo} className="mx-auto d-block"/>
+                                <Image src={logo} className="mx-auto d-block login-logo"/>
                             </Col>
                         </Row>
                     </Container>
