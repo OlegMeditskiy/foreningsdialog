@@ -5,7 +5,7 @@ import se.foreningsdialog.forening.models.administration.constants.SuperAdminRol
 
 import javax.persistence.ManyToOne;
 
-public class OrganizationSuperAdmin extends Administration {
+public class OrganizationSuperAdmin extends AbstractAdministration {
 
     private SuperAdminRoles role = SuperAdminRoles.ORGANIZATION_SUPER_ADMIN;
 
