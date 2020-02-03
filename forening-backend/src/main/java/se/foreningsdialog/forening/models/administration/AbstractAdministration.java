@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Entity(name = "Administration")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "ADMIN_TYPE")
-public abstract class Administration {
+public abstract class AbstractAdministration {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
