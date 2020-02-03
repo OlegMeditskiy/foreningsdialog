@@ -4,7 +4,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import se.foreningsdialog.forening.models.Member;
 
 import javax.persistence.*;
 
@@ -21,8 +20,6 @@ public abstract class AbstractLoanObject {
     @GeneratedValue
     private long id;
 
-    @OneToOne
-    Member member;
 
     private boolean hasCalendarData;
 }
