@@ -2,7 +2,8 @@ import React, {Component} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 import logoAB from '../images/logoAB.png';
-import {Button, Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Image, Nav, Navbar} from "react-bootstrap";
+
 class LoginPage extends  Component{
 
     render() {

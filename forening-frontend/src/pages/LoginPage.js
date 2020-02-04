@@ -8,7 +8,6 @@ import './style.css'
 import logo from '../images/logo.png'
 class LoginPage extends  Component{
 
-
     render() {
         return(
 
@@ -58,7 +57,7 @@ class LoginPage extends  Component{
             </div>
                 <div>
                     <footer>
-
+                       <a href="/registration"> Registrera förening här </a>
                     </footer>
 
                 </div>
