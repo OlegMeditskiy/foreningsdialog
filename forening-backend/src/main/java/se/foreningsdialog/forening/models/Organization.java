@@ -1,8 +1,9 @@
 package se.foreningsdialog.forening.models;
 
-import lombok.Getter;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import se.foreningsdialog.forening.models.houses.AbstractHouse;
 import se.foreningsdialog.forening.models.loanobjects.AbstractLoanObject;
 import se.foreningsdialog.forening.models.administration.AbstractAdministration;
@@ -10,22 +11,19 @@ import se.foreningsdialog.forening.models.administration.AbstractAdministration;
 import javax.persistence.*;
 import java.util.List;
 
+
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 @Entity
 public class Organization {
     @Id
     @GeneratedValue
     private long id;
-
     private String organizationName;
-
     private String organizationNumber;
 
-    private String organizationIdentificationName;
-
-    private boolean isActivated=false;
+    //    private boolean isActivated=false;
 
     @OneToMany
     List<AbstractHouse> houses;
@@ -35,7 +33,6 @@ public class Organization {
 
     @OneToMany
     List<AbstractAdministration> administrators;
-
 
 
 }
