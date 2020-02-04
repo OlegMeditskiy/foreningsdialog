@@ -8,6 +8,7 @@ import './style.css'
 import logo from '../images/logo.png'
 class LoginPage extends  Component{
 
+
     render() {
         return(
 
