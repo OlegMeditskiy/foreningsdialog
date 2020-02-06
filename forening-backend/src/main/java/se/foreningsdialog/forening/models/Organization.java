@@ -4,11 +4,13 @@ package se.foreningsdialog.forening.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import se.foreningsdialog.forening.models.houses.AbstractHouse;
+import se.foreningsdialog.forening.models.houses.House;
 import se.foreningsdialog.forening.models.loanobjects.AbstractLoanObject;
-import se.foreningsdialog.forening.models.administration.AbstractAdministration;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 
@@ -26,13 +28,11 @@ public class Organization {
     //    private boolean isActivated=false;
 
     @OneToMany
-    List<AbstractHouse> houses;
+    List<House> houses;
 
     @OneToMany
     List<AbstractLoanObject> loanObjects;
 
-    @OneToMany
-    List<AbstractAdministration> administrators;
 
 
 }

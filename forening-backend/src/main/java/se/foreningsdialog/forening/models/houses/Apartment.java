@@ -4,21 +4,24 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import se.foreningsdialog.forening.models.Member;
+import se.foreningsdialog.forening.models.ApartmentMember;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @Entity
 @DiscriminatorValue("APARTMENT")
-public class Apartment extends AbstractHouse {
+public class Apartment{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
     @OneToMany
-    private List<Member> members;
+    private List<ApartmentMember> members;
+
+    private int number;
 }
