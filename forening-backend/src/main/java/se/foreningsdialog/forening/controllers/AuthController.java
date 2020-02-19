@@ -1,6 +1,7 @@
 package se.foreningsdialog.forening.controllers;
 
 import se.foreningsdialog.forening.exception.AppException;
+import se.foreningsdialog.forening.models.Organization;
 import se.foreningsdialog.forening.models.users.User;
 import se.foreningsdialog.forening.models.users.constants.Role;
 import se.foreningsdialog.forening.models.users.constants.RoleName;
@@ -75,6 +76,7 @@ public class AuthController {
             return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
+
 
         // Creating user's account
         User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),

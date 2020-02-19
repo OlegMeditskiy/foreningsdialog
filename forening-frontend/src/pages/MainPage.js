@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
-import logoAB from '../images/logoAB.png';
-import {Image, Nav, Navbar} from "react-bootstrap";
+import {Nav, Navbar} from "react-bootstrap";
 
 class LoginPage extends  Component{
 
@@ -10,9 +9,7 @@ class LoginPage extends  Component{
         return(
 
             <div>
-                <div className="header">
-                    <Image className="logoAB" src={logoAB}></Image>
-                </div>
+
                 <Navbar expand="lg">
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">

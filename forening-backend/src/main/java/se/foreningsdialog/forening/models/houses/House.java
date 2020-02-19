@@ -13,4 +13,6 @@ public class House {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    private String address;
 }
