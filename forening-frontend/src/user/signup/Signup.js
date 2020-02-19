@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { signup, checkUsernameAvailability, checkEmailAvailability } from '../../util/APIUtils';
 import './Signup.css';
+import Association from "./Organization";
 import { Link } from 'react-router-dom';
 import { 
     NAME_MIN_LENGTH, NAME_MAX_LENGTH, 
@@ -13,23 +14,41 @@ import {
 import { Form, Input, Button, notification } from 'antd';
 const FormItem = Form.Item;
 
+
 class Signup extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            list: [1, 2, 3],
+            association:{
+                name:'new',
+                organizations:[]
+            },
             organization: {
-                // organizationNumber: '',
-                // numberOfApartments: '',
-                // totalArea: '',
-                // associations: [],
+                organizationNumber: '',
+                numberOfApartments: '',
+                totalArea: '',
+                associationsNames: [],
                 houses: []
             },
-            address:{
-                value: ''
+            house:{
+                address: '',
+                city: '',
+                zipCode:'',
+            },
+            associationsName:{
+              name:{},
+              contacts:[]
+            },
+            contact:{
+                name: '',
+                telephone:'',
+                email: ''
             },
             name: {
                 value: ''
             },
+            countContacts:0,
             username: {
                 value: ''
             },
@@ -45,17 +64,37 @@ class Signup extends Component {
         this.validateUsernameAvailability = this.validateUsernameAvailability.bind(this);
         this.validateEmailAvailability = this.validateEmailAvailability.bind(this);
         this.isFormInvalid = this.isFormInvalid.bind(this);
+        this.addHouseToOrganization = this.addHouseToOrganization.bind(this);
     }
 
-    addHouseToOrganization(){
-        var newArray = this.state.organization.houses.slice();
-        var itemToBeAdded = {
-            address : this.state.address.value
-        };
-        newArray.push(itemToBeAdded);
-        console.log(newArray);
-        this.setState(state=>{
-            const list = [...state.organization.houses,itemToBeAdded]
+
+
+    handleHouseInputChange(event, validationFun){
+        var i;
+        for (i=0;i<this.state.countContacts;i++) {
+            const target44 = event.target+i;
+
+        }
+        const target = event.target;
+        const inputName = target.name;
+        const inputValue = target.value;
+        this.setState({
+            house: {
+                [inputName]: inputValue,
+                    ...validationFun(inputValue)
+            }
+        })
+    }
+
+    handleContactInputChange(event, validationFun){
+        const target = event.target;
+        const inputName = target.name;
+        const inputValue = target.value;
+        this.setState({
+            contact: {
+                [inputName]: inputValue,
+                ...validationFun(inputValue)
+            }
         })
     }
 
@@ -63,13 +102,24 @@ class Signup extends Component {
         const target = event.target;
         const inputName = target.name;        
         const inputValue = target.value;
-
         this.setState({
             [inputName] : {
                 value: inputValue,
                 ...validationFun(inputValue)
             }
         });
+    }
+
+    addHouseToOrganization(event){
+        event.preventDefault();
+
+        const itemToBeAdded = {
+            address : this.state.address.value
+        };
+        this.setState(state=> {
+            this.state.organization.houses.push(itemToBeAdded);
+        })
+        console.log(this.state.organization);
     }
 
     handleSubmit(event) {
@@ -101,38 +151,38 @@ class Signup extends Component {
         return !(this.state.name.validateStatus === 'success' &&
             this.state.username.validateStatus === 'success' &&
             this.state.email.validateStatus === 'success' &&
-            this.state.password.validateStatus === 'success' &&
-            this.state.address.validateStatus === 'success'
+            this.state.password.validateStatus === 'success'
+            // && this.state.address.validateStatus === 'success'
         );
     }
+
+    createNewOrganization(){
+        const organization = {
+            organizationNumber: '123',
+                numberOfApartments: '',
+                totalArea: '',
+                associationsNames: [],
+                houses: []
+        }
+          this.setState(state=>{
+              const list = state.association.organizations.push(organization);
+            return{
+                list
+            }
+          })
+        console.log(this.state.association);
+    }
+
 
     render() {
         return (
             <div className="signup-container">
                 <h1 className="page-title">Sign Up</h1>
+
+
                 <div className="signup-content">
+
                     <Form onSubmit={this.handleSubmit} className="signup-form">
-                        <Form onSubmit={this.addHouseToOrganization}>
-                            <FormItem
-                                label="Organisation address"
-                                validateStatus={this.state.address.validateStatus}
-                                help={this.state.address.errorMsg}>
-                                <Input
-                                    size="large"
-                                    name="address"
-                                    autoComplete="off"
-                                    placeholder="Address"
-                                    value={this.state.address.value}
-                                    onChange={(event) => this.handleInputChange(event, this.validateAddress)} />
-                            </FormItem>
-                            <FormItem>
-                                <Button type="primary"
-                                        htmlType="submit"
-                                        size="large"
-                                        className="signup-form-button">Add house</Button>
-                                Already registed? <Link to="/login">Login now!</Link>
-                            </FormItem>
-                        </Form>
                         <FormItem 
                             label="Full Name"
                             validateStatus={this.state.name.validateStatus}
@@ -195,6 +245,12 @@ class Signup extends Component {
                             Already registed? <Link to="/login">Login now!</Link>
                         </FormItem>
                     </Form>
+                    <button onClick={this.createNewOrganization.bind(this)}>New organization</button>
+                    <div>
+                        {this.state.association.organizations.map((item, index) =>
+                            <Association item={item} key={index} validate={this.state.name.validateStatus} keyId={index}/>
+                        )}
+                    </div>
                 </div>
             </div>
         );

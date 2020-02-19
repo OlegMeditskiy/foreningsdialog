@@ -11,8 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 
@@ -25,10 +23,6 @@ public class Organization {
     @GeneratedValue
     private long id;
 
-    @NotBlank
-    @Size(max = 40)
-    private String organizationName;
-
     private String organizationNumber;
     private int numberOfApartments;
     private int totalArea;
@@ -39,7 +33,7 @@ public class Organization {
     List<House> houses;
 
     @OneToMany
-    List<Association> associations;
+    List<AssociationName> associations;
 
     @OneToMany
     List<AbstractLoanObject> loanObjects;

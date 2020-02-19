@@ -15,4 +15,8 @@ public class House {
     private Long id;
 
     private String address;
+
+    private String city;
+
+    private String zipCode;
 }
