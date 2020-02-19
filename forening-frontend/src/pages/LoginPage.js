@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Container, Image, Row} from "react-bootstrap";
+import {Container, Row} from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import './style.css'
-import logo from '../images/logo.png'
+
 class LoginPage extends  Component{
 
     render() {
@@ -13,13 +13,6 @@ class LoginPage extends  Component{
 
             <div>
                 <div className="mainContent login">
-                    <Container>
-                        <Row>
-                            <Col>
-                                <Image src={logo} className="mx-auto d-block login-logo"/>
-                            </Col>
-                        </Row>
-                    </Container>
 
                 <Container>
                     <Row>

@@ -1,10 +1,11 @@
 package se.foreningsdialog.forening.payload;
 
+import se.foreningsdialog.forening.models.Association;
+import se.foreningsdialog.forening.models.Organization;
+
 import javax.validation.constraints.*;
 
-/**
- * Created by rajeevkumarsingh on 02/08/17.
- */
+
 
 public class SignUpRequest {
     @NotBlank
@@ -23,6 +24,26 @@ public class SignUpRequest {
     @NotBlank
     @Size(min = 6, max = 20)
     private String password;
+
+    private Association association;
+
+    public Association getAssociation() {
+        return association;
+    }
+
+    public void setAssociation(Association association) {
+        this.association = association;
+    }
+
+    private Organization organization;
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
 
     public String getName() {
         return name;

@@ -22,13 +22,18 @@ public class Organization {
     @Id
     @GeneratedValue
     private long id;
-    private String organizationName;
-    private String organizationNumber;
 
-    //    private boolean isActivated=false;
+    private String organizationNumber;
+    private int numberOfApartments;
+    private int totalArea;
+
+    private boolean isActivated=false;
 
     @OneToMany
     List<House> houses;
+
+    @OneToMany
+    List<AssociationName> associations;
 
     @OneToMany
     List<AbstractLoanObject> loanObjects;

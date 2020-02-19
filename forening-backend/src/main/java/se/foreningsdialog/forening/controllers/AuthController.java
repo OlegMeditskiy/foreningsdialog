@@ -1,6 +1,9 @@
 package se.foreningsdialog.forening.controllers;
 
 import se.foreningsdialog.forening.exception.AppException;
+import se.foreningsdialog.forening.models.Association;
+import se.foreningsdialog.forening.models.Organization;
+import se.foreningsdialog.forening.models.houses.House;
 import se.foreningsdialog.forening.models.users.User;
 import se.foreningsdialog.forening.models.users.constants.Role;
 import se.foreningsdialog.forening.models.users.constants.RoleName;
@@ -18,8 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import se.foreningsdialog.forening.repository.RoleRepository;
-import se.foreningsdialog.forening.repository.UserRepository;
+import se.foreningsdialog.forening.repository.*;
 import se.foreningsdialog.forening.security.JwtTokenProvider;
 
 import javax.validation.Valid;
@@ -41,6 +43,15 @@ public class AuthController {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    HouseRepository houseRepository;
+
+    @Autowired
+    AssociationRepository associationRepository;
+
+    @Autowired
+    OrganizationRepository organizationRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -75,6 +86,24 @@ public class AuthController {
             return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
+
+        //Creating new organization
+        for (Organization organization1: signUpRequest.getAssociation().getOrganizations()){
+            Organization organization = new Organization();
+            for (House house:organization1.getHouses()){
+                houseRepository.save(house);
+            }
+            organization.setHouses(organization1.getHouses());
+            organizationRepository.save(organization);
+        }
+
+
+        //Creating new Association
+        Association association = new Association();
+        association.setOrganizations(signUpRequest.getAssociation().getOrganizations());
+        associationRepository.save(association);
+
+
 
         // Creating user's account
         User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),

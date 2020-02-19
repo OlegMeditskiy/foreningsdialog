@@ -14,7 +14,6 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 @Entity
-@DiscriminatorValue("APARTMENT")
 public class Apartment{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
