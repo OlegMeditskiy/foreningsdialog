@@ -12,6 +12,9 @@ export const NAME_MAX_LENGTH = 40;
 export const ADDRESS_MIN_LENGTH = 10;
 export const ADDRESS_MAX_LENGTH = 40;
 
+export const ORG_NUMBER_MIN_LENGTH = 10;
+export const ORG_NUMBER_MAX_LENGTH = 10;
+
 export const USERNAME_MIN_LENGTH = 3;
 export const USERNAME_MAX_LENGTH = 15;
 

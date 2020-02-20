@@ -91,9 +91,9 @@ class App extends Component {
         }
         return (
             <Layout className="app-container">
-                <AppHeader isAuthenticated={this.state.isAuthenticated}
-                           currentUser={this.state.currentUser}
-                           onLogout={this.handleLogout} />
+                {/*<AppHeader isAuthenticated={this.state.isAuthenticated}*/}
+                {/*           currentUser={this.state.currentUser}*/}
+                {/*           onLogout={this.handleLogout} />*/}
 
                 <Content className="app-content">
                     <div className="container">
