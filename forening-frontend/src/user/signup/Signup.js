@@ -29,6 +29,12 @@ class Signup extends Component {
                     numberOfApartments: 0
                 }]
             },
+            organizations:[{
+                orgNumber:'',
+                totalArea:'',
+                numberOfApartments: 0
+            }],
+
             house:{
                 address: '',
                 city: '',
@@ -153,16 +159,20 @@ class Signup extends Component {
         }
     }
     addNewOrganization=(e)=>{
-        const nnn=this.state.association.organizations
+        const organization = {
+            orgNumber:'',
+            totalArea:'',
+            numberOfApartments: 0
+        };
         this.setState((prevState)=>({
-            nnn: [...prevState.nnn,{orgNumber:""}]
+            association: {...prevState.association,organizations:[...prevState.association.organizations,organization]}
         }));
+        console.log(this.state.association.organizations)
     }
 
 
     render() {
         let {organizations} = this.state.association
-        console.log(organizations);
         return (
             <div className="signup-container">
                 <h1 className="page-title">Sign Up</h1>

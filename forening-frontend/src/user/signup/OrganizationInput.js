@@ -34,7 +34,7 @@ const OrganizationInput = (props)=>{
                         />
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label>Total area</Form.Label>
+                        <Form.Label>Antal lagenheter</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Antal lagenheter"
