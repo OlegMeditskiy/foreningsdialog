@@ -13,8 +13,8 @@ import {
 
 } from '../../constants';
 
-import { Form, Input, Button, notification } from 'antd';
-const FormItem = Form.Item;
+import {notification } from 'antd';
+import {Button, Form} from "react-bootstrap";
 
 
 class Signup extends Component {
@@ -26,7 +26,9 @@ class Signup extends Component {
 
             },
             organizations:[{
-                orgNumber:''
+                orgNumber:'',
+                totalArea:'',
+                numberOfApartments: 0
             }],
             house:{
                 address: '',
@@ -61,29 +63,12 @@ class Signup extends Component {
         this.validateUsernameAvailability = this.validateUsernameAvailability.bind(this);
         this.validateEmailAvailability = this.validateEmailAvailability.bind(this);
         this.isFormInvalid = this.isFormInvalid.bind(this);
-        this.handleOrganizationInputChange=this.handleOrganizationInputChange.bind(this);
+
         this.handleChange = this.handleChange.bind(this);
         this.addNewOrganization = this.addNewOrganization.bind(this);
     }
 
 
-
-    handleHouseInputChange(event, validationFun){
-        var i;
-        for (i=0;i<this.state.countContacts;i++) {
-            const target44 = event.target+i;
-
-        }
-        const target = event.target;
-        const inputName = target.name;
-        const inputValue = target.value;
-        this.setState({
-            house: {
-                [inputName]: inputValue,
-                    ...validationFun(inputValue)
-            }
-        })
-    }
 
 
 
@@ -155,34 +140,18 @@ class Signup extends Component {
         });
         console.log(this.state.association.organizations[0].organizationNumber);
     }
-    createNewOrganization(){
-        const organization = {
-            organizationNumber: '123',
-                numberOfApartments: '',
-                totalArea: '',
-                associationsNames: [],
-                houses: []
-        }
-        const number ={
-            value:''
-        }
-          this.setState(state=>{
-              const list = state.association.organizations.push(organization);
-            return{
-                list
-            }
-          })
-        console.log(this.state.association);
-    }
+
 
     handleChange = (e) =>{
-        if(["orgNumber"].includes(e.target.className) ){
+        console.log(e.target.bsClass)
+        if(["orgNumber","numberOfApartments","totalArea"].includes(e.target.bsClass) ){
             let organizations = this.state.organizations
-            organizations[e.target.dataset.id][e.target.className]=e.target.value.toUpperCase()
+            organizations[e.target.dataset.id][e.target.bsClass]=e.target.value
             this.setState({organizations},()=>console.log(this.state.organizations))
         }
         else{
-            this.setState({[e.target.className]:e.target.value.toUpperCase()})
+            console.log("wrongClassName");
+            this.setState({[e.target.className]:e.target.value})
         }
     }
     addNewOrganization=(e)=>{
@@ -202,75 +171,72 @@ class Signup extends Component {
 
                 <div className="signup-content">
 
-                    <Form onSubmit={this.handleSubmit} className="signup-form">
-                        <FormItem 
-                            label="Full Name"
-                            validateStatus={this.state.name.validateStatus}
-                            help={this.state.name.errorMsg}>
-                            <Input 
-                                size="large"
-                                name="name"
-                                autoComplete="off"
-                                placeholder="Your full name"
-                                value={this.state.name.value} 
-                                onChange={(event) => this.handleInputChange(event, this.validateName)} />    
-                        </FormItem>
-                        <FormItem label="Username"
-                            hasFeedback
-                            validateStatus={this.state.username.validateStatus}
-                            help={this.state.username.errorMsg}>
-                            <Input 
-                                size="large"
-                                name="username" 
-                                autoComplete="off"
-                                placeholder="A unique username"
-                                value={this.state.username.value} 
-                                onBlur={this.validateUsernameAvailability}
-                                onChange={(event) => this.handleInputChange(event, this.validateUsername)} />    
-                        </FormItem>
-                        <FormItem 
-                            label="Email"
-                            hasFeedback
-                            validateStatus={this.state.email.validateStatus}
-                            help={this.state.email.errorMsg}>
-                            <Input 
-                                size="large"
-                                name="email" 
-                                type="email" 
-                                autoComplete="off"
-                                placeholder="Your email"
-                                value={this.state.email.value} 
-                                onBlur={this.validateEmailAvailability}
-                                onChange={(event) => this.handleInputChange(event, this.validateEmail)} />    
-                        </FormItem>
-                        <FormItem 
-                            label="Password"
-                            validateStatus={this.state.password.validateStatus}
-                            help={this.state.password.errorMsg}>
-                            <Input 
-                                size="large"
-                                name="password" 
-                                type="password"
-                                autoComplete="off"
-                                placeholder="A password between 6 to 20 characters" 
-                                value={this.state.password.value} 
-                                onChange={(event) => this.handleInputChange(event, this.validatePassword)} />    
-                        </FormItem>
-                        <FormItem>
-                            <Button type="primary" 
-                                htmlType="submit" 
-                                size="large" 
-                                className="signup-form-button"
-                                disabled={this.isFormInvalid()}>Sign up</Button>
-                            Already registed? <Link to="/login">Login now!</Link>
-                        </FormItem>
-                    </Form>
+                    {/*<Form onSubmit={this.handleSubmit} className="signup-form">*/}
+                    {/*    <FormItem */}
+                    {/*        label="Full Name"*/}
+                    {/*        validateStatus={this.state.name.validateStatus}*/}
+                    {/*        help={this.state.name.errorMsg}>*/}
+                    {/*        <Input */}
+                    {/*            size="large"*/}
+                    {/*            name="name"*/}
+                    {/*            autoComplete="off"*/}
+                    {/*            placeholder="Your full name"*/}
+                    {/*            value={this.state.name.value} */}
+                    {/*            onChange={(event) => this.handleInputChange(event, this.validateName)} />    */}
+                    {/*    </FormItem>*/}
+                    {/*    <FormItem label="Username"*/}
+                    {/*        hasFeedback*/}
+                    {/*        validateStatus={this.state.username.validateStatus}*/}
+                    {/*        help={this.state.username.errorMsg}>*/}
+                    {/*        <Input */}
+                    {/*            size="large"*/}
+                    {/*            name="username" */}
+                    {/*            autoComplete="off"*/}
+                    {/*            placeholder="A unique username"*/}
+                    {/*            value={this.state.username.value} */}
+                    {/*            onBlur={this.validateUsernameAvailability}*/}
+                    {/*            onChange={(event) => this.handleInputChange(event, this.validateUsername)} />    */}
+                    {/*    </FormItem>*/}
+                    {/*    <FormItem */}
+                    {/*        label="Email"*/}
+                    {/*        hasFeedback*/}
+                    {/*        validateStatus={this.state.email.validateStatus}*/}
+                    {/*        help={this.state.email.errorMsg}>*/}
+                    {/*        <Input */}
+                    {/*            size="large"*/}
+                    {/*            name="email" */}
+                    {/*            type="email" */}
+                    {/*            autoComplete="off"*/}
+                    {/*            placeholder="Your email"*/}
+                    {/*            value={this.state.email.value} */}
+                    {/*            onBlur={this.validateEmailAvailability}*/}
+                    {/*            onChange={(event) => this.handleInputChange(event, this.validateEmail)} />    */}
+                    {/*    </FormItem>*/}
+                    {/*    <FormItem */}
+                    {/*        label="Password"*/}
+                    {/*        validateStatus={this.state.password.validateStatus}*/}
+                    {/*        help={this.state.password.errorMsg}>*/}
+                    {/*        <Input */}
+                    {/*            size="large"*/}
+                    {/*            name="password" */}
+                    {/*            type="password"*/}
+                    {/*            autoComplete="off"*/}
+                    {/*            placeholder="A password between 6 to 20 characters" */}
+                    {/*            value={this.state.password.value} */}
+                    {/*            onChange={(event) => this.handleInputChange(event, this.validatePassword)} />    */}
+                    {/*    </FormItem>*/}
+                    {/*    <FormItem>*/}
+                    {/*        <Button type="primary" */}
+                    {/*            htmlType="submit" */}
+                    {/*            size="large" */}
+                    {/*            className="signup-form-button"*/}
+                    {/*            disabled={this.isFormInvalid()}>Sign up</Button>*/}
+                    {/*        Already registed? <Link to="/login">Login now!</Link>*/}
+                    {/*    </FormItem>*/}
+                    {/*</Form>*/}
                     <Form  onChange={this.handleChange}>
-                        <div>
-                            <h1>Organization</h1>
-                        </div>
-                        <button onClick={this.addNewOrganization}>Add organization</button>
-                        <OrganizationInput organizations={organizations}/>
+                        <Button onClick={this.addNewOrganization}>Lagga organisation</Button>
+                        <OrganizationInput  organizations={organizations}/>
                         <input type="submit" value="Submit"/>
                     </Form>
                 </div>
