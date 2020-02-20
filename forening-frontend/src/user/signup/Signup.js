@@ -23,13 +23,18 @@ class Signup extends Component {
         this.state = {
             association:{
                 name:'new',
-
+                organizations:[{
+                    orgNumber:'',
+                    totalArea:'',
+                    numberOfApartments: 0
+                }]
             },
             organizations:[{
                 orgNumber:'',
                 totalArea:'',
                 numberOfApartments: 0
             }],
+
             house:{
                 address: '',
                 city: '',
@@ -145,25 +150,29 @@ class Signup extends Component {
     handleChange = (e) =>{
         const className = e.target.className.split(" ")[0]
         if(["orgNumber","numberOfApartments","totalArea"].includes(className) ){
-            let organizations = this.state.organizations
+            let organizations = this.state.association.organizations
             organizations[e.target.dataset.id][className]=e.target.value
             this.setState({organizations},()=>console.log(this.state.organizations))
         }
         else{
-            console.log("wrongClassName");
             this.setState({[e.target.className]:e.target.value})
         }
     }
     addNewOrganization=(e)=>{
+        const organization = {
+            orgNumber:'',
+            totalArea:'',
+            numberOfApartments: 0
+        };
         this.setState((prevState)=>({
-            organizations: [...prevState.organizations,{orgNumber:""}]
+            association: {...prevState.association,organizations:[...prevState.association.organizations,organization]}
         }));
+        console.log(this.state.association.organizations)
     }
 
 
     render() {
-        let {organizations} = this.state
-        console.log(organizations);
+        let {organizations} = this.state.association
         return (
             <div className="signup-container">
                 <h1 className="page-title">Sign Up</h1>
