@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { signup, checkUsernameAvailability, checkEmailAvailability } from '../../util/APIUtils';
 import './Signup.css';
-import Association from "./Organization";
+import OrganizationInput from "./OrganizationInput";
 import { Link } from 'react-router-dom';
 import { 
     NAME_MIN_LENGTH, NAME_MAX_LENGTH, 
     USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH,
     EMAIL_MAX_LENGTH,
     PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH,
-    ADDRESS_MIN_LENGTH,ADDRESS_MAX_LENGTH
+    ADDRESS_MIN_LENGTH,ADDRESS_MAX_LENGTH,
+    ORG_NUMBER_MIN_LENGTH,ORG_NUMBER_MAX_LENGTH
+
 } from '../../constants';
 
 import { Form, Input, Button, notification } from 'antd';
@@ -19,18 +21,13 @@ class Signup extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            list: [1, 2, 3],
             association:{
                 name:'new',
-                organizations:[]
+
             },
-            organization: {
-                organizationNumber: '',
-                numberOfApartments: '',
-                totalArea: '',
-                associationsNames: [],
-                houses: []
-            },
+            organizations:[{
+                orgNumber:''
+            }],
             house:{
                 address: '',
                 city: '',
@@ -64,7 +61,9 @@ class Signup extends Component {
         this.validateUsernameAvailability = this.validateUsernameAvailability.bind(this);
         this.validateEmailAvailability = this.validateEmailAvailability.bind(this);
         this.isFormInvalid = this.isFormInvalid.bind(this);
-        this.addHouseToOrganization = this.addHouseToOrganization.bind(this);
+        this.handleOrganizationInputChange=this.handleOrganizationInputChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.addNewOrganization = this.addNewOrganization.bind(this);
     }
 
 
@@ -86,17 +85,7 @@ class Signup extends Component {
         })
     }
 
-    handleContactInputChange(event, validationFun){
-        const target = event.target;
-        const inputName = target.name;
-        const inputValue = target.value;
-        this.setState({
-            contact: {
-                [inputName]: inputValue,
-                ...validationFun(inputValue)
-            }
-        })
-    }
+
 
     handleInputChange(event, validationFun) {
         const target = event.target;
@@ -110,17 +99,6 @@ class Signup extends Component {
         });
     }
 
-    addHouseToOrganization(event){
-        event.preventDefault();
-
-        const itemToBeAdded = {
-            address : this.state.address.value
-        };
-        this.setState(state=> {
-            this.state.organization.houses.push(itemToBeAdded);
-        })
-        console.log(this.state.organization);
-    }
 
     handleSubmit(event) {
         event.preventDefault();
@@ -141,7 +119,7 @@ class Signup extends Component {
             this.props.history.push("/login");
         }).catch(error => {
             notification.error({
-                message: 'Polling App',
+                message: 'Forenings App',
                 description: error.message || 'Sorry! Something went wrong. Please try again!'
             });
         });
@@ -156,6 +134,27 @@ class Signup extends Component {
         );
     }
 
+    handleOrganizationInputChange(event, validationFun,whichOrganization){
+        console.log('Change org '+ whichOrganization);
+        const target = event.target;
+        const inputName = target.name;
+        const inputValue = target.value;
+        this.setState(state=>{
+
+            const number = state.organizationNumber[whichOrganization];
+            number.value=inputValue;
+            const list = state.association.organizations.map((organization,index)=>{
+               if (whichOrganization==index){
+                   return organization.organizationNumber = inputValue;
+               }
+            });
+            return{
+                list,
+                number
+            };
+        });
+        console.log(this.state.association.organizations[0].organizationNumber);
+    }
     createNewOrganization(){
         const organization = {
             organizationNumber: '123',
@@ -163,6 +162,9 @@ class Signup extends Component {
                 totalArea: '',
                 associationsNames: [],
                 houses: []
+        }
+        const number ={
+            value:''
         }
           this.setState(state=>{
               const list = state.association.organizations.push(organization);
@@ -173,8 +175,26 @@ class Signup extends Component {
         console.log(this.state.association);
     }
 
+    handleChange = (e) =>{
+        if(["orgNumber"].includes(e.target.className) ){
+            let organizations = this.state.organizations
+            organizations[e.target.dataset.id][e.target.className]=e.target.value.toUpperCase()
+            this.setState({organizations},()=>console.log(this.state.organizations))
+        }
+        else{
+            this.setState({[e.target.className]:e.target.value.toUpperCase()})
+        }
+    }
+    addNewOrganization=(e)=>{
+        this.setState((prevState)=>({
+            organizations: [...prevState.organizations,{orgNumber:""}]
+        }));
+    }
+
 
     render() {
+        let {organizations} = this.state
+        console.log(organizations);
         return (
             <div className="signup-container">
                 <h1 className="page-title">Sign Up</h1>
@@ -245,18 +265,21 @@ class Signup extends Component {
                             Already registed? <Link to="/login">Login now!</Link>
                         </FormItem>
                     </Form>
-                    <button onClick={this.createNewOrganization.bind(this)}>New organization</button>
-                    <div>
-                        {this.state.association.organizations.map((item, index) =>
-                            <Association item={item} key={index} validate={this.state.name.validateStatus} keyId={index}/>
-                        )}
-                    </div>
+                    <Form  onChange={this.handleChange}>
+                        <div>
+                            <h1>Organization</h1>
+                        </div>
+                        <button onClick={this.addNewOrganization}>Add organization</button>
+                        <OrganizationInput organizations={organizations}/>
+                        <input type="submit" value="Submit"/>
+                    </Form>
                 </div>
-            </div>
+                </div>
         );
     }
 
     // Validation Functions
+
 
     validateName = (name) => {
         if(name.length < NAME_MIN_LENGTH) {
@@ -273,7 +296,7 @@ class Signup extends Component {
             return {
                 validateStatus: 'success',
                 errorMsg: null,
-              };            
+            };
         }
     }
 
@@ -468,6 +491,24 @@ class Signup extends Component {
                 validateStatus: 'success',
                 errorMsg: null,
             };            
+        }
+    }
+    validateOrganizationNumber = (organizationNumber) => {
+        if(organizationNumber.length < ORG_NUMBER_MIN_LENGTH) {
+            return {
+                validateStatus: 'error',
+                errorMsg: `Number is too short (Minimum ${ORG_NUMBER_MIN_LENGTH} characters needed.)`
+            }
+        } else if (organizationNumber.length > ORG_NUMBER_MAX_LENGTH) {
+            return {
+                validationStatus: 'error',
+                errorMsg: `Number is too long (Maximum ${ORG_NUMBER_MAX_LENGTH} characters allowed.)`
+            }
+        } else {
+            return {
+                validateStatus: 'success',
+                errorMsg: null,
+            };
         }
     }
 
