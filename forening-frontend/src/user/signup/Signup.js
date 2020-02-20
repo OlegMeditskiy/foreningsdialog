@@ -143,10 +143,10 @@ class Signup extends Component {
 
 
     handleChange = (e) =>{
-        console.log(e.target.bsClass)
-        if(["orgNumber","numberOfApartments","totalArea"].includes(e.target.bsClass) ){
+        const className = e.target.className.split(" ")[0]
+        if(["orgNumber","numberOfApartments","totalArea"].includes(className) ){
             let organizations = this.state.organizations
-            organizations[e.target.dataset.id][e.target.bsClass]=e.target.value
+            organizations[e.target.dataset.id][className]=e.target.value
             this.setState({organizations},()=>console.log(this.state.organizations))
         }
         else{
