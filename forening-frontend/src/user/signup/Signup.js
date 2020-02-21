@@ -29,15 +29,15 @@ class Signup extends Component {
                     houses:[{
                         address:'',
                         city:'',
-                        zipCode: ''
+                        zipCode: 0
                     }
                     ],
                     associations:[{
-                        name: '',
+                        associationName: '',
                         contacts: [{
-                            name:'',
-                            telephone: '',
-                            email:''
+                            contactName:'',
+                            contactTelephone: '',
+                            contactEmail:''
                         }]
                     }],
                 }]
@@ -60,13 +60,86 @@ class Signup extends Component {
         this.validateUsernameAvailability = this.validateUsernameAvailability.bind(this);
         this.validateEmailAvailability = this.validateEmailAvailability.bind(this);
         this.isFormInvalid = this.isFormInvalid.bind(this);
-
         this.handleChange = this.handleChange.bind(this);
         this.addNewOrganization = this.addNewOrganization.bind(this);
+        this.addNewAssociation = this.addNewAssociation.bind(this);
+        this.addNewHouse = this.addNewHouse.bind(this);
+        this.addNewContact = this.addNewHouse.bind(this);
     }
 
+    handleChange = (e) =>{
+        const className = e.target.className.split(" ")[0];
+        const index = e.target.dataset.id;
+        if(["orgNumber","numberOfApartments","totalArea"].includes(className) ){
+            let organizations = this.state.association.organizations;
+            organizations[e.target.dataset.id][className]=e.target.value;
+            this.setState({organizations},()=>console.log(this.state.organizations))
+        }
+        else if(["address","city","zipCode"].includes(className)){
+            let houses = this.state.association.organizations[index].houses;
+            houses[e.target.dataset.id][className]=e.target.value;
+            this.setState({houses},()=>console.log(this.state.association.organizations[index].houses))
+        }
+        else if(["associationName"].includes(className)){
+            let associations = this.state.association.associations;
+            associations[e.target.dataset.id][className]=e.target.value;
+            this.setState({associations},()=>console.log(this.state.association.associations))
+        }
+        else if(["contactName","contactTelephone","contactEmail"].includes(className)){
+            let contacts = this.state.association.associations[index].contacts;
+            contacts[e.target.dataset.id][className]=e.target.value;
+            this.setState({contacts},()=>console.log(this.state.association.associations[index].contacts))
+        }
+        else{
+            this.setState({[e.target.className]:e.target.value})
+        }
+    }
 
+    addNewHouse=(e)=>{
+        const house ={
+            address:'',
+                city:'',
+            zipCode: ''
+        };
+        this.setState((prevState)=>({
+            association: {...prevState.association,organization:{...prevState.association.organizations[e.target.dataset.id],houses:[...prevState.association.organizations[e.target.dataset.id].houses,house]}}
+        }));
+    }
+    addNewAssociation=(e)=>{
+        const association ={
+            associationName: '',
+            contacts: [{
+                contactName:'',
+                contactTelephone: '',
+                contactEmail:''
+            }]
+        }
+        this.setState((prevState)=>({
+            association: {...prevState.association,associations:[...prevState.association.associations,association]}
+        }));
+    }
+    addNewContact=(e)=>{
+        const contact ={
+            contactName:'',
+            contactTelephone: '',
+            contactEmail:''
+        }
+        this.setState((prevState)=>({
+            association: {...prevState.association,association:{...prevState.association.associations[e.target.dataset.id],contacts:[...prevState.association.associations[e.target.dataset.id].contacts,contact]}}
+        }));
+    }
 
+    addNewOrganization=(e)=>{
+        const organization = {
+            orgNumber:'',
+            totalArea:'',
+            numberOfApartments: 0
+        };
+        this.setState((prevState)=>({
+            association: {...prevState.association,organizations:[...prevState.association.organizations,organization]}
+        }));
+        console.log(this.state.association.organizations)
+    }
 
 
     handleInputChange(event, validationFun) {
@@ -116,51 +189,9 @@ class Signup extends Component {
         );
     }
 
-    handleOrganizationInputChange(event, validationFun,whichOrganization){
-        console.log('Change org '+ whichOrganization);
-        const target = event.target;
-        const inputName = target.name;
-        const inputValue = target.value;
-        this.setState(state=>{
-
-            const number = state.organizationNumber[whichOrganization];
-            number.value=inputValue;
-            const list = state.association.organizations.map((organization,index)=>{
-               if (whichOrganization==index){
-                   return organization.organizationNumber = inputValue;
-               }
-            });
-            return{
-                list,
-                number
-            };
-        });
-        console.log(this.state.association.organizations[0].organizationNumber);
-    }
 
 
-    handleChange = (e) =>{
-        const className = e.target.className.split(" ")[0]
-        if(["orgNumber","numberOfApartments","totalArea"].includes(className) ){
-            let organizations = this.state.association.organizations
-            organizations[e.target.dataset.id][className]=e.target.value
-            this.setState({organizations},()=>console.log(this.state.organizations))
-        }
-        else{
-            this.setState({[e.target.className]:e.target.value})
-        }
-    }
-    addNewOrganization=(e)=>{
-        const organization = {
-            orgNumber:'',
-            totalArea:'',
-            numberOfApartments: 0
-        };
-        this.setState((prevState)=>({
-            association: {...prevState.association,organizations:[...prevState.association.organizations,organization]}
-        }));
-        console.log(this.state.association.organizations)
-    }
+
 
 
 
