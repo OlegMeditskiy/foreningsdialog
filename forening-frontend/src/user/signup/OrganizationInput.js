@@ -1,7 +1,7 @@
 import React from 'react';
-import {Form} from "react-bootstrap";
-
-
+import {Button, Form} from "react-bootstrap";
+import AssociationInput from "./AssociationInput";
+import HouseInput from "./HouseInput";
 
 const OrganizationInput = (props)=>{
     return(
@@ -45,6 +45,10 @@ const OrganizationInput = (props)=>{
                             className="numberOfApartments"
                         />
                     </Form.Group>
+                    <Button onClick={(event)=>props.addAssociation(event,idx)}>Lagga forening</Button>
+                    <AssociationInput organization={idx} associations={props.organizations[idx].associations}/>
+                    <Button onClick={(event)=>props.addHouse(event,idx)}>Lagga hus</Button>
+                    <HouseInput organization={idx} houses={props.organizations[idx].houses}/>
                     <hr/>
                 </div>
             )
