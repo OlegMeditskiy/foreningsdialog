@@ -18,7 +18,7 @@ public class ContactPerson {
 
     private String name;
 
-    private long telephone;
+    private String telephone;
 
     private String email;
 

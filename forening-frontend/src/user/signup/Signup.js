@@ -22,37 +22,29 @@ class Signup extends Component {
         super(props);
         this.state = {
             association:{
-                name:'new',
                 organizations:[{
                     orgNumber:'',
                     totalArea:'',
-                    numberOfApartments: 0
+                    numberOfApartments: 0,
+                    houses:[{
+                        address:'',
+                        city:'',
+                        zipCode: ''
+                    }
+                    ],
+                    associations:[{
+                        name: '',
+                        contacts: [{
+                            name:'',
+                            telephone: '',
+                            email:''
+                        }]
+                    }],
                 }]
-            },
-            organizations:[{
-                orgNumber:'',
-                totalArea:'',
-                numberOfApartments: 0
-            }],
-
-            house:{
-                address: '',
-                city: '',
-                zipCode:'',
-            },
-            associationsName:{
-              name:{},
-              contacts:[]
-            },
-            contact:{
-                name: '',
-                telephone:'',
-                email: ''
             },
             name: {
                 value: ''
             },
-            countContacts:0,
             username: {
                 value: ''
             },
@@ -169,6 +161,7 @@ class Signup extends Component {
         }));
         console.log(this.state.association.organizations)
     }
+
 
 
     render() {
