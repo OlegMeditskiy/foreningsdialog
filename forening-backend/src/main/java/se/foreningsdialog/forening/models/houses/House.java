@@ -18,5 +18,5 @@ public class House {
 
     private String city;
 
-    private String zipCode;
+    private int zipCode;
 }

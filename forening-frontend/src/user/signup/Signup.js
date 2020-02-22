@@ -13,7 +13,7 @@ import {
 
 } from '../../constants';
 
-import {notification } from 'antd';
+import {notification} from 'antd';
 import {Button, Form} from "react-bootstrap";
 
 
@@ -21,38 +21,36 @@ class Signup extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            errors: {
+                orgNumber: '',
+                zipCode:'',
+                contactEmail:''
+
+            },
             association:{
-                name:'new',
+                name:'',
                 organizations:[{
                     orgNumber:'',
                     totalArea:'',
-                    numberOfApartments: 0
+                    numberOfApartments: 0,
+                    houses:[{
+                        address:'',
+                        city:'',
+                        zipCode: 0
+                    }],
+                    associations:[{
+                        associationName: '',
+                        contacts: [{
+                            contactName:'',
+                            contactTelephone: '',
+                            contactEmail:''
+                        }]
+                    }]
                 }]
-            },
-            organizations:[{
-                orgNumber:'',
-                totalArea:'',
-                numberOfApartments: 0
-            }],
-
-            house:{
-                address: '',
-                city: '',
-                zipCode:'',
-            },
-            associationsName:{
-              name:{},
-              contacts:[]
-            },
-            contact:{
-                name: '',
-                telephone:'',
-                email: ''
             },
             name: {
                 value: ''
             },
-            countContacts:0,
             username: {
                 value: ''
             },
@@ -63,53 +61,184 @@ class Signup extends Component {
                 value: ''
             }
         }
-        this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.validateUsernameAvailability = this.validateUsernameAvailability.bind(this);
         this.validateEmailAvailability = this.validateEmailAvailability.bind(this);
         this.isFormInvalid = this.isFormInvalid.bind(this);
-
         this.handleChange = this.handleChange.bind(this);
         this.addNewOrganization = this.addNewOrganization.bind(this);
+        this.addNewAssociation = this.addNewAssociation.bind(this);
+        this.addNewHouse = this.addNewHouse.bind(this);
+        this.addNewContact = this.addNewContact.bind(this);
     }
 
 
+    handleChange = (e) =>{
+        const EMAIL_REGEX = RegExp('[^@ ]+@[^@ ]+\\.[^@ ]+');
+        const className = e.target.className.split(" ")[0];
+        console.log(className)
+        const index = e.target.dataset.id;
+        const value = e.target.value;
+        const organizationId = e.target.dataset.organization;
+        const associationId = e.target.dataset.association;
+        let errors = this.state.errors;
+        switch (className) {
+            case 'orgNumber':
+                errors.orgNumber = value.length==0?'':
+                    value.length<10 ?'Organization must be 10 characters long':
+                    '';
+                break;
+            case 'zipCode':
+                errors.zipCode = value.length==0?'':
+                    value.length<5 ?'Postnummer maste vara 5 symboler lang':
+                        '';
+                break;
+            case 'contactEmail':
+                errors.contactEmail = value.length==0?'':
+                    EMAIL_REGEX.test(value) ?'':
+                        'Email is invalid';
+                break;
+            default:
+                break;
+        }
+        this.setState({errors, [className]: value}, ()=> {
+            console.log(errors)
+        })
+        console.log(organizationId,associationId)
+        if(["orgNumber","numberOfApartments","totalArea"].includes(className) ){
+            let organizations = this.state.association.organizations;
+            organizations[e.target.dataset.id][className]=value;
+            this.setState({organizations},()=>console.log(this.state.organizations))
+        }
+        else if(["address","city","zipCode"].includes(className)){
+            let houses = this.state.association.organizations[organizationId].houses;
+            houses[e.target.dataset.id][className]=e.target.value;
+
+            this.setState({houses},()=>console.log(this.state.association.organizations[organizationId].houses))
+        }
+        else if(["associationName"].includes(className)){
+            let associations = this.state.association.organizations[organizationId].associations;
+            associations[e.target.dataset.id][className]=e.target.value;
+            this.setState({associations},   ()=>console.log(this.state.association.organizations[organizationId].associations))
+        }
+        else if(["contactName","contactTelephone","contactEmail"].includes(className)){
+            let contacts = this.state.association.organizations[organizationId].associations[associationId].contacts;
+            contacts[e.target.dataset.id][className]=e.target.value;
+            this.setState({contacts},()=>console.log(this.state.association.organizations[organizationId].associations[associationId].contacts))
+        }
+        else{
+            this.setState({[className]:{value:value}},()=>console.log(this.state))
+        }
+    }
+
+    addNewHouse=(event,orgId)=>{
+        const house = {
+            street:'',
+                city:'',
+            zipCode: 0
+        };
+
+        this.setState((prevState)=>({
+            association:{...prevState.association,
+                organizations:[...prevState.association.organizations.slice(0,orgId),
+                    {...prevState.association.organizations[orgId],
+                        houses:[...prevState.association.organizations[orgId].houses,house]},
+                    ...prevState.association.organizations.slice(orgId+1)
+                ]}
+        }));
+    }
+    addNewAssociation=(e,orgId)=>{
+        const association = {
+            associationName: '',
+            contacts: [{
+                contactName:'',
+                contactTelephone: '',
+                contactEmail:''
+            }]
+        };
+        console.log(this.state.association.organizations[orgId])
+        this.setState((prevState)=>({
+            association:{...prevState.association,
+                organizations:[...prevState.association.organizations.slice(0,orgId),
+                    {...prevState.association.organizations[orgId],
+                        associations:[...prevState.association.organizations[orgId].associations,association]},
+                    ...prevState.association.organizations.slice(orgId+1)
+                ]}
+        }));
+
+    }
+    addNewContact=(e,orgId,associationId)=>{
+        const contact ={
+            contactName:'',
+            contactTelephone: '',
+            contactEmail:''
+        }
+        this.setState((prevState)=>({
+            association:{...prevState.association,
+                organizations:[...prevState.association.organizations.slice(0,orgId),
+
+                    {...prevState.association.organizations[orgId],
+                        associations:[...prevState.association.organizations[orgId].associations.slice(0,associationId),
+                            {...prevState.association.organizations[orgId].associations[associationId],
+                            contacts:[...prevState.association.organizations[orgId].associations[associationId].contacts,contact]
+                            }
+                        ]},
 
 
+                    ...prevState.association.organizations.slice(orgId+1)
+                ]}
+        }));
 
-    handleInputChange(event, validationFun) {
-        const target = event.target;
-        const inputName = target.name;        
-        const inputValue = target.value;
-        this.setState({
-            [inputName] : {
-                value: inputValue,
-                ...validationFun(inputValue)
+    }
+
+    addNewOrganization=(e)=>{
+        const organization = {
+            orgNumber:'',
+            totalArea:'',
+            numberOfApartments: 0,
+            houses:[{
+                street:'',
+                city:'',
+                zipCode: 0
             }
-        });
-    }
+            ],
+            associations:[{
+                associationName: '',
+                contacts: [{
+                    contactName:'',
+                    contactTelephone: '',
+                    contactEmail:''
+                }]
+            }]
 
+        };
+        this.setState((prevState)=>({
+            association: {...prevState.association,
+                organizations:[...prevState.association.organizations,organization]}
+        }));
+
+    }
 
     handleSubmit(event) {
         event.preventDefault();
+
         const signupRequest = {
+            association: this.state.association,
             name: this.state.name.value,
             email: this.state.email.value,
             username: this.state.username.value,
-            password: this.state.password.value,
-            organization: this.state.organization
+            password: this.state.password.value
         };
-
         signup(signupRequest)
-        .then(response => {
-            notification.success({
-                message: 'Polling App',
-                description: "Thank you! You're successfully registered. Please Login to continue!",
-            });          
-            this.props.history.push("/login");
-        }).catch(error => {
+            .then(response => {
+                notification.success({
+                    message: 'Polling App',
+                    description: "Thank you! You're successfully registered. Please Login to continue!",
+                });
+                this.props.history.push("/login");
+            }).catch(error => {
             notification.error({
-                message: 'Forenings App',
+                message: 'Polling App',
                 description: error.message || 'Sorry! Something went wrong. Please try again!'
             });
         });
@@ -124,204 +253,123 @@ class Signup extends Component {
         );
     }
 
-    handleOrganizationInputChange(event, validationFun,whichOrganization){
-        console.log('Change org '+ whichOrganization);
-        const target = event.target;
-        const inputName = target.name;
-        const inputValue = target.value;
-        this.setState(state=>{
-
-            const number = state.organizationNumber[whichOrganization];
-            number.value=inputValue;
-            const list = state.association.organizations.map((organization,index)=>{
-               if (whichOrganization==index){
-                   return organization.organizationNumber = inputValue;
-               }
-            });
-            return{
-                list,
-                number
-            };
-        });
-        console.log(this.state.association.organizations[0].organizationNumber);
-    }
-
-
-    handleChange = (e) =>{
-        const className = e.target.className.split(" ")[0]
-        if(["orgNumber","numberOfApartments","totalArea"].includes(className) ){
-            let organizations = this.state.association.organizations
-            organizations[e.target.dataset.id][className]=e.target.value
-            this.setState({organizations},()=>console.log(this.state.organizations))
-        }
-        else{
-            this.setState({[e.target.className]:e.target.value})
-        }
-    }
-    addNewOrganization=(e)=>{
-        const organization = {
-            orgNumber:'',
-            totalArea:'',
-            numberOfApartments: 0
-        };
-        this.setState((prevState)=>({
-            association: {...prevState.association,organizations:[...prevState.association.organizations,organization]}
-        }));
-        console.log(this.state.association.organizations)
-    }
-
-
     render() {
         let {organizations} = this.state.association
+        console.log(this.state.association)
         return (
             <div className="signup-container">
                 <h1 className="page-title">Sign Up</h1>
-
-
                 <div className="signup-content">
+{/*                    <Form onSubmit={this.handleSubmit} className="signup-form">
+                        <FormItem
+                            label="Full Name"
+                            validateStatus={this.state.name.validateStatus}
+                            help={this.state.name.errorMsg}>
+                            <Input
+                                size="large"
+                                name="name"
+                                autoComplete="off"
+                                placeholder="Your full name"
+                                value={this.state.name.value}
+                                onChange={(event) => this.handleInputChange(event, this.validateName)} />
+                        </FormItem>
+                        <FormItem label="Username"
+                            hasFeedback
+                            validateStatus={this.state.username.validateStatus}
+                            help={this.state.username.errorMsg}>
+                            <Input
+                                size="large"
+                                name="username"
+                                autoComplete="off"
+                                placeholder="A unique username"
+                                value={this.state.username.value}
+                                onBlur={this.validateUsernameAvailability}
+                                onChange={(event) => this.handleInputChange(event, this.validateUsername)} />
+                        </FormItem>
+                        <FormItem
+                            label="Email"
+                            hasFeedback
+                            validateStatus={this.state.email.validateStatus}
+                            help={this.state.email.errorMsg}>
+                            <Input
+                                size="large"
+                                name="email"
+                                type="email"
+                                autoComplete="off"
+                                placeholder="Your email"
+                                value={this.state.email.value}
+                                onBlur={this.validateEmailAvailability}
+                                onChange={(event) => this.handleInputChange(event, this.validateEmail)} />
+                        </FormItem>
+                        <FormItem
+                            label="Password"
+                            validateStatus={this.state.password.validateStatus}
+                            help={this.state.password.errorMsg}>
+                            <Input
+                                size="large"
+                                name="password"
+                                type="password"
+                                autoComplete="off"
+                                placeholder="A password between 6 to 20 characters"
+                                value={this.state.password.value}
+                                onChange={(event) => this.handleInputChange(event, this.validatePassword)} />
+                        </FormItem>
+                        <FormItem>
+                            <Button type="primary"
+                                htmlType="submit"
+                                size="large"
+                                className="signup-form-button"
+                                disabled={this.isFormInvalid()}>Sign up</Button>
+                            Already registed? <Link to="/login">Login now!</Link>
+                        </FormItem>
+                    </Form>*/}
+                    <Form onSubmit={this.handleSubmit} onChange={this.handleChange} className="signup-form" >
+                        <Form.Group>
+                            <Form.Control
+                                size="large"
+                                name="name"
+                                autoComplete="off"
+                                placeholder="Your full name"
+                                className={"name"}/>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Control
+                                size="large"
+                                name="username"
+                                autoComplete="off"
+                                className={"username"}
+                                placeholder="A unique username"/>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Control
+                                size="large"
+                                name="email"
+                                type="email"
+                                autoComplete="off"
+                                className={"email"}
+                                placeholder="Your email"/>
 
-                    {/*<Form onSubmit={this.handleSubmit} className="signup-form">*/}
-                    {/*    <FormItem */}
-                    {/*        label="Full Name"*/}
-                    {/*        validateStatus={this.state.name.validateStatus}*/}
-                    {/*        help={this.state.name.errorMsg}>*/}
-                    {/*        <Input */}
-                    {/*            size="large"*/}
-                    {/*            name="name"*/}
-                    {/*            autoComplete="off"*/}
-                    {/*            placeholder="Your full name"*/}
-                    {/*            value={this.state.name.value} */}
-                    {/*            onChange={(event) => this.handleInputChange(event, this.validateName)} />    */}
-                    {/*    </FormItem>*/}
-                    {/*    <FormItem label="Username"*/}
-                    {/*        hasFeedback*/}
-                    {/*        validateStatus={this.state.username.validateStatus}*/}
-                    {/*        help={this.state.username.errorMsg}>*/}
-                    {/*        <Input */}
-                    {/*            size="large"*/}
-                    {/*            name="username" */}
-                    {/*            autoComplete="off"*/}
-                    {/*            placeholder="A unique username"*/}
-                    {/*            value={this.state.username.value} */}
-                    {/*            onBlur={this.validateUsernameAvailability}*/}
-                    {/*            onChange={(event) => this.handleInputChange(event, this.validateUsername)} />    */}
-                    {/*    </FormItem>*/}
-                    {/*    <FormItem */}
-                    {/*        label="Email"*/}
-                    {/*        hasFeedback*/}
-                    {/*        validateStatus={this.state.email.validateStatus}*/}
-                    {/*        help={this.state.email.errorMsg}>*/}
-                    {/*        <Input */}
-                    {/*            size="large"*/}
-                    {/*            name="email" */}
-                    {/*            type="email" */}
-                    {/*            autoComplete="off"*/}
-                    {/*            placeholder="Your email"*/}
-                    {/*            value={this.state.email.value} */}
-                    {/*            onBlur={this.validateEmailAvailability}*/}
-                    {/*            onChange={(event) => this.handleInputChange(event, this.validateEmail)} />    */}
-                    {/*    </FormItem>*/}
-                    {/*    <FormItem */}
-                    {/*        label="Password"*/}
-                    {/*        validateStatus={this.state.password.validateStatus}*/}
-                    {/*        help={this.state.password.errorMsg}>*/}
-                    {/*        <Input */}
-                    {/*            size="large"*/}
-                    {/*            name="password" */}
-                    {/*            type="password"*/}
-                    {/*            autoComplete="off"*/}
-                    {/*            placeholder="A password between 6 to 20 characters" */}
-                    {/*            value={this.state.password.value} */}
-                    {/*            onChange={(event) => this.handleInputChange(event, this.validatePassword)} />    */}
-                    {/*    </FormItem>*/}
-                    {/*    <FormItem>*/}
-                    {/*        <Button type="primary" */}
-                    {/*            htmlType="submit" */}
-                    {/*            size="large" */}
-                    {/*            className="signup-form-button"*/}
-                    {/*            disabled={this.isFormInvalid()}>Sign up</Button>*/}
-                    {/*        Already registed? <Link to="/login">Login now!</Link>*/}
-                    {/*    </FormItem>*/}
-                    {/*</Form>*/}
-                    <Form  onChange={this.handleChange}>
-                        <Button onClick={this.addNewOrganization}>Lagga organisation</Button>
-                        <OrganizationInput  organizations={organizations}/>
-                        <input type="submit" value="Submit"/>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Control
+                                size="large"
+                                name="password"
+                                type="password"
+                                autoComplete="off"
+                                className={"password"}
+                                placeholder="A password between 6 to 20 characters"/>
+                        </Form.Group>
+                        <Button className="signup-form-button" onClick={this.addNewOrganization}>Lagga organisation</Button>
+                        <OrganizationInput errors={this.state.errors} validateOrgNumber={this.validateOrganizationNumber} handleChange={this.handleChange} addContact={this.addNewContact} addHouse={this.addNewHouse} addAssociation={this.addNewAssociation}  organizations={organizations}/>
+                        <Button variant="primary" type="submit">Register</Button>
                     </Form>
+
                 </div>
                 </div>
         );
     }
 
     // Validation Functions
-
-
-    validateName = (name) => {
-        if(name.length < NAME_MIN_LENGTH) {
-            return {
-                validateStatus: 'error',
-                errorMsg: `Name is too short (Minimum ${NAME_MIN_LENGTH} characters needed.)`
-            }
-        } else if (name.length > NAME_MAX_LENGTH) {
-            return {
-                validationStatus: 'error',
-                errorMsg: `Name is too long (Maximum ${NAME_MAX_LENGTH} characters allowed.)`
-            }
-        } else {
-            return {
-                validateStatus: 'success',
-                errorMsg: null,
-            };
-        }
-    }
-
-    validateAddress = (address) => {
-        if(address.length < ADDRESS_MIN_LENGTH) {
-            return {
-                validateStatus: 'error',
-                errorMsg: `Address is too short (Minimum ${ADDRESS_MIN_LENGTH} characters needed.)`
-            }
-        } else if (address.length > ADDRESS_MAX_LENGTH) {
-            return {
-                validationStatus: 'error',
-                errorMsg: `Address is too long (Maximum ${ADDRESS_MAX_LENGTH} characters allowed.)`
-            }
-        } else {
-            return {
-                validateStatus: 'success',
-                errorMsg: null,
-            };
-        }
-    }
-
-    validateEmail = (email) => {
-        if(!email) {
-            return {
-                validateStatus: 'error',
-                errorMsg: 'Email may not be empty'                
-            }
-        }
-
-        const EMAIL_REGEX = RegExp('[^@ ]+@[^@ ]+\\.[^@ ]+');
-        if(!EMAIL_REGEX.test(email)) {
-            return {
-                validateStatus: 'error',
-                errorMsg: 'Email not valid'
-            }
-        }
-
-        if(email.length > EMAIL_MAX_LENGTH) {
-            return {
-                validateStatus: 'error',
-                errorMsg: `Email is too long (Maximum ${EMAIL_MAX_LENGTH} characters allowed)`
-            }
-        }
-
-        return {
-            validateStatus: null,
-            errorMsg: null
-        }
-    }
 
     validateUsername = (username) => {
         if(username.length < USERNAME_MIN_LENGTH) {
@@ -407,7 +455,7 @@ class Signup extends Component {
                     value: emailValue,
                     ...emailValidation
                 }
-            });    
+            });
             return;
         }
 
@@ -466,24 +514,6 @@ class Signup extends Component {
                 validateStatus: 'success',
                 errorMsg: null,
             };            
-        }
-    }
-    validateOrganizationNumber = (organizationNumber) => {
-        if(organizationNumber.length < ORG_NUMBER_MIN_LENGTH) {
-            return {
-                validateStatus: 'error',
-                errorMsg: `Number is too short (Minimum ${ORG_NUMBER_MIN_LENGTH} characters needed.)`
-            }
-        } else if (organizationNumber.length > ORG_NUMBER_MAX_LENGTH) {
-            return {
-                validationStatus: 'error',
-                errorMsg: `Number is too long (Maximum ${ORG_NUMBER_MAX_LENGTH} characters allowed.)`
-            }
-        } else {
-            return {
-                validateStatus: 'success',
-                errorMsg: null,
-            };
         }
     }
 
