@@ -21,10 +21,16 @@ class Signup extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            errors: {
+                orgNumber: ''
+
+            },
             association:{
                 name:'',
                 organizations:[{
-                    orgNumber:'',
+                    orgNumber:{
+                        value:''
+                    },
                     totalArea:'',
                     numberOfApartments: 0,
                     houses:[{
@@ -64,33 +70,52 @@ class Signup extends Component {
         this.addNewOrganization = this.addNewOrganization.bind(this);
         this.addNewAssociation = this.addNewAssociation.bind(this);
         this.addNewHouse = this.addNewHouse.bind(this);
-        this.addNewContact = this.addNewHouse.bind(this);
+        this.addNewContact = this.addNewContact.bind(this);
+        this.validateOrganizationNumber = this.validateOrganizationNumber.bind(this);
     }
 
-    handleChange = (e) =>{
-        console.log(e.target.className);
+    handleChange = (e, validationFun) =>{
         const className = e.target.className.split(" ")[0];
         const index = e.target.dataset.id;
-        console.log(index);
+        const value = e.target.value;
+        const organizationId = e.target.dataset.organization;
+        const associationId = e.target.dataset.association;
+        let errors = this.state.errors;
+        switch (className) {
+            case 'orgNumber':
+                errors.orgNumber = value.length==0?'':
+                    value.length<10 ?'Organization must be 10 characters long':
+                    value.length>10 ? 'Organization must be 10 characters long'
+                    :'';
+
+                break;
+            default:
+                break;
+        }
+        this.setState({errors, [className]: value}, ()=> {
+            console.log(errors)
+        })
+        console.log(organizationId,associationId)
         if(["orgNumber","numberOfApartments","totalArea"].includes(className) ){
             let organizations = this.state.association.organizations;
-            organizations[e.target.dataset.id][className]=e.target.value;
+            organizations[e.target.dataset.id][className]={value:e.target.value,...validationFun(e.target.value)};
             this.setState({organizations},()=>console.log(this.state.organizations))
         }
         else if(["address","city","zipCode"].includes(className)){
-            let houses = this.state.association.organizations[index].houses;
+            let houses = this.state.association.organizations[organizationId].houses;
             houses[e.target.dataset.id][className]=e.target.value;
-            this.setState({houses},()=>console.log(this.state.association.organizations[index].houses))
+
+            this.setState({houses},()=>console.log(this.state.association.organizations[organizationId].houses))
         }
         else if(["associationName"].includes(className)){
-            let associations = this.state.association.organizations[e.target.dataset.organization].associations;
+            let associations = this.state.association.organizations[organizationId].associations;
             associations[e.target.dataset.id][className]=e.target.value;
-            this.setState({associations},()=>console.log(this.state.association.associations))
+            this.setState({associations},   ()=>console.log(this.state.association.organizations[organizationId].associations))
         }
         else if(["contactName","contactTelephone","contactEmail"].includes(className)){
-            let contacts = this.state.association.associations[e.target.dataset.association].contacts;
+            let contacts = this.state.association.organizations[organizationId].associations[associationId].contacts;
             contacts[e.target.dataset.id][className]=e.target.value;
-            this.setState({contacts},()=>console.log(this.state.association.associations[index].contacts))
+            this.setState({contacts},()=>console.log(this.state.association.organizations[organizationId].associations[associationId].contacts))
         }
         else{
             this.setState({[e.target.className]:e.target.value})
@@ -99,9 +124,9 @@ class Signup extends Component {
 
     addNewHouse=(event,orgId)=>{
         const house = {
-            address:'check',
+            address:'',
                 city:'',
-            zipCode: 123
+            zipCode: 0
         };
 
         this.setState((prevState)=>({
@@ -115,7 +140,7 @@ class Signup extends Component {
     }
     addNewAssociation=(e,orgId)=>{
         const association = {
-            associationName: 'check',
+            associationName: '',
             contacts: [{
                 contactName:'',
                 contactTelephone: '',
@@ -133,15 +158,28 @@ class Signup extends Component {
         }));
 
     }
-    addNewContact=(e)=>{
+    addNewContact=(e,orgId,associationId)=>{
         const contact ={
             contactName:'',
             contactTelephone: '',
             contactEmail:''
         }
         this.setState((prevState)=>({
-            association: {...prevState.association,association:{...prevState.association.associations[e.target.dataset.id],contacts:[...prevState.association.associations[e.target.dataset.id].contacts,contact]}}
+            association:{...prevState.association,
+                organizations:[...prevState.association.organizations.slice(0,orgId),
+
+                    {...prevState.association.organizations[orgId],
+                        associations:[...prevState.association.organizations[orgId].associations.slice(0,associationId),
+                            {...prevState.association.organizations[orgId].associations[associationId],
+                            contacts:[...prevState.association.organizations[orgId].associations[associationId].contacts,contact]
+                            }
+                        ]},
+
+
+                    ...prevState.association.organizations.slice(orgId+1)
+                ]}
         }));
+
     }
 
     addNewOrganization=(e)=>{
@@ -220,12 +258,6 @@ class Signup extends Component {
         );
     }
 
-
-
-
-
-
-
     render() {
         let {organizations} = this.state.association
         console.log(this.state.association)
@@ -297,9 +329,9 @@ class Signup extends Component {
                             Already registed? <Link to="/login">Login now!</Link>
                         </FormItem>
                     </Form>*/}
-                    <Form  onChange={this.handleChange}>
+                    <Form >
                         <Button onClick={this.addNewOrganization}>Lagga organisation</Button>
-                        <OrganizationInput addHouse={this.addNewHouse} addAssociation={this.addNewAssociation}  organizations={organizations}/>
+                        <OrganizationInput errors={this.state.errors} validateOrgNumber={this.validateOrganizationNumber} handleChange={this.handleChange} addContact={this.addNewContact} addHouse={this.addNewHouse} addAssociation={this.addNewAssociation}  organizations={organizations}/>
                         <input type="submit" value="Submit"/>
                     </Form>
                 </div>
@@ -522,13 +554,13 @@ class Signup extends Component {
             };            
         }
     }
-    validateOrganizationNumber = (organizationNumber) => {
-        if(organizationNumber.length < ORG_NUMBER_MIN_LENGTH) {
+    validateOrganizationNumber = (orgNumber) => {
+        if(orgNumber.length < ORG_NUMBER_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
                 errorMsg: `Number is too short (Minimum ${ORG_NUMBER_MIN_LENGTH} characters needed.)`
             }
-        } else if (organizationNumber.length > ORG_NUMBER_MAX_LENGTH) {
+        } else if (orgNumber.length > ORG_NUMBER_MAX_LENGTH) {
             return {
                 validationStatus: 'error',
                 errorMsg: `Number is too long (Maximum ${ORG_NUMBER_MAX_LENGTH} characters allowed.)`
