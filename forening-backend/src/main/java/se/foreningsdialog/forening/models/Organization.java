@@ -23,7 +23,7 @@ public class Organization {
     @GeneratedValue
     private long id;
 
-    private String organizationNumber;
+    private String orgNumber;
     private int numberOfApartments;
     private int totalArea;
 

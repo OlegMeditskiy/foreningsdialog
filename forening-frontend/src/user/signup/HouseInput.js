@@ -7,7 +7,7 @@ import OrganizationInput from "./OrganizationInput";
 const HouseInput = (props)=>{
     return(
         props.houses.map((val,idx)=>{
-            let addressId = `address-${idx}`,cityId = `city-${idx}`,zipCodeId = `zipCode-${idx}`
+            let streetId = `street-${idx}`,cityId = `city-${idx}`,zipCodeId = `zipCode-${idx}`
             return(
                 <div key={idx}>
                     <div>Hus {idx+1}</div>
@@ -15,13 +15,14 @@ const HouseInput = (props)=>{
                         <Form.Label>Address</Form.Label>
                         <Form.Control
                             type="text"
-                            name={addressId}
+                            name={streetId}
                             data-id={idx}
                             data-organization={props.organization}
-                            id={addressId}
-                            placeholder="Address"
+                            id={streetId}
+                            autoComplete="off"
+                            placeholder="Gata"
                             // value={props.organizations[idx].orgNumber}
-                            className={"address"}
+                            className={"street"}
                         />
                     </Form.Group>
                     <Form.Group>
@@ -32,6 +33,7 @@ const HouseInput = (props)=>{
                             data-id={idx}
                             data-organization={props.organization}
                             id={cityId}
+                            autoComplete="off"
                             placeholder="Ort"
                             // value={props.organizations[idx].orgNumber}
                             className={"city"}
@@ -45,6 +47,7 @@ const HouseInput = (props)=>{
                             data-id={idx}
                             data-organization={props.organization}
                             id={zipCodeId}
+                            autoComplete="off"
                             onInput = {(e) =>{
                                 e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,5)
                             }}

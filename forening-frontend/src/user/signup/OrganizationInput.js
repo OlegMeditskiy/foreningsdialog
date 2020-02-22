@@ -35,6 +35,7 @@ const OrganizationInput = (props)=>{
                             placeholder="Total area"
                             name={totalAreaId}
                             data-id={idx}
+                            autoComplete="off"
                             id={totalAreaId}
                             // value={props.organizations[idx].orgNumber}
                             className="totalArea"
@@ -47,6 +48,7 @@ const OrganizationInput = (props)=>{
                             placeholder="Antal lagenheter"
                             name={numberOfApartmentsId}
                             data-id={idx}
+                            autoComplete="off"
                             id={numberOfApartmentsId}
                             // value={props.organizations[idx].orgNumber}
                             className="numberOfApartments"
@@ -54,7 +56,7 @@ const OrganizationInput = (props)=>{
                     </Form.Group>
                     <div className={"association"}>
                         <Button onClick={(event)=>props.addAssociation(event,idx)}>Lagga forening</Button>
-                        <AssociationInput addContact={props.addContact} organization={idx} associations={props.organizations[idx].associations}/>
+                        <AssociationInput errors={props.errors} addContact={props.addContact} organization={idx} associations={props.organizations[idx].associations}/>
                     </div>
                     <div className={"house"}>
                         <Button onClick={(event)=>props.addHouse(event,idx)}>Lagga hus</Button>

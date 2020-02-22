@@ -16,6 +16,7 @@ const ContactInput = (props)=>{
                             type="text"
                             name={contactNameId}
                             data-id={idx}
+                            autoComplete="off"
                             data-organization={props.organization}
                             data-association={props.association}
                             id={contactNameId}
@@ -30,6 +31,7 @@ const ContactInput = (props)=>{
                             type="number"
                             name={contactTelephoneId}
                             data-id={idx}
+                            autoComplete="off"
                             data-organization={props.organization}
                             data-association={props.association}
                             id={contactTelephoneId}
@@ -47,10 +49,13 @@ const ContactInput = (props)=>{
                             data-organization={props.organization}
                             data-association={props.association}
                             id={contactEmailId}
+                            autoComplete="off"
                             placeholder="E-mail"
                             // value={props.organizations[idx].orgNumber}
-                            className={"contactName"}
+                            className={"contactEmail"}
                         />
+                        {props.errors.contactEmail.length > 0 &&
+                        <span className='error'>{props.errors.contactEmail}</span>}
                     </Form.Group>
                     <hr/>
                 </div>

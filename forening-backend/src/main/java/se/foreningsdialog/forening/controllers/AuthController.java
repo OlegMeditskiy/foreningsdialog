@@ -2,6 +2,8 @@ package se.foreningsdialog.forening.controllers;
 
 import se.foreningsdialog.forening.exception.AppException;
 import se.foreningsdialog.forening.models.Association;
+import se.foreningsdialog.forening.models.AssociationName;
+import se.foreningsdialog.forening.models.ContactPerson;
 import se.foreningsdialog.forening.models.Organization;
 import se.foreningsdialog.forening.models.houses.House;
 import se.foreningsdialog.forening.models.users.User;
@@ -28,9 +30,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
 
-/**
- * Created by rajeevkumarsingh on 02/08/17.
- */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -44,14 +43,23 @@ public class AuthController {
     @Autowired
     RoleRepository roleRepository;
 
-    @Autowired
-    HouseRepository houseRepository;
+
 
     @Autowired
     AssociationRepository associationRepository;
 
     @Autowired
     OrganizationRepository organizationRepository;
+
+    @Autowired
+    HouseRepository houseRepository;
+
+    @Autowired
+    AssociationNameRepository associationNameRepository;
+
+    @Autowired
+    ContactPersonRepository contactPersonRepository;
+
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -77,6 +85,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+        System.out.println("sign up");
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
             return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
@@ -87,22 +96,26 @@ public class AuthController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        //Creating new organization
-        for (Organization organization1: signUpRequest.getAssociation().getOrganizations()){
-            Organization organization = new Organization();
-            for (House house:organization1.getHouses()){
-                houseRepository.save(house);
-            }
-            organization.setHouses(organization1.getHouses());
-            organizationRepository.save(organization);
-        }
-
 
         //Creating new Association
         Association association = new Association();
+        for (Organization organization: signUpRequest.getAssociation().getOrganizations()){
+            for (House house:organization.getHouses()){
+                houseRepository.save(house);
+            }
+            for(AssociationName associationName: organization.getAssociations()){
+                for (ContactPerson contactPerson: associationName.getContacts()){
+                    contactPersonRepository.save(contactPerson);
+                }
+                associationName.setContacts(associationName.getContacts());
+                associationNameRepository.save(associationName);
+            }
+            organization.setAssociations(organization.getAssociations());
+            organization.setHouses(organization.getHouses());
+            organizationRepository.save(organization);
+        }
         association.setOrganizations(signUpRequest.getAssociation().getOrganizations());
         associationRepository.save(association);
-
 
 
         // Creating user's account
@@ -123,5 +136,6 @@ public class AuthController {
                 .buildAndExpand(result.getUsername()).toUri();
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+//        return ResponseEntity.ok().body("Created");
     }
 }

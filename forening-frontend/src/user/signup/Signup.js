@@ -13,7 +13,7 @@ import {
 
 } from '../../constants';
 
-import {notification } from 'antd';
+import {notification} from 'antd';
 import {Button, Form} from "react-bootstrap";
 
 
@@ -23,7 +23,8 @@ class Signup extends Component {
         this.state = {
             errors: {
                 orgNumber: '',
-                zipCode:''
+                zipCode:'',
+                contactEmail:''
 
             },
             association:{
@@ -60,7 +61,6 @@ class Signup extends Component {
                 value: ''
             }
         }
-        this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.validateUsernameAvailability = this.validateUsernameAvailability.bind(this);
         this.validateEmailAvailability = this.validateEmailAvailability.bind(this);
@@ -70,11 +70,13 @@ class Signup extends Component {
         this.addNewAssociation = this.addNewAssociation.bind(this);
         this.addNewHouse = this.addNewHouse.bind(this);
         this.addNewContact = this.addNewContact.bind(this);
-        this.validateOrganizationNumber = this.validateOrganizationNumber.bind(this);
     }
 
-    handleChange = (e, validationFun) =>{
+
+    handleChange = (e) =>{
+        const EMAIL_REGEX = RegExp('[^@ ]+@[^@ ]+\\.[^@ ]+');
         const className = e.target.className.split(" ")[0];
+        console.log(className)
         const index = e.target.dataset.id;
         const value = e.target.value;
         const organizationId = e.target.dataset.organization;
@@ -90,6 +92,11 @@ class Signup extends Component {
                 errors.zipCode = value.length==0?'':
                     value.length<5 ?'Postnummer maste vara 5 symboler lang':
                         '';
+                break;
+            case 'contactEmail':
+                errors.contactEmail = value.length==0?'':
+                    EMAIL_REGEX.test(value) ?'':
+                        'Email is invalid';
                 break;
             default:
                 break;
@@ -120,13 +127,13 @@ class Signup extends Component {
             this.setState({contacts},()=>console.log(this.state.association.organizations[organizationId].associations[associationId].contacts))
         }
         else{
-            this.setState({[e.target.className]:e.target.value})
+            this.setState({[className]:{value:value}},()=>console.log(this.state))
         }
     }
 
     addNewHouse=(event,orgId)=>{
         const house = {
-            address:'',
+            street:'',
                 city:'',
             zipCode: 0
         };
@@ -190,7 +197,7 @@ class Signup extends Component {
             totalArea:'',
             numberOfApartments: 0,
             houses:[{
-                address:'',
+                street:'',
                 city:'',
                 zipCode: 0
             }
@@ -212,40 +219,26 @@ class Signup extends Component {
 
     }
 
-
-    handleInputChange(event, validationFun) {
-        const target = event.target;
-        const inputName = target.name;        
-        const inputValue = target.value;
-        this.setState({
-            [inputName] : {
-                value: inputValue,
-                ...validationFun(inputValue)
-            }
-        });
-    }
-
-
     handleSubmit(event) {
         event.preventDefault();
+
         const signupRequest = {
+            association: this.state.association,
             name: this.state.name.value,
             email: this.state.email.value,
             username: this.state.username.value,
-            password: this.state.password.value,
-            organization: this.state.organization
+            password: this.state.password.value
         };
-
         signup(signupRequest)
-        .then(response => {
-            notification.success({
-                message: 'Polling App',
-                description: "Thank you! You're successfully registered. Please Login to continue!",
-            });          
-            this.props.history.push("/login");
-        }).catch(error => {
+            .then(response => {
+                notification.success({
+                    message: 'Polling App',
+                    description: "Thank you! You're successfully registered. Please Login to continue!",
+                });
+                this.props.history.push("/login");
+            }).catch(error => {
             notification.error({
-                message: 'Forenings App',
+                message: 'Polling App',
                 description: error.message || 'Sorry! Something went wrong. Please try again!'
             });
         });
@@ -267,7 +260,6 @@ class Signup extends Component {
             <div className="signup-container">
                 <h1 className="page-title">Sign Up</h1>
                 <div className="signup-content">
-
 {/*                    <Form onSubmit={this.handleSubmit} className="signup-form">
                         <FormItem
                             label="Full Name"
@@ -331,85 +323,53 @@ class Signup extends Component {
                             Already registed? <Link to="/login">Login now!</Link>
                         </FormItem>
                     </Form>*/}
-                    <Form onChange={this.handleChange} >
-                        <Button onClick={this.addNewOrganization}>Lagga organisation</Button>
+                    <Form onSubmit={this.handleSubmit} onChange={this.handleChange} className="signup-form" >
+                        <Form.Group>
+                            <Form.Control
+                                size="large"
+                                name="name"
+                                autoComplete="off"
+                                placeholder="Your full name"
+                                className={"name"}/>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Control
+                                size="large"
+                                name="username"
+                                autoComplete="off"
+                                className={"username"}
+                                placeholder="A unique username"/>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Control
+                                size="large"
+                                name="email"
+                                type="email"
+                                autoComplete="off"
+                                className={"email"}
+                                placeholder="Your email"/>
+
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Control
+                                size="large"
+                                name="password"
+                                type="password"
+                                autoComplete="off"
+                                className={"password"}
+                                placeholder="A password between 6 to 20 characters"/>
+                        </Form.Group>
+                        <Button className="signup-form-button" onClick={this.addNewOrganization}>Lagga organisation</Button>
                         <OrganizationInput errors={this.state.errors} validateOrgNumber={this.validateOrganizationNumber} handleChange={this.handleChange} addContact={this.addNewContact} addHouse={this.addNewHouse} addAssociation={this.addNewAssociation}  organizations={organizations}/>
-                        <input type="submit" value="Submit"/>
+                        <Button variant="primary" type="submit">Register</Button>
                     </Form>
+
                 </div>
                 </div>
         );
     }
 
     // Validation Functions
-
-
-    validateName = (name) => {
-        if(name.length < NAME_MIN_LENGTH) {
-            return {
-                validateStatus: 'error',
-                errorMsg: `Name is too short (Minimum ${NAME_MIN_LENGTH} characters needed.)`
-            }
-        } else if (name.length > NAME_MAX_LENGTH) {
-            return {
-                validationStatus: 'error',
-                errorMsg: `Name is too long (Maximum ${NAME_MAX_LENGTH} characters allowed.)`
-            }
-        } else {
-            return {
-                validateStatus: 'success',
-                errorMsg: null,
-            };
-        }
-    }
-
-    validateAddress = (address) => {
-        if(address.length < ADDRESS_MIN_LENGTH) {
-            return {
-                validateStatus: 'error',
-                errorMsg: `Address is too short (Minimum ${ADDRESS_MIN_LENGTH} characters needed.)`
-            }
-        } else if (address.length > ADDRESS_MAX_LENGTH) {
-            return {
-                validationStatus: 'error',
-                errorMsg: `Address is too long (Maximum ${ADDRESS_MAX_LENGTH} characters allowed.)`
-            }
-        } else {
-            return {
-                validateStatus: 'success',
-                errorMsg: null,
-            };
-        }
-    }
-
-    validateEmail = (email) => {
-        if(!email) {
-            return {
-                validateStatus: 'error',
-                errorMsg: 'Email may not be empty'                
-            }
-        }
-
-        const EMAIL_REGEX = RegExp('[^@ ]+@[^@ ]+\\.[^@ ]+');
-        if(!EMAIL_REGEX.test(email)) {
-            return {
-                validateStatus: 'error',
-                errorMsg: 'Email not valid'
-            }
-        }
-
-        if(email.length > EMAIL_MAX_LENGTH) {
-            return {
-                validateStatus: 'error',
-                errorMsg: `Email is too long (Maximum ${EMAIL_MAX_LENGTH} characters allowed)`
-            }
-        }
-
-        return {
-            validateStatus: null,
-            errorMsg: null
-        }
-    }
 
     validateUsername = (username) => {
         if(username.length < USERNAME_MIN_LENGTH) {
@@ -495,7 +455,7 @@ class Signup extends Component {
                     value: emailValue,
                     ...emailValidation
                 }
-            });    
+            });
             return;
         }
 
@@ -554,24 +514,6 @@ class Signup extends Component {
                 validateStatus: 'success',
                 errorMsg: null,
             };            
-        }
-    }
-    validateOrganizationNumber = (orgNumber) => {
-        if(orgNumber.length < ORG_NUMBER_MIN_LENGTH) {
-            return {
-                validateStatus: 'error',
-                errorMsg: `Number is too short (Minimum ${ORG_NUMBER_MIN_LENGTH} characters needed.)`
-            }
-        } else if (orgNumber.length > ORG_NUMBER_MAX_LENGTH) {
-            return {
-                validationStatus: 'error',
-                errorMsg: `Number is too long (Maximum ${ORG_NUMBER_MAX_LENGTH} characters allowed.)`
-            }
-        } else {
-            return {
-                validateStatus: 'success',
-                errorMsg: null,
-            };
         }
     }
 

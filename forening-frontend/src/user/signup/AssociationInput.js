@@ -16,6 +16,7 @@ const AssociationInput = (props)=>{
                             type="text"
                             name={associationNameId}
                             data-id={idx}
+                            autoComplete="off"
                             data-organization={props.organization}
                             id={associationNameId}
                             placeholder="Forenings namn"
@@ -25,7 +26,7 @@ const AssociationInput = (props)=>{
                     </Form.Group>
                     <div className={"contact"}>
                         <Button onClick={(event)=>props.addContact(event,props.organization,idx)}>Lagga contact</Button>
-                        <ContactInput organization={props.organization} association={idx} contacts={props.associations[idx].contacts}/>
+                        <ContactInput errors={props.errors} organization={props.organization} association={idx} contacts={props.associations[idx].contacts}/>
                     </div>
                     <hr/>
                 </div>
