@@ -24,7 +24,6 @@ const OrganizationInput = (props)=>{
                             placeholder="Organisationsnummer"
                             // value={props.organizations[idx].orgNumber}
                             className={"orgNumber"}
-                            onChange = {(event) => props.handleChange(event, props.validateOrgNumber)}
                         />
                         {props.errors.orgNumber.length > 0 &&
                         <span className='error'>{props.errors.orgNumber}</span>}
@@ -59,7 +58,7 @@ const OrganizationInput = (props)=>{
                     </div>
                     <div className={"house"}>
                         <Button onClick={(event)=>props.addHouse(event,idx)}>Lagga hus</Button>
-                        <HouseInput organization={idx} houses={props.organizations[idx].houses}/>
+                        <HouseInput errors={props.errors} organization={idx} houses={props.organizations[idx].houses}/>
                     </div>
 
                     <hr/>

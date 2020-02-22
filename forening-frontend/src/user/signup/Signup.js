@@ -22,15 +22,14 @@ class Signup extends Component {
         super(props);
         this.state = {
             errors: {
-                orgNumber: ''
+                orgNumber: '',
+                zipCode:''
 
             },
             association:{
                 name:'',
                 organizations:[{
-                    orgNumber:{
-                        value:''
-                    },
+                    orgNumber:'',
                     totalArea:'',
                     numberOfApartments: 0,
                     houses:[{
@@ -85,9 +84,12 @@ class Signup extends Component {
             case 'orgNumber':
                 errors.orgNumber = value.length==0?'':
                     value.length<10 ?'Organization must be 10 characters long':
-                    value.length>10 ? 'Organization must be 10 characters long'
-                    :'';
-
+                    '';
+                break;
+            case 'zipCode':
+                errors.zipCode = value.length==0?'':
+                    value.length<5 ?'Postnummer maste vara 5 symboler lang':
+                        '';
                 break;
             default:
                 break;
@@ -98,7 +100,7 @@ class Signup extends Component {
         console.log(organizationId,associationId)
         if(["orgNumber","numberOfApartments","totalArea"].includes(className) ){
             let organizations = this.state.association.organizations;
-            organizations[e.target.dataset.id][className]={value:e.target.value,...validationFun(e.target.value)};
+            organizations[e.target.dataset.id][className]=value;
             this.setState({organizations},()=>console.log(this.state.organizations))
         }
         else if(["address","city","zipCode"].includes(className)){
@@ -329,7 +331,7 @@ class Signup extends Component {
                             Already registed? <Link to="/login">Login now!</Link>
                         </FormItem>
                     </Form>*/}
-                    <Form >
+                    <Form onChange={this.handleChange} >
                         <Button onClick={this.addNewOrganization}>Lagga organisation</Button>
                         <OrganizationInput errors={this.state.errors} validateOrgNumber={this.validateOrganizationNumber} handleChange={this.handleChange} addContact={this.addNewContact} addHouse={this.addNewHouse} addAssociation={this.addNewAssociation}  organizations={organizations}/>
                         <input type="submit" value="Submit"/>

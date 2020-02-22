@@ -40,15 +40,20 @@ const HouseInput = (props)=>{
                     <Form.Group>
                         <Form.Label>Postnummer</Form.Label>
                         <Form.Control
-                            type="text"
+                            type="number"
                             name={zipCodeId}
                             data-id={idx}
                             data-organization={props.organization}
                             id={zipCodeId}
+                            onInput = {(e) =>{
+                                e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,5)
+                            }}
                             placeholder="Postnummer"
                             // value={props.organizations[idx].orgNumber}
                             className={"zipCode"}
                         />
+                        {props.errors.zipCode.length > 0 &&
+                        <span className='error'>{props.errors.zipCode}</span>}
                     </Form.Group>
                     <hr/>
                 </div>
