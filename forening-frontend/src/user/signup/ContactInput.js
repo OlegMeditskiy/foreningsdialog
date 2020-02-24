@@ -1,6 +1,7 @@
 import React from 'react';
-import {Button, Form} from "react-bootstrap";
-
+import {Accordion, Button, Card, Form} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faTrash} from "@fortawesome/free-solid-svg-icons";
 
 
 const ContactInput = (props)=>{
@@ -9,7 +10,16 @@ const ContactInput = (props)=>{
             let contactNameId = `contactName-${idx}`,contactTelephoneId = `contactTelephone-${idx}`,contactEmailId = `contactEmail-${idx}`
             return(
                 <div key={idx}>
-                    <div>Contact {idx+1}</div>
+                    <Card>
+                        <Accordion.Toggle as={Card.Header} eventKey={'contact'+idx}>
+                            Kontakt {idx+1}
+                            <Button data-organization={props.organization} data-association={props.association} className={"pull-right"} variant={"danger"} onClick={(event)=>props.remove(event,idx,'contact')} >
+                                <FontAwesomeIcon icon={faTrash}/>
+                            </Button>
+                        </Accordion.Toggle>
+
+                        <Accordion.Collapse eventKey={'contact'+idx} id={'organisation'+{idx}}>
+                            <Card.Body>
                     <Form.Group>
                         <Form.Label>Namn</Form.Label>
                         <Form.Control
@@ -21,7 +31,8 @@ const ContactInput = (props)=>{
                             data-association={props.association}
                             id={contactNameId}
                             placeholder="Namn"
-                            // value={props.organizations[idx].orgNumber}
+                            value={props.contacts[idx].contactName}
+                            onChange={props.handleChange}
                             className={"contactName"}
                         />
                     </Form.Group>
@@ -36,7 +47,8 @@ const ContactInput = (props)=>{
                             data-association={props.association}
                             id={contactTelephoneId}
                             placeholder="Telefonnummer"
-                            // value={props.organizations[idx].orgNumber}
+                            value={props.contacts[idx].contactTelephone}
+                            onChange={props.handleChange}
                             className={"contactTelephone"}
                         />
                     </Form.Group>
@@ -51,17 +63,21 @@ const ContactInput = (props)=>{
                             id={contactEmailId}
                             autoComplete="off"
                             placeholder="E-mail"
-                            // value={props.organizations[idx].orgNumber}
+                            value={props.contacts[idx].contactEmail}
+                            onChange={props.handleChange}
                             className={"contactEmail"}
                         />
                         {props.errors.contactEmail.length > 0 &&
                         <span className='error'>{props.errors.contactEmail}</span>}
                     </Form.Group>
-                    <hr/>
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
                 </div>
             )
         })
     )
 }
+
 
 export default ContactInput;
