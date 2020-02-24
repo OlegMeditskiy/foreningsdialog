@@ -1,21 +1,13 @@
-import React, { Component } from 'react';
-import { signup, checkUsernameAvailability, checkEmailAvailability } from '../../util/APIUtils';
+import React, {Component} from 'react';
+import {checkEmailAvailability, checkUsernameAvailability, signup} from '../../util/APIUtils';
 import './Signup.css';
 import OrganizationInput from "./OrganizationInput";
-import { Link } from 'react-router-dom';
-import { 
-    NAME_MIN_LENGTH, NAME_MAX_LENGTH, 
-    USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH,
-    EMAIL_MAX_LENGTH,
-    PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH,
-    ADDRESS_MIN_LENGTH,ADDRESS_MAX_LENGTH,
-    ORG_NUMBER_MIN_LENGTH,ORG_NUMBER_MAX_LENGTH
+import {PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH} from '../../constants';
 
-} from '../../constants';
-
+import {useAccordionToggle} from 'react-bootstrap/AccordionToggle';
 import {notification} from 'antd';
-import {Button, Form} from "react-bootstrap";
-
+import {Accordion, Button, Form} from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Signup extends Component {
     constructor(props) {
@@ -32,19 +24,19 @@ class Signup extends Component {
                 organizations:[{
                     orgNumber:'',
                     totalArea:'',
-                    numberOfApartments: 0,
-                    houses:[{
-                        address:'',
-                        city:'',
-                        zipCode: 0
-                    }],
+                    numberOfApartments: '',
                     associations:[{
                         associationName: '',
                         contacts: [{
                             contactName:'',
                             contactTelephone: '',
                             contactEmail:''
-                        }]
+                        }],
+                        houses:[{
+                            street:'',
+                            city:'',
+                            zipCode: ''
+                        }],
                     }]
                 }]
             },
@@ -70,13 +62,14 @@ class Signup extends Component {
         this.addNewAssociation = this.addNewAssociation.bind(this);
         this.addNewHouse = this.addNewHouse.bind(this);
         this.addNewContact = this.addNewContact.bind(this);
+        this.collapse=this.collapse.bind(this);
+        this.remove=this.remove.bind(this);
     }
 
 
     handleChange = (e) =>{
         const EMAIL_REGEX = RegExp('[^@ ]+@[^@ ]+\\.[^@ ]+');
         const className = e.target.className.split(" ")[0];
-        console.log(className)
         const index = e.target.dataset.id;
         const value = e.target.value;
         const organizationId = e.target.dataset.organization;
@@ -110,11 +103,10 @@ class Signup extends Component {
             organizations[e.target.dataset.id][className]=value;
             this.setState({organizations},()=>console.log(this.state.organizations))
         }
-        else if(["address","city","zipCode"].includes(className)){
-            let houses = this.state.association.organizations[organizationId].houses;
+        else if(["street","city","zipCode"].includes(className)){
+            let houses = this.state.association.organizations[organizationId].associations[associationId].houses;
             houses[e.target.dataset.id][className]=e.target.value;
-
-            this.setState({houses},()=>console.log(this.state.association.organizations[organizationId].houses))
+            this.setState({houses},()=>console.log(this.state.association.organizations[organizationId].associations[associationId].houses))
         }
         else if(["associationName"].includes(className)){
             let associations = this.state.association.organizations[organizationId].associations;
@@ -131,18 +123,24 @@ class Signup extends Component {
         }
     }
 
-    addNewHouse=(event,orgId)=>{
+    addNewHouse=(event,orgId, associationId)=>{
+        console.log(associationId)
         const house = {
             street:'',
                 city:'',
-            zipCode: 0
+            zipCode: ''
         };
 
         this.setState((prevState)=>({
             association:{...prevState.association,
                 organizations:[...prevState.association.organizations.slice(0,orgId),
+
                     {...prevState.association.organizations[orgId],
-                        houses:[...prevState.association.organizations[orgId].houses,house]},
+                        associations:[...prevState.association.organizations[orgId].associations.slice(0,associationId),
+                            {...prevState.association.organizations[orgId].associations[associationId],
+                                houses:[...prevState.association.organizations[orgId].associations[associationId].houses,house]
+                            }
+                        ]},
                     ...prevState.association.organizations.slice(orgId+1)
                 ]}
         }));
@@ -154,7 +152,13 @@ class Signup extends Component {
                 contactName:'',
                 contactTelephone: '',
                 contactEmail:''
-            }]
+            }],
+            houses:[{
+                street:'',
+                city:'',
+                zipCode: ''
+            }
+            ],
         };
         console.log(this.state.association.organizations[orgId])
         this.setState((prevState)=>({
@@ -195,19 +199,18 @@ class Signup extends Component {
         const organization = {
             orgNumber:'',
             totalArea:'',
-            numberOfApartments: 0,
-            houses:[{
-                street:'',
-                city:'',
-                zipCode: 0
-            }
-            ],
+            numberOfApartments: '',
             associations:[{
                 associationName: '',
                 contacts: [{
                     contactName:'',
                     contactTelephone: '',
                     contactEmail:''
+                }],
+                houses:[{
+                    street:'',
+                    city:'',
+                    zipCode: ''
                 }]
             }]
 
@@ -217,6 +220,65 @@ class Signup extends Component {
                 organizations:[...prevState.association.organizations,organization]}
         }));
 
+        // this.collapse();
+    }
+
+    remove=(event,index,whatToDelete)=>{
+        const organizationId = event.currentTarget.dataset.organization;
+        const associationId = event.currentTarget.dataset.association;
+        console.log(organizationId,associationId);
+        switch (whatToDelete) {
+            case 'organization':
+                if (this.state.association.organizations.length>1){
+                    const newList = this.state.association.organizations.splice(index, 1);
+                    this.setState({organizations:newList})
+                }
+                else {
+                    notification.error({message: 'Föreningsdialog App',
+                        description: 'Kan inte ta bort sista Organisation!'});
+                }
+                break;
+            case 'association':
+                if (this.state.association.organizations[organizationId].associations.length>1){
+                    const newList = this.state.association.organizations[organizationId].associations.splice(index, 1);
+                    this.setState({associations:newList})
+                }
+                else {
+                    notification.error({message: 'Föreningsdialog App',
+                        description: 'Kan inte ta bort sista Förening!'});
+                }
+                break;
+            case 'house':
+                if (this.state.association.organizations[organizationId].associations[associationId].houses.length>1){
+                    const newList = this.state.association.organizations[organizationId].associations[associationId].houses.splice(index, 1);
+                    this.setState({associations:newList})
+                }
+                else {
+                    notification.error({message: 'Föreningsdialog App',
+                        description: 'Kan inte ta bort sista hus!'});
+                }
+                break;
+            case 'contact':
+                if (this.state.association.organizations[organizationId].associations[associationId].contacts.length>1){
+                    const newList = this.state.association.organizations[organizationId].associations[associationId].contacts.splice(index, 1);
+                    this.setState({associations:newList})
+
+                }
+                else {
+                    notification.error({message: 'Föreningsdialog App',
+                        description: 'Kan inte ta bort sista kontakt!'});
+                }
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    collapse=()=>{
+        this.state.association.organizations.map((org,idx)=>{
+            const decoratedOnClick = useAccordionToggle(idx,()=>console.log('closed') );
+        })
     }
 
     handleSubmit(event) {
@@ -232,13 +294,13 @@ class Signup extends Component {
         signup(signupRequest)
             .then(response => {
                 notification.success({
-                    message: 'Polling App',
+                    message: 'Föreningsdialog App',
                     description: "Thank you! You're successfully registered. Please Login to continue!",
                 });
                 this.props.history.push("/login");
             }).catch(error => {
             notification.error({
-                message: 'Polling App',
+                message: 'Föreningsdialog App',
                 description: error.message || 'Sorry! Something went wrong. Please try again!'
             });
         });
@@ -323,7 +385,7 @@ class Signup extends Component {
                             Already registed? <Link to="/login">Login now!</Link>
                         </FormItem>
                     </Form>*/}
-                    <Form onSubmit={this.handleSubmit} onChange={this.handleChange} className="signup-form" >
+                    <Form onSubmit={this.handleSubmit} className="signup-form" >
                         <Form.Group>
                             <Form.Control
                                 size="large"
@@ -359,8 +421,10 @@ class Signup extends Component {
                                 className={"password"}
                                 placeholder="A password between 6 to 20 characters"/>
                         </Form.Group>
-                        <Button className="signup-form-button" onClick={this.addNewOrganization}>Lagga organisation</Button>
-                        <OrganizationInput errors={this.state.errors} validateOrgNumber={this.validateOrganizationNumber} handleChange={this.handleChange} addContact={this.addNewContact} addHouse={this.addNewHouse} addAssociation={this.addNewAssociation}  organizations={organizations}/>
+                        <Button className="signup-form-button" onClick={this.addNewOrganization}>Lägga organisation</Button>
+                        <Accordion defaultActiveKey="0">
+                            <OrganizationInput remove={this.remove} errors={this.state.errors} handleChange={this.handleChange} addContact={this.addNewContact} addHouse={this.addNewHouse} addAssociation={this.addNewAssociation}  organizations={organizations}/>
+                        </Accordion>
                         <Button variant="primary" type="submit">Register</Button>
                     </Form>
 

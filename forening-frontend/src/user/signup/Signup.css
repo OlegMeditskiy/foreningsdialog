@@ -24,7 +24,7 @@
     margin-left: 30px;
 }
 .house{
-    margin-left: 30px;
+    margin-left: 60px;
 }
 .contact{
     margin-left: 60px;
@@ -33,4 +33,7 @@
     color:#db2269;
     font-size: 0.625em;
     display: relative;
+}
+.pull-right{
+    float: right;
 }
