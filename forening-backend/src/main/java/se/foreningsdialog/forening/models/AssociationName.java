@@ -3,6 +3,7 @@ package se.foreningsdialog.forening.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import se.foreningsdialog.forening.models.houses.House;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,4 +21,8 @@ public class AssociationName {
 
     @OneToMany
     List<ContactPerson> contacts;
+
+    @OneToMany
+    List<House> houses;
+
 }

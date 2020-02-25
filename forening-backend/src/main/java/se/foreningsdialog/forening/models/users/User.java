@@ -15,9 +15,6 @@ import java.util.Set;
 @Table(name = "users",uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "username"
-        }),
-        @UniqueConstraint(columnNames = {
-                "email"
         })
 })
 public class User extends DateAudit {
@@ -25,19 +22,11 @@ public class User extends DateAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 40)
-    private String name;
-
-    @NotBlank
-    @Size(max = 15)
-    private String username;
-
     @NaturalId
     @NotBlank
     @Size(max = 40)
     @Email
-    private String email;
+    private String username;
 
     @NotBlank
     @Size(max = 100)
@@ -53,10 +42,8 @@ public class User extends DateAudit {
 
     }
 
-    public User(String name, String username, String email, String password) {
-        this.name = name;
+    public User(String username, String password) {
         this.username = username;
-        this.email = email;
         this.password = password;
     }
 
@@ -74,22 +61,6 @@ public class User extends DateAudit {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPassword() {

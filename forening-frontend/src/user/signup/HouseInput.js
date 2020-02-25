@@ -11,14 +11,15 @@ const HouseInput = (props)=>{
             return(
                 <div key={idx}>
                     <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey={'house'+idx}>
-                            Hus {idx+1}
+                        <Card.Header>
                             <Button data-organization={props.organization} data-association={props.association} className={"pull-right"} variant={"danger"} onClick={(event)=>props.remove(event,idx,'house')} >
                                 <FontAwesomeIcon icon={faTrash}/>
                             </Button>
-                        </Accordion.Toggle>
-
-                        <Accordion.Collapse eventKey={'house'+idx} id={'organisation'+{idx}}>
+                            <CustomToggle eventKey={'house'+idx}>
+                                Hus {idx+1}
+                            </CustomToggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey={'house'+idx} id={'house'+{idx}}>
                             <Card.Body>
 
                             <Form.Group>
@@ -89,8 +90,11 @@ function CustomToggle({ children, eventKey }) {
     );
 
     return (
-        children
+        <div
+            onClick={decoratedOnClick}
+        >
+            {children}
+        </div>
     );
 }
-
 export default HouseInput;

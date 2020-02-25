@@ -26,7 +26,7 @@ public class UserController {
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-        UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getName());
+        UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername());
         return userSummary;
     }
 
@@ -36,11 +36,11 @@ public class UserController {
         return new UserIdentityAvailability(isAvailable);
     }
 
-    @GetMapping("/user/checkEmailAvailability")
-    public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
-        Boolean isAvailable = !userRepository.existsByEmail(email);
-        return new UserIdentityAvailability(isAvailable);
-    }
+//    @GetMapping("/user/checkEmailAvailability")
+//    public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
+//        Boolean isAvailable = !userRepository.existsByEmail(email);
+//        return new UserIdentityAvailability(isAvailable);
+//    }
 
 
 

@@ -8,7 +8,6 @@ import {useAccordionToggle} from 'react-bootstrap/AccordionToggle';
 import {notification} from 'antd';
 import {Accordion, Button, Form} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 class Signup extends Component {
     constructor(props) {
         super(props);
@@ -16,7 +15,8 @@ class Signup extends Component {
             errors: {
                 orgNumber: '',
                 zipCode:'',
-                contactEmail:''
+                contactEmail:'',
+                username:''
 
             },
             association:{
@@ -62,7 +62,6 @@ class Signup extends Component {
         this.addNewAssociation = this.addNewAssociation.bind(this);
         this.addNewHouse = this.addNewHouse.bind(this);
         this.addNewContact = this.addNewContact.bind(this);
-        this.collapse=this.collapse.bind(this);
         this.remove=this.remove.bind(this);
     }
 
@@ -88,6 +87,11 @@ class Signup extends Component {
                 break;
             case 'contactEmail':
                 errors.contactEmail = value.length==0?'':
+                    EMAIL_REGEX.test(value) ?'':
+                        'Email is invalid';
+                break;
+            case 'username':
+                errors.username = value.length==0?'':
                     EMAIL_REGEX.test(value) ?'':
                         'Email is invalid';
                 break;
@@ -219,8 +223,12 @@ class Signup extends Component {
             association: {...prevState.association,
                 organizations:[...prevState.association.organizations,organization]}
         }));
+        // const newOrg = this.state.association.organizations.length-1;
+        // this.props.history.push("/signup/#organization"+newOrg);
 
-        // this.collapse();
+        // this.state.association.organizations.map((org,idx)=>{
+        //     const hook = useAccordionToggle(idx,()=>console.log('closed') );
+        // })
     }
 
     remove=(event,index,whatToDelete)=>{
@@ -232,6 +240,10 @@ class Signup extends Component {
                 if (this.state.association.organizations.length>1){
                     const newList = this.state.association.organizations.splice(index, 1);
                     this.setState({organizations:newList})
+                    notification.success({
+                        message: 'Foreningsdialog App',
+                        description: 'Organisation har tagits bort'
+                    });
                 }
                 else {
                     notification.error({message: 'Föreningsdialog App',
@@ -242,8 +254,13 @@ class Signup extends Component {
                 if (this.state.association.organizations[organizationId].associations.length>1){
                     const newList = this.state.association.organizations[organizationId].associations.splice(index, 1);
                     this.setState({associations:newList})
+                    notification.success({
+                        message: 'Foreningsdialog App',
+                        description: 'Förening har tagits bort'
+                    });
                 }
                 else {
+
                     notification.error({message: 'Föreningsdialog App',
                         description: 'Kan inte ta bort sista Förening!'});
                 }
@@ -252,6 +269,10 @@ class Signup extends Component {
                 if (this.state.association.organizations[organizationId].associations[associationId].houses.length>1){
                     const newList = this.state.association.organizations[organizationId].associations[associationId].houses.splice(index, 1);
                     this.setState({associations:newList})
+                    notification.success({
+                        message: 'Foreningsdialog App',
+                        description: 'Hus har tagits bort'
+                    });
                 }
                 else {
                     notification.error({message: 'Föreningsdialog App',
@@ -262,6 +283,10 @@ class Signup extends Component {
                 if (this.state.association.organizations[organizationId].associations[associationId].contacts.length>1){
                     const newList = this.state.association.organizations[organizationId].associations[associationId].contacts.splice(index, 1);
                     this.setState({associations:newList})
+                    notification.success({
+                        message: 'Foreningsdialog App',
+                        description: 'Kontakt har tagits bort'
+                    });
 
                 }
                 else {
@@ -275,19 +300,13 @@ class Signup extends Component {
         }
     }
 
-    collapse=()=>{
-        this.state.association.organizations.map((org,idx)=>{
-            const decoratedOnClick = useAccordionToggle(idx,()=>console.log('closed') );
-        })
-    }
+
 
     handleSubmit(event) {
         event.preventDefault();
 
         const signupRequest = {
             association: this.state.association,
-            name: this.state.name.value,
-            email: this.state.email.value,
             username: this.state.username.value,
             password: this.state.password.value
         };
@@ -386,30 +405,33 @@ class Signup extends Component {
                         </FormItem>
                     </Form>*/}
                     <Form onSubmit={this.handleSubmit} className="signup-form" >
-                        <Form.Group>
-                            <Form.Control
-                                size="large"
-                                name="name"
-                                autoComplete="off"
-                                placeholder="Your full name"
-                                className={"name"}/>
-                        </Form.Group>
+                        {/*<Form.Group>*/}
+                        {/*    <Form.Control*/}
+                        {/*        size="large"*/}
+                        {/*        name="name"*/}
+                        {/*        autoComplete="off"*/}
+                        {/*        placeholder="Your full name"*/}
+                        {/*        className={"name"}/>*/}
+                        {/*</Form.Group>*/}
+                        {/*<Form.Group>*/}
+                        {/*    <Form.Control*/}
+                        {/*        size="large"*/}
+                        {/*        name="username"*/}
+                        {/*        autoComplete="off"*/}
+                        {/*        className={"username"}*/}
+                        {/*        placeholder="A unique username"/>*/}
+                        {/*</Form.Group>*/}
                         <Form.Group>
                             <Form.Control
                                 size="large"
                                 name="username"
-                                autoComplete="off"
-                                className={"username"}
-                                placeholder="A unique username"/>
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Control
-                                size="large"
-                                name="email"
                                 type="email"
-                                autoComplete="off"
-                                className={"email"}
-                                placeholder="Your email"/>
+                                autoComplete="new-email"
+                                className={"username"}
+                                placeholder="Gemensam förenings e-mail"
+                                onChange={this.handleChange}
+                            />
+
 
                         </Form.Group>
                         <Form.Group>
@@ -417,9 +439,12 @@ class Signup extends Component {
                                 size="large"
                                 name="password"
                                 type="password"
-                                autoComplete="off"
+                                autoComplete="new-password"
                                 className={"password"}
-                                placeholder="A password between 6 to 20 characters"/>
+                                placeholder="A password between 6 to 20 characters"
+                                onChange={this.handleChange}
+                                />
+
                         </Form.Group>
                         <Button className="signup-form-button" onClick={this.addNewOrganization}>Lägga organisation</Button>
                         <Accordion defaultActiveKey="0">

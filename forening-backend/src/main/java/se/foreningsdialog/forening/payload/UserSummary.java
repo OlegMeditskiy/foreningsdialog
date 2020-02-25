@@ -3,12 +3,10 @@ package se.foreningsdialog.forening.payload;
 public class UserSummary {
     private Long id;
     private String username;
-    private String name;
 
-    public UserSummary(Long id, String username, String name) {
+    public UserSummary(Long id, String username) {
         this.id = id;
         this.username = username;
-        this.name = name;
     }
 
     public Long getId() {
@@ -27,11 +25,4 @@ public class UserSummary {
         this.username = username;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
+import 'antd/dist/antd.css';
 import {
-    Route,
     withRouter,
-    Switch
+    Switch, Route
 } from 'react-router-dom';
 
 import { getCurrentUser } from '../util/APIUtils';
@@ -16,8 +16,8 @@ import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import MainPage from '../pages/MainPage';
 
-import { Layout, notification } from 'antd';
-const { Content } = Layout;
+import {notification } from 'antd';
+// const { Content } = Layout;
 
 class App extends Component {
     constructor(props) {
@@ -90,12 +90,12 @@ class App extends Component {
             return <LoadingIndicator />
         }
         return (
-            <Layout className="app-container">
+            <div className="app-container">
                 {/*<AppHeader isAuthenticated={this.state.isAuthenticated}*/}
                 {/*           currentUser={this.state.currentUser}*/}
                 {/*           onLogout={this.handleLogout} />*/}
 
-                <Content className="app-content">
+                <div className="app-content">
                     <div className="container">
                         <Switch>
                             <Route exact path="/"
@@ -107,8 +107,8 @@ class App extends Component {
                             <Route component={NotFound}></Route>
                         </Switch>
                     </div>
-                </Content>
-            </Layout>
+                </div>
+            </div>
         );
     }
 }
