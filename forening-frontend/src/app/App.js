@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import 'antd/dist/antd.css';
 import {
     withRouter,
     Switch, Route
@@ -15,9 +14,11 @@ import AppHeader from '../common/AppHeader';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import MainPage from '../pages/MainPage';
-
-import {notification } from 'antd';
-// const { Content } = Layout;
+import Admin from "../pages/Admin";
+import {Layout, notification} from 'antd';
+import PrivateRoute from "../common/PrivateRoute";
+import Profile from "../user/profile/Profile";
+const { Content } = Layout;
 
 class App extends Component {
     constructor(props) {
@@ -39,9 +40,11 @@ class App extends Component {
     }
 
     loadCurrentUser() {
+        console.log("loadCurentUser");
         this.setState({
             isLoading: true
         });
+
         getCurrentUser()
             .then(response => {
                 this.setState({
@@ -54,11 +57,13 @@ class App extends Component {
                 isLoading: false
             });
         });
+
     }
 
     componentDidMount() {
         this.loadCurrentUser();
     }
+
 
     handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
         localStorage.removeItem(ACCESS_TOKEN);
@@ -71,44 +76,51 @@ class App extends Component {
         this.props.history.push(redirectTo);
 
         notification[notificationType]({
-            message: 'Polling App',
+            message: 'Förenings App',
             description: description,
         });
     }
 
     handleLogin() {
         notification.success({
-            message: 'Polling App',
+            message: 'Förenings App',
             description: "You're successfully logged in.",
         });
         this.loadCurrentUser();
-        this.props.history.push("/");
+        this.props.history.push("/admin");
+        console.log(this.state.isAuthenticated);
     }
 
     render() {
         if(this.state.isLoading) {
             return <LoadingIndicator />
         }
-        return (
-            <div className="app-container">
-                {/*<AppHeader isAuthenticated={this.state.isAuthenticated}*/}
-                {/*           currentUser={this.state.currentUser}*/}
-                {/*           onLogout={this.handleLogout} />*/}
 
-                <div className="app-content">
+        console.log(this.state.isAuthenticated);
+        return (
+            <Layout className="app-container">
+                <   AppHeader isAuthenticated={this.state.isAuthenticated}
+                           currentUser={this.state.currentUser}
+                           onLogout={this.handleLogout} />
+
+                <Content className="app-content">
                     <div className="container">
                         <Switch>
                             <Route exact path="/"
-                                 component={MainPage}>
+                                 render={(props)=><MainPage {...props}/>}>
                             </Route>
                             <Route path="/login"
                                    render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
                             <Route path="/signup" component={Signup}></Route>
+                            <Route path="/users/:username"
+                                   render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
+                            </Route>
+                            <PrivateRoute authenticated={this.state.isAuthenticated} path="/admin" currentUser={this.state.currentUser} component={Admin} handleLogout={this.handleLogout}></PrivateRoute>
                             <Route component={NotFound}></Route>
                         </Switch>
                     </div>
-                </div>
-            </div>
+                </Content>
+            </Layout>
         );
     }
 }
