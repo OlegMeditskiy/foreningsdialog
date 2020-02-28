@@ -60,12 +60,17 @@ class App extends Component {
 
     }
 
+    componentWillMount() {
+        this.loadCurrentUser();
+    }
+
     componentDidMount() {
         this.loadCurrentUser();
     }
 
 
-    handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
+
+    handleLogout(redirectTo="/login", notificationType="success", description="You're successfully logged out.") {
         localStorage.removeItem(ACCESS_TOKEN);
 
         this.setState({
@@ -87,7 +92,7 @@ class App extends Component {
             description: "You're successfully logged in.",
         });
         this.loadCurrentUser();
-        this.props.history.push("/admin");
+        this.props.history.push("/");
         console.log(this.state.isAuthenticated);
     }
 
@@ -106,16 +111,16 @@ class App extends Component {
                 <Content className="app-content">
                     <div className="container">
                         <Switch>
-                            <Route exact path="/"
-                                 render={(props)=><MainPage {...props}/>}>
-                            </Route>
+                            {/*<Route exact path="/"*/}
+                            {/*     render={(props)=><MainPage {...props}/>}>*/}
+                            {/*</Route>*/}
                             <Route path="/login"
                                    render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
                             <Route path="/signup" component={Signup}></Route>
                             <Route path="/users/:username"
                                    render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
                             </Route>
-                            <PrivateRoute authenticated={this.state.isAuthenticated} path="/admin" currentUser={this.state.currentUser} component={Admin} handleLogout={this.handleLogout}></PrivateRoute>
+                            <PrivateRoute authenticated={this.state.isAuthenticated} path="/" currentUser={this.state.currentUser} component={Admin} handleLogout={this.handleLogout}></PrivateRoute>
                             <Route component={NotFound}></Route>
                         </Switch>
                     </div>

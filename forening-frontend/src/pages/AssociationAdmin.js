@@ -11,9 +11,12 @@ class AssociationAdmin extends Component{
     render() {
 
         return (
-            <div>
-                Förenings ADMIN
+            <div className="login-container">
+        <div className="login-content">
+            FöreningsAdmin
+        </div>
             </div>
+
         )}
 
 

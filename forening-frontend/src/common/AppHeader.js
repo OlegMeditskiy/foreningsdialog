@@ -29,9 +29,6 @@ class AppHeader extends Component {
                   <HomeOutlined />
               </Link>
             </Menu.Item>,
-              <Menu.Item key="admin">
-                  <Link to={'/admin'}>ADMIN</Link>
-              </Menu.Item>,
           <Menu.Item key="/profile" className="profile-menu">
                 <ProfileDropdownMenu 
                   currentUser={this.props.currentUser} 
