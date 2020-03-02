@@ -1,4 +1,4 @@
-import { API_BASE_URL, POLL_LIST_SIZE, ACCESS_TOKEN } from '../constants';
+import { API_BASE_URL, ASSOCIATION_LIST_SIZE, ACCESS_TOKEN } from '../constants';
 
 const request = (options) => {
     const headers = new Headers({
@@ -23,12 +23,12 @@ const request = (options) => {
     );
 };
 
-export function getAllPolls(page, size) {
+export function getAllAssociations(page, size) {
     page = page || 0;
-    size = size || POLL_LIST_SIZE;
+    size = size || ASSOCIATION_LIST_SIZE;
 
     return request({
-        url: API_BASE_URL + "/polls?page=" + page + "&size=" + size,
+        url: API_BASE_URL + "/associations?page=" + page + "&size=" + size,
         method: 'GET'
     });
 }

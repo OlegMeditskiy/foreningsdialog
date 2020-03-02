@@ -40,6 +40,7 @@ public class UserPrincipal implements UserDetails {
                 user.getPassword(),
                 authorities
         );
+
     }
 
     public Long getId() {

@@ -2,10 +2,8 @@ package se.foreningsdialog.forening.models.houses;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,4 +17,7 @@ public class House {
     private String city;
 
     private int zipCode;
+
+    @OneToMany
+    private List<Apartment> apartments;
 }

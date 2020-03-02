@@ -6,6 +6,7 @@ import se.foreningsdialog.forening.models.AssociationName;
 import se.foreningsdialog.forening.models.ContactPerson;
 import se.foreningsdialog.forening.models.Organization;
 import se.foreningsdialog.forening.models.houses.House;
+import se.foreningsdialog.forening.models.users.Admin;
 import se.foreningsdialog.forening.models.users.User;
 import se.foreningsdialog.forening.models.users.constants.Role;
 import se.foreningsdialog.forening.models.users.constants.RoleName;
@@ -28,7 +29,6 @@ import se.foreningsdialog.forening.security.JwtTokenProvider;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -95,7 +95,7 @@ public class AuthController {
 
 
         // Creating user's account
-        User user = new User(signUpRequest.getUsername(), signUpRequest.getPassword());
+        Admin user = new Admin(signUpRequest.getUsername(), signUpRequest.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Set<Role> roles = new LinkedHashSet<>();
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
@@ -146,7 +146,7 @@ public class AuthController {
 
 
         // Creating user's account
-        User user = new User(signUpRequest.getUsername(), signUpRequest.getPassword());
+        Admin user = new Admin(signUpRequest.getUsername(), signUpRequest.getPassword());
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Set<Role> roles = new LinkedHashSet<>();
@@ -160,9 +160,8 @@ public class AuthController {
         
 
         User result = userRepository.save(user);
-        association.setUser(user);
+        association.setCreatedBy(user.getId());
         associationRepository.save(association);
-
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/users/{username}")
                 .buildAndExpand(result.getUsername()).toUri();

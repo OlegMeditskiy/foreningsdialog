@@ -40,7 +40,6 @@ class App extends Component {
     }
 
     loadCurrentUser() {
-        console.log("loadCurentUser");
         this.setState({
             isLoading: true
         });

@@ -6,4 +6,5 @@ import se.foreningsdialog.forening.models.Association;
 import se.foreningsdialog.forening.models.AssociationName;
 @Repository
 public interface AssociationRepository extends JpaRepository<Association, Long> {
+//    Association findByUserId(Long id);
 }

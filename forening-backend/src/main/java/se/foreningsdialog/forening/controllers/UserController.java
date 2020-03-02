@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import se.foreningsdialog.forening.repository.AssociationRepository;
 import se.foreningsdialog.forening.repository.UserRepository;
 import se.foreningsdialog.forening.security.CurrentUser;
 import se.foreningsdialog.forening.security.UserPrincipal;
@@ -15,6 +16,8 @@ import se.foreningsdialog.forening.security.UserPrincipal;
 @RestController
 @RequestMapping("/api")
 public class UserController {
+
+
 
     @Autowired
     private UserRepository userRepository;
