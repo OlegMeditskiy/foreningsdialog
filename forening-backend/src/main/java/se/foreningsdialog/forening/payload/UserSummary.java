@@ -1,14 +1,26 @@
 package se.foreningsdialog.forening.payload;
 
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
+
 public class UserSummary {
     private Long id;
     private String username;
-    private String name;
+    private Collection<? extends GrantedAuthority> authorities;
 
-    public UserSummary(Long id, String username, String name) {
+    public UserSummary(Long id, String username, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
-        this.name = name;
+        this.authorities = authorities;
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 
     public Long getId() {
@@ -27,11 +39,4 @@ public class UserSummary {
         this.username = username;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

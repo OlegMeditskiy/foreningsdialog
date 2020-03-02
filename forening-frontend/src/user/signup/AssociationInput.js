@@ -1,5 +1,5 @@
 import React from 'react';
-import {Accordion, Button, Card, Form} from "react-bootstrap";
+import {Accordion, Button, Card, Form, useAccordionToggle} from "react-bootstrap";
 import ContactInput from "./ContactInput";
 import HouseInput from "./HouseInput";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -21,7 +21,14 @@ const AssociationInput = (props)=>{
                                     <FontAwesomeIcon icon={faTrash}/>
                                 </Button>
                             </Accordion.Toggle>
-
+                        {/*<Card.Header>*/}
+                        {/*    <Button data-organization={props.organization} data-association={props.association} className={"pull-right"} variant={"danger"} onClick={(event)=>props.remove(event,idx,'house')} >*/}
+                        {/*        <FontAwesomeIcon icon={faTrash}/>*/}
+                        {/*    </Button>*/}
+                        {/*    <CustomToggle eventKey={'house'+idx}>*/}
+                        {/*        Hus {idx+1}*/}
+                        {/*    </CustomToggle>*/}
+                        {/*</Card.Header>*/}
                         <Accordion.Collapse eventKey={'association'+idx} id={'organisation'+{idx}}>
                             <Card.Body>
 
@@ -60,6 +67,19 @@ const AssociationInput = (props)=>{
             )
         })
     )
+}
+function CustomToggle({ children, eventKey }) {
+    const decoratedOnClick = useAccordionToggle(eventKey, () =>
+        console.log('totally custom!'),
+    );
+
+    return (
+        <div
+            onClick={decoratedOnClick}
+        >
+            {children}
+        </div>
+    );
 }
 
 export default AssociationInput;

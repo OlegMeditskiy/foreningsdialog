@@ -1,5 +1,5 @@
 import React from 'react';
-import {Accordion, Button, Card, Form} from "react-bootstrap";
+import {Accordion, Button, Card, Form, useAccordionToggle} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 
@@ -7,18 +7,20 @@ import {faTrash} from "@fortawesome/free-solid-svg-icons";
 const ContactInput = (props)=>{
     return(
         props.contacts.map((val,idx)=>{
-            let contactNameId = `contactName-${idx}`,contactTelephoneId = `contactTelephone-${idx}`,contactEmailId = `contactEmail-${idx}`
+            let contactNameId = `contactName-${idx}`,contactTelephoneId = `contactTelephone-${idx}`,contactEmailId = `contactEmail-${idx}`;
             return(
                 <div key={idx}>
                     <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey={'contact'+idx}>
-                            Kontakt {idx+1}
+                        <Card.Header>
                             <Button data-organization={props.organization} data-association={props.association} className={"pull-right"} variant={"danger"} onClick={(event)=>props.remove(event,idx,'contact')} >
                                 <FontAwesomeIcon icon={faTrash}/>
                             </Button>
-                        </Accordion.Toggle>
+                            <CustomToggle eventKey={'contact'+idx}>
+                                Kontakt {idx+1}
+                            </CustomToggle>
+                        </Card.Header>
 
-                        <Accordion.Collapse eventKey={'contact'+idx} id={'organisation'+{idx}}>
+                        <Accordion.Collapse eventKey={'contact'+idx} id={'contact'+{idx}}>
                             <Card.Body>
                     <Form.Group>
                         <Form.Label>Namn</Form.Label>
@@ -78,6 +80,22 @@ const ContactInput = (props)=>{
         })
     )
 }
+function CustomToggle({ children, eventKey }) {
+    const decoratedOnClick = useAccordionToggle(eventKey, () =>
+        console.log('totally custom!'),
+    );
+
+    return (
+        <div
+            onClick={decoratedOnClick}
+        >
+            {children}
+        </div>
+    );
+}
+
+
+
 
 
 export default ContactInput;

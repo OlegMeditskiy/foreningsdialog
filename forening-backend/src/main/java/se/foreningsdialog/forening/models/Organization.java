@@ -30,9 +30,6 @@ public class Organization {
     private boolean isActivated=false;
 
     @OneToMany
-    List<House> houses;
-
-    @OneToMany
     List<AssociationName> associations;
 
     @OneToMany

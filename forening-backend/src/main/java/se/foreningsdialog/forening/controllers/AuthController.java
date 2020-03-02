@@ -6,6 +6,7 @@ import se.foreningsdialog.forening.models.AssociationName;
 import se.foreningsdialog.forening.models.ContactPerson;
 import se.foreningsdialog.forening.models.Organization;
 import se.foreningsdialog.forening.models.houses.House;
+import se.foreningsdialog.forening.models.users.Admin;
 import se.foreningsdialog.forening.models.users.User;
 import se.foreningsdialog.forening.models.users.constants.Role;
 import se.foreningsdialog.forening.models.users.constants.RoleName;
@@ -28,7 +29,8 @@ import se.foreningsdialog.forening.security.JwtTokenProvider;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -69,10 +71,10 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
+        System.out.println("LOGIN");
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsernameOrEmail(),
+                        loginRequest.getUsername(),
                         loginRequest.getPassword()
                 )
         );
@@ -83,54 +85,83 @@ public class AuthController {
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        System.out.println("sign up");
+    @PostMapping("/signup/main")
+    public ResponseEntity<?> registerMainAdmin(@Valid @RequestBody SignUpRequest signUpRequest) {
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
             return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
 
+
+        // Creating user's account
+        Admin user = new Admin(signUpRequest.getUsername(), signUpRequest.getPassword());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Set<Role> roles = new LinkedHashSet<>();
+        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                .orElseThrow(() -> new AppException("User Role not set."));
+        roles.add(userRole);
+        userRole = roleRepository.findByName(RoleName.ROLE_MAIN_ADMIN)
+                .orElseThrow(() -> new AppException("User Role not set."));
+        roles.add(userRole);
+        user.setRoles(roles);
+
+
+        User result = userRepository.save(user);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath().path("/users/{username}")
+                .buildAndExpand(result.getUsername()).toUri();
+
+        return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+//        return ResponseEntity.ok().body("Created");
+    }
+
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+        System.out.println("sign up");
+        if(userRepository.existsByUsername(signUpRequest.getUsername())) {
+            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
         //Creating new Association
         Association association = new Association();
         for (Organization organization: signUpRequest.getAssociation().getOrganizations()){
-            for (House house:organization.getHouses()){
-                houseRepository.save(house);
-            }
             for(AssociationName associationName: organization.getAssociations()){
                 for (ContactPerson contactPerson: associationName.getContacts()){
                     contactPersonRepository.save(contactPerson);
                 }
+                for (House house:associationName.getHouses()){
+                    houseRepository.save(house);
+                }
+                associationName.setHouses(associationName.getHouses());
                 associationName.setContacts(associationName.getContacts());
                 associationNameRepository.save(associationName);
             }
             organization.setAssociations(organization.getAssociations());
-            organization.setHouses(organization.getHouses());
             organizationRepository.save(organization);
         }
         association.setOrganizations(signUpRequest.getAssociation().getOrganizations());
-        associationRepository.save(association);
 
 
         // Creating user's account
-        User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
-                signUpRequest.getEmail(), signUpRequest.getPassword());
+        Admin user = new Admin(signUpRequest.getUsername(), signUpRequest.getPassword());
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
+        Set<Role> roles = new LinkedHashSet<>();
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set."));
-
-        user.setRoles(Collections.singleton(userRole));
+        roles.add(userRole);
+        userRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+                .orElseThrow(() -> new AppException("User Role not set."));
+        roles.add(userRole);
+        user.setRoles(roles);
+        
 
         User result = userRepository.save(user);
-
+        association.setCreatedBy(user.getId());
+        associationRepository.save(association);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/users/{username}")
                 .buildAndExpand(result.getUsername()).toUri();

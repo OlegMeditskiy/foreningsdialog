@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import se.foreningsdialog.forening.models.ApartmentMember;
+import se.foreningsdialog.forening.models.users.Guest;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,8 +19,17 @@ public class Apartment{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @OneToOne
+    private House house;
+
     @OneToMany
-    private List<ApartmentMember> members;
+    private List<Guest> guests;
 
     private int number;
+
+    private int area;
+
+    private int roomAndKitchen;
+
+
 }

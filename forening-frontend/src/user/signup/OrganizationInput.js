@@ -1,5 +1,5 @@
 import React from 'react';
-import {Accordion, Button, Card, Form} from "react-bootstrap";
+import {Accordion, Button, Card, Form, useAccordionToggle} from "react-bootstrap";
 import AssociationInput from "./AssociationInput";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
@@ -10,15 +10,16 @@ const OrganizationInput = (props)=>{
         props.organizations.map((val,idx)=>{
             let orgNumberId = `orgNumber-${idx}`, totalAreaId = `totalArea-${idx}`,numberOfApartmentsId = `numberOfApartments-${idx}`
             return(
-                <div key={idx}>
+                <div key={idx} id={"organization"+idx}>
                         <Card>
-                            <Accordion.Toggle as={Card.Header} eventKey={'organisation'+idx}>
-                                Organisation {idx+1}
+                            <Card.Header>
                                 <Button className={"pull-right"} variant={"danger"} onClick={(event)=>props.remove(event,idx,'organization')} >
                                     <FontAwesomeIcon icon={faTrash}/>
                                 </Button>
-                            </Accordion.Toggle>
-
+                                <CustomToggle eventKey={'organisation'+idx}>
+                                    Organisation {idx+1}
+                                </CustomToggle>
+                            </Card.Header>
                             <Accordion.Collapse eventKey={'organisation'+idx} id={'organisation'+{idx}}>
                                 <Card.Body>
 
@@ -84,6 +85,19 @@ const OrganizationInput = (props)=>{
             )
         })
     )
+}
+function CustomToggle({ children, eventKey }) {
+    const decoratedOnClick = useAccordionToggle(eventKey, () =>
+        console.log('totally custom!'),
+    );
+
+    return (
+        <div
+            onClick={decoratedOnClick}
+        >
+            {children}
+        </div>
+    );
 }
 
 export default OrganizationInput;

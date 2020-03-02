@@ -7,12 +7,12 @@ const colors = [
     '#4CAF50', '#ffeb3b', '#ffc107',
 ];
 
-export function getAvatarColor(name) {
-    name = name.substr(0, 6);
+export function getAvatarColor(username) {
+    username = username.substr(0, 6);
 
     var hash = 0;
-    for (var i = 0; i < name.length; i++) {
-        hash = 31 * hash + name.charCodeAt(i);
+    for (var i = 0; i < username.length; i++) {
+        hash = 31 * hash + username.charCodeAt(i);
     }
     var index = Math.abs(hash % colors.length);
     return colors[index];
