@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { login } from '../../util/APIUtils';
+import React from 'react';
+import {login} from '../../util/APIUtils';
 import './Login.css';
-import { Link } from 'react-router-dom';
-import { ACCESS_TOKEN } from '../../constants';
-import {Form, Input, Button, notification, Checkbox} from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import {ACCESS_TOKEN} from '../../constants';
+import {Button, Form, Input, notification} from 'antd';
+import {LockOutlined, UserOutlined} from '@ant-design/icons';
+
 const Login = (props) => {
     const onFinish = values => {
         const loginRequest = values;
@@ -66,23 +66,11 @@ const Login = (props) => {
                     placeholder="Password"
                 />
             </Form.Item>
-{/*
-            <Form.Item>
-                <Form.Item name="remember" valuePropName="checked" noStyle>
-                    <Checkbox>Remember me</Checkbox>
-                </Form.Item>
-
-                <a className="login-form-forgot" href="">
-                    Forgot password
-                </a>
-            </Form.Item>
-*/}
-
             <Form.Item>
                 <Button type="primary" htmlType="submit" className="login-form-button">
                     Log in
                 </Button>
-                Or <a href="">register now!</a>
+                Or <a href="/signup">register now!</a>
             </Form.Item>
         </Form>
             </div>

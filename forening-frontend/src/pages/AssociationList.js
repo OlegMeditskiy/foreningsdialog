@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {ASSOCIATION_LIST_SIZE} from "../constants";
-import {getAllAssociations} from "../util/APIUtils";
-import Association from "../user/signup/Association";
-import {Button} from "react-bootstrap";
+import {getAllAssociations, getUserCreatedAssociations} from "../util/APIUtils";
+import Association from "../user/signup/OrganizationList";
+import {Accordion, Button} from "react-bootstrap";
 import {Icon} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
 class AssociationList extends Component{
@@ -24,7 +24,9 @@ class AssociationList extends Component{
     loadAssociationList(page = 0, size = ASSOCIATION_LIST_SIZE) {
         let promise;
         if(this.props.username) {
-
+            if(this.props.type === 'USER_CREATED_POLLS') {
+                promise = getUserCreatedAssociations(this.props.username,page,size);
+            }
         } else {
             promise = getAllAssociations(page, size);
         }
@@ -79,16 +81,18 @@ class AssociationList extends Component{
         this.loadAssociationList(this.state.page + 1);
     }
     render() {
-        const pollViews = [];
+        const listViews = [];
         this.state.associations.forEach((association, associationIndex) => {
-            pollViews.push(<Association
+            listViews.push(<Association
                 key={association.id}
                 association={association}/>)
         });
 
         return (
             <div className="polls-container">
-                {pollViews}
+                <Accordion defaultActiveKey="0">
+                {listViews}
+                </Accordion>
                 {
                     !this.state.isLoading && this.state.associations.length === 0 ? (
                         <div className="no-polls-found">

@@ -20,8 +20,10 @@ public class AssociationController {
     @Autowired
     private AssociationRepository associationRepository;
 
+
     @Autowired
     private AssociationService associationService;
+
     @GetMapping
     private PagedResponse<AssociationResponse> getAssociations(@CurrentUser UserPrincipal currentUser,
                                                               @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
