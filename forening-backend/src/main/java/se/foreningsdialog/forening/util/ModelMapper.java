@@ -25,6 +25,7 @@ public class ModelMapper {
         List<OrganizationResponse> organizationResponses = association.getOrganizations().stream().map(organization -> {
             OrganizationResponse organizationResponse = new OrganizationResponse();
             organizationResponse.setId(organization.getId());
+            organizationResponse.setOrgNumber(organization.getOrgNumber());
             organizationResponse.setNumberOfApartments(organization.getNumberOfApartments());
             organizationResponse.setActivated(organization.isActivated());
             organizationResponse.setTotalArea(organization.getTotalArea());

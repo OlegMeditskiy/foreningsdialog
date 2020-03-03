@@ -1,5 +1,7 @@
 package se.foreningsdialog.forening.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import se.foreningsdialog.forening.models.Association;
@@ -7,4 +9,5 @@ import se.foreningsdialog.forening.models.AssociationName;
 @Repository
 public interface AssociationRepository extends JpaRepository<Association, Long> {
 //    Association findByUserId(Long id);
+        Page<Association> findByCreatedBy(Long userId, Pageable pageable);
 }

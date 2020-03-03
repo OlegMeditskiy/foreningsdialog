@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import se.foreningsdialog.forening.exception.BadRequestException;
+import se.foreningsdialog.forening.exception.ResourceNotFoundException;
 import se.foreningsdialog.forening.models.Association;
 import se.foreningsdialog.forening.models.users.User;
 import se.foreningsdialog.forening.payload.AssociationResponse;
@@ -31,7 +32,7 @@ public class AssociationService {
     @Autowired
     UserRepository userRepository;
 
-    public PagedResponse<AssociationResponse> getAllPolls(UserPrincipal currentUser, int page, int size) {
+    public PagedResponse<AssociationResponse> getAllAssociations(UserPrincipal currentUser, int page, int size) {
         validatePageNumberAndSize(page, size);
 
         // Retrieve Polls
@@ -50,6 +51,32 @@ public class AssociationService {
         List<AssociationResponse> associationResponses = associations.map(association -> {
             return ModelMapper.mapPollToPollResponse(association,
                     creatorMap.get(currentUser.getId()));
+        }).getContent();
+
+        return new PagedResponse<>(associationResponses, associations.getNumber(),
+                associations.getSize(), associations.getTotalElements(), associations.getTotalPages(), associations.isLast());
+    }
+    public PagedResponse<AssociationResponse> getAssociationsCreatedBy(String username, UserPrincipal currentUser, int page, int size) {
+        validatePageNumberAndSize(page, size);
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+
+        // Retrieve all associations created by the given username
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+        Page<Association> associations = associationRepository.findByCreatedBy(user.getId(), pageable);
+
+        if (associations.getNumberOfElements() == 0) {
+            return new PagedResponse<>(Collections.emptyList(), associations.getNumber(),
+                    associations.getSize(), associations.getTotalElements(), associations.getTotalPages(), associations.isLast());
+        }
+
+        // Map Polls to PollResponses containing vote counts and poll creator details
+        List<Long> associationIds = associations.map(Association::getId).getContent();
+
+        List<AssociationResponse> associationResponses = associations.map(association -> {
+            return ModelMapper.mapPollToPollResponse(association,
+                    user);
         }).getContent();
 
         return new PagedResponse<>(associationResponses, associations.getNumber(),

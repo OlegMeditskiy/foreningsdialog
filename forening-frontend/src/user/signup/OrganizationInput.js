@@ -35,7 +35,7 @@ const OrganizationInput = (props)=>{
                                                 e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
                                             }}
                                             placeholder="Organisationsnummer"
-                                            value={props.organizations[idx].orgNumber}
+                                            value={val.orgNumber}
                                             className={"orgNumber"}
                                             onChange={props.handleChange}
                                         />
@@ -51,7 +51,7 @@ const OrganizationInput = (props)=>{
                                             data-id={idx}
                                             autoComplete="off"
                                             id={totalAreaId}
-                                            value={props.organizations[idx].totalArea}
+                                            value={val.totalArea}
                                             onChange={props.handleChange}
                                             className="totalArea"
                                         />
@@ -65,7 +65,7 @@ const OrganizationInput = (props)=>{
                                             data-id={idx}
                                             autoComplete="off"
                                             id={numberOfApartmentsId}
-                                            value={props.organizations[idx].numberOfApartments}
+                                            value={val.numberOfApartments}
                                             onChange={props.handleChange}
                                             className="numberOfApartments"
                                         />

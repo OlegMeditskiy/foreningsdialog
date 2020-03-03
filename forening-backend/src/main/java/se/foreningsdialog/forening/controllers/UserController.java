@@ -12,6 +12,8 @@ import se.foreningsdialog.forening.repository.AssociationRepository;
 import se.foreningsdialog.forening.repository.UserRepository;
 import se.foreningsdialog.forening.security.CurrentUser;
 import se.foreningsdialog.forening.security.UserPrincipal;
+import se.foreningsdialog.forening.service.AssociationService;
+import se.foreningsdialog.forening.util.AppConstants;
 
 @RestController
 @RequestMapping("/api")
@@ -21,6 +23,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AssociationService associationService;
 
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -46,6 +51,14 @@ public class UserController {
         UserProfile userProfile = new UserProfile(user.getId(), user.getUsername(), user.getCreatedAt());
 
         return userProfile;
+    }
+
+    @GetMapping("/users/{username}/associations")
+    public PagedResponse<AssociationResponse> getAssociationsCreatedBy(@PathVariable(value = "username") String username,
+                                                                       @CurrentUser UserPrincipal currentUser,
+                                                                       @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+                                                                       @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+        return associationService.getPollsCreatedBy(username, currentUser, page, size);
     }
 
 //    @GetMapping("/user/checkEmailAvailability")

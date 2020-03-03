@@ -13,7 +13,6 @@ import Signup from '../user/signup/Signup';
 import AppHeader from '../common/AppHeader';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
-import MainPage from '../pages/MainPage';
 import Admin from "../pages/Admin";
 import {Layout, notification} from 'antd';
 import PrivateRoute from "../common/PrivateRoute";
@@ -110,9 +109,6 @@ class App extends Component {
                 <Content className="app-content">
                     <div className="container">
                         <Switch>
-                            {/*<Route exact path="/"*/}
-                            {/*     render={(props)=><MainPage {...props}/>}>*/}
-                            {/*</Route>*/}
                             <Route path="/login"
                                    render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
                             <Route path="/signup" component={Signup}></Route>

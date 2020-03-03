@@ -64,6 +64,16 @@ export function checkEmailAvailability(email) {
     });
 }
 
+export function getUserCreatedAssociations(username, page, size) {
+    page = page || 0;
+    size = size || ASSOCIATION_LIST_SIZE;
+
+    return request({
+        url: API_BASE_URL + "/users/" + username + "/associations?page=" + page + "&size=" + size,
+        method: 'GET'
+    });
+}
+
 
 export function getCurrentUser() {
     if(!localStorage.getItem(ACCESS_TOKEN)) {

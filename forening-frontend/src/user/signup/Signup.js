@@ -3,11 +3,10 @@ import {checkEmailAvailability, checkUsernameAvailability, signup} from '../../u
 import './Signup.css';
 import OrganizationInput from "./OrganizationInput";
 import {PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH} from '../../constants';
-
-import {useAccordionToggle} from 'react-bootstrap/AccordionToggle';
 import {notification} from 'antd';
 import {Accordion, Button, Form} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 class Signup extends Component {
     constructor(props) {
         super(props);
@@ -69,29 +68,28 @@ class Signup extends Component {
     handleChange = (e) =>{
         const EMAIL_REGEX = RegExp('[^@ ]+@[^@ ]+\\.[^@ ]+');
         const className = e.target.className.split(" ")[0];
-        const index = e.target.dataset.id;
         const value = e.target.value;
         const organizationId = e.target.dataset.organization;
         const associationId = e.target.dataset.association;
         let errors = this.state.errors;
         switch (className) {
             case 'orgNumber':
-                errors.orgNumber = value.length==0?'':
+                errors.orgNumber = value.length===0?'':
                     value.length<10 ?'Organization must be 10 characters long':
                     '';
                 break;
             case 'zipCode':
-                errors.zipCode = value.length==0?'':
+                errors.zipCode = value.length===0?'':
                     value.length<5 ?'Postnummer maste vara 5 symboler lang':
                         '';
                 break;
             case 'contactEmail':
-                errors.contactEmail = value.length==0?'':
+                errors.contactEmail = value.length===0?'':
                     EMAIL_REGEX.test(value) ?'':
                         'Email is invalid';
                 break;
             case 'username':
-                errors.username = value.length==0?'':
+                errors.username = value.length===0?'':
                     EMAIL_REGEX.test(value) ?'':
                         'Email is invalid';
                 break;
@@ -341,86 +339,9 @@ class Signup extends Component {
             <div className="signup-container">
                 <h1 className="page-title">Sign Up</h1>
                 <div className="signup-content">
-{/*                    <Form onSubmit={this.handleSubmit} className="signup-form">
-                        <FormItem
-                            label="Full Name"
-                            validateStatus={this.state.name.validateStatus}
-                            help={this.state.name.errorMsg}>
-                            <Input
-                                size="large"
-                                name="name"
-                                autoComplete="off"
-                                placeholder="Your full name"
-                                value={this.state.name.value}
-                                onChange={(event) => this.handleInputChange(event, this.validateName)} />
-                        </FormItem>
-                        <FormItem label="Username"
-                            hasFeedback
-                            validateStatus={this.state.username.validateStatus}
-                            help={this.state.username.errorMsg}>
-                            <Input
-                                size="large"
-                                name="username"
-                                autoComplete="off"
-                                placeholder="A unique username"
-                                value={this.state.username.value}
-                                onBlur={this.validateUsernameAvailability}
-                                onChange={(event) => this.handleInputChange(event, this.validateUsername)} />
-                        </FormItem>
-                        <FormItem
-                            label="Email"
-                            hasFeedback
-                            validateStatus={this.state.email.validateStatus}
-                            help={this.state.email.errorMsg}>
-                            <Input
-                                size="large"
-                                name="email"
-                                type="email"
-                                autoComplete="off"
-                                placeholder="Your email"
-                                value={this.state.email.value}
-                                onBlur={this.validateEmailAvailability}
-                                onChange={(event) => this.handleInputChange(event, this.validateEmail)} />
-                        </FormItem>
-                        <FormItem
-                            label="Password"
-                            validateStatus={this.state.password.validateStatus}
-                            help={this.state.password.errorMsg}>
-                            <Input
-                                size="large"
-                                name="password"
-                                type="password"
-                                autoComplete="off"
-                                placeholder="A password between 6 to 20 characters"
-                                value={this.state.password.value}
-                                onChange={(event) => this.handleInputChange(event, this.validatePassword)} />
-                        </FormItem>
-                        <FormItem>
-                            <Button type="primary"
-                                htmlType="submit"
-                                size="large"
-                                className="signup-form-button"
-                                disabled={this.isFormInvalid()}>Sign up</Button>
-                            Already registed? <Link to="/login">Login now!</Link>
-                        </FormItem>
-                    </Form>*/}
+
                     <Form onSubmit={this.handleSubmit} className="signup-form" >
-                        {/*<Form.Group>*/}
-                        {/*    <Form.Control*/}
-                        {/*        size="large"*/}
-                        {/*        name="name"*/}
-                        {/*        autoComplete="off"*/}
-                        {/*        placeholder="Your full name"*/}
-                        {/*        className={"name"}/>*/}
-                        {/*</Form.Group>*/}
-                        {/*<Form.Group>*/}
-                        {/*    <Form.Control*/}
-                        {/*        size="large"*/}
-                        {/*        name="username"*/}
-                        {/*        autoComplete="off"*/}
-                        {/*        className={"username"}*/}
-                        {/*        placeholder="A unique username"/>*/}
-                        {/*</Form.Group>*/}
+
                         <Form.Group>
                             <Form.Control
                                 size="large"
