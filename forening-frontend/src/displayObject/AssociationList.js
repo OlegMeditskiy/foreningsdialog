@@ -1,18 +1,15 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {ASSOCIATION_LIST_SIZE} from "../constants";
-import {getAllAssociations, getUserCreatedAssociations, getUserCreatedOrganizations} from "../util/APIUtils";
-import Association from "./OrganizationList";
-import {Accordion, Button} from "react-bootstrap";
-import {
-    withRouter,
-    Switch, Route
-} from 'react-router-dom';
+import {getAllAssociations, getUserCreatedOrganizations} from "../util/APIUtils";
+import {Button} from "react-bootstrap";
+import {Route, Switch} from 'react-router-dom';
 import {Icon} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
 
 import AssociationPage from "./AssociationPage";
 import HousesPage from "./HousePage";
-import OrganizationList from "./OrganizationList";
+import OrganizationPage from "./OrganizationPage";
+
 class AssociationList extends Component{
     constructor(props) {
         super(props);
@@ -95,23 +92,12 @@ class AssociationList extends Component{
     }
 
     render() {
-        console.log(this.state.organizations);
-        const listViews = [];
-        this.state.organizations.forEach((organization, associationIndex) => {
-            listViews.push(<Association
-                currentUser={this.props.currentUser}
-                key={organization.id}
-                organization={organization}
-                {...this.props}
-                />)
-        });
-        console.log("render")
         return (
             <div className="polls-container">
 
                 <Switch>
                     <Route path={`${this.props.match.path}/organisations/`}
-                               render={(props) => <OrganizationList organizations={this.state.organizations} loadList={this.loadAssociationList} {...props}  />}>
+                               render={(props) => <OrganizationPage organizations={this.state.organizations} loadList={this.loadAssociationList} {...props}  />}>
                     </Route>
                     <Route path={`${this.props.match.path}/organisation/:organisationId/foreningar`}
                            render={(props) => <AssociationPage {...props}  />}>

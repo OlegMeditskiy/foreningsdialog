@@ -1,8 +1,6 @@
-import React,{Component} from "react";
-import {Link, withRouter} from "react-router-dom";
-import {Accordion} from "react-bootstrap";
-import AssociationsList from "./AssociationsList";
+import React from "react";
 import {Table} from "antd";
+
 const HousesPage =(props)=>{
     console.log(props)
     const columns=[

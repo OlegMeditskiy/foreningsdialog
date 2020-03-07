@@ -1,8 +1,6 @@
 import React from 'react';
-import {Accordion, Card, useAccordionToggle} from "react-bootstrap";
-import AssociationsList from "./AssociationsList";
-import {Link, Redirect, Route, withRouter} from "react-router-dom";
-import OrganisationPage from "./OrganisationPage";
+import {useAccordionToggle} from "react-bootstrap";
+import {withRouter} from "react-router-dom";
 import {Table} from "antd";
 
 const OrganizationsList =(props)=>{
