@@ -125,26 +125,6 @@ public class AuthController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        //Creating new Association
-        Association association = new Association();
-        for (Organization organization: signUpRequest.getAssociation().getOrganizations()){
-            for(AssociationName associationName: organization.getAssociations()){
-                for (ContactPerson contactPerson: associationName.getContacts()){
-                    contactPersonRepository.save(contactPerson);
-                }
-                for (House house:associationName.getHouses()){
-                    houseRepository.save(house);
-                }
-                associationName.setHouses(associationName.getHouses());
-                associationName.setContacts(associationName.getContacts());
-                associationNameRepository.save(associationName);
-            }
-            organization.setAssociations(organization.getAssociations());
-            organizationRepository.save(organization);
-        }
-        association.setOrganizations(signUpRequest.getAssociation().getOrganizations());
-
-
         // Creating user's account
         Admin user = new Admin(signUpRequest.getUsername(), signUpRequest.getPassword());
 
@@ -157,11 +137,31 @@ public class AuthController {
                 .orElseThrow(() -> new AppException("User Role not set."));
         roles.add(userRole);
         user.setRoles(roles);
-        
+
 
         User result = userRepository.save(user);
-        association.setCreatedBy(user.getId());
-        associationRepository.save(association);
+
+        //Creating new Organizations
+        for (Organization organization: signUpRequest.getAssociation().getOrganizations()){
+            for(AssociationName associationName: organization.getAssociations()){
+                for (ContactPerson contactPerson: associationName.getContacts()){
+                    contactPerson.setCreatedBy(user.getId());
+                    contactPersonRepository.save(contactPerson);
+                }
+                for (House house:associationName.getHouses()){
+                    house.setCreatedBy(user.getId());
+                    houseRepository.save(house);
+                }
+                associationName.setCreatedBy(user.getId());
+                associationName.setHouses(associationName.getHouses());
+                associationName.setContacts(associationName.getContacts());
+                associationNameRepository.save(associationName);
+            }
+            organization.setAssociations(organization.getAssociations());
+            organization.setCreatedBy(user.getId());
+            organizationRepository.save(organization);
+        }
+
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/users/{username}")
                 .buildAndExpand(result.getUsername()).toUri();

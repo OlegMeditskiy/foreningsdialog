@@ -18,6 +18,7 @@ class Profile extends Component {
             isLoading: false
         }
         this.loadUserProfile = this.loadUserProfile.bind(this);
+        console.log("profile con")
     }
 
     loadUserProfile(username) {
@@ -49,15 +50,18 @@ class Profile extends Component {
     componentDidMount() {
         const username = this.props.match.params.username;
         this.loadUserProfile(username);
+        console.log("profile did mount")
     }
 
     componentDidUpdate(nextProps) {
         if(this.props.match.params.username !== nextProps.match.params.username) {
             this.loadUserProfile(nextProps.match.params.username);
-        }        
+        }
+        console.log("profile did update")
     }
 
     render() {
+        console.log(this.props.isAuthenticated)
         if(this.state.isLoading) {
             return <LoadingIndicator />;
         }

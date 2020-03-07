@@ -25,7 +25,7 @@ class AppHeader extends Component {
         if(this.props.currentUser) {
           menuItems = [
             <Menu.Item key="/">
-              <Link to="/">
+              <Link to="/a/organisations">
                   <HomeOutlined />
               </Link>
             </Menu.Item>,
@@ -67,7 +67,6 @@ class AppHeader extends Component {
 }
 
 function ProfileDropdownMenu(props) {
-    console.log(props.currentUser.authorities);
   const dropdownMenu = (
     <Menu onClick={props.handleMenuClick} className="profile-dropdown-menu">
       <Menu.Item key="user-info" className="dropdown-item" disabled>

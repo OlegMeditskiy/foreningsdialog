@@ -17,6 +17,7 @@ public class OrganizationResponse {
     private int numberOfApartments;
     private int totalArea;
 
+    private UserSummary createdBy;
     private boolean isActivated;
 
     @OneToMany
