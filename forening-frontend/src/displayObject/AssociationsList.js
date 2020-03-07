@@ -2,6 +2,7 @@ import React from 'react';
 import {Accordion, Card, useAccordionToggle} from "react-bootstrap";
 import HousesList from "./HousesList";
 import ContactsList from "./ContactList";
+import {Link} from "react-router-dom";
 
 const AssociationsList =(props)=>{
     return(
@@ -17,6 +18,9 @@ const AssociationsList =(props)=>{
                         <Accordion.Collapse eventKey={'organisation'+idx} id={'organisation'+{idx}}>
                             <Card.Body>
                                 <div>
+                                    <Link to={{pathname:`${props.match.url}/association/${org.id}`,state:{
+                                            association: org,
+                                        }}}>To association</Link>
                                     <p>
                                         Föreningsnamn: {org.associationName}
                                     </p>

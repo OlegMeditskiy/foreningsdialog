@@ -13,10 +13,12 @@ import Signup from '../user/signup/Signup';
 import AppHeader from '../common/AppHeader';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
-import Admin from "../pages/Admin";
+import Admin from "../roles/Admin";
 import {Layout, notification} from 'antd';
 import PrivateRoute from "../common/PrivateRoute";
 import Profile from "../user/profile/Profile";
+import OrganisationPage from "../displayObject/OrganisationPage";
+import AssociationList from "../displayObject/AssociationList";
 const { Content } = Layout;
 
 class App extends Component {
@@ -84,6 +86,8 @@ class App extends Component {
         });
     }
 
+
+
     handleLogin() {
         notification.success({
             message: 'Förenings App',
@@ -99,23 +103,23 @@ class App extends Component {
             return <LoadingIndicator />
         }
 
-        console.log(this.state.isAuthenticated);
         return (
             <Layout className="app-container">
-                <   AppHeader isAuthenticated={this.state.isAuthenticated}
+                <AppHeader isAuthenticated={this.state.isAuthenticated}
                            currentUser={this.state.currentUser}
                            onLogout={this.handleLogout} />
 
                 <Content className="app-content">
                     <div className="container">
                         <Switch>
+                            <Route exact path='/' component={Signup}/>
                             <Route path="/login"
                                    render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
                             <Route path="/signup" component={Signup}></Route>
                             <Route path="/users/:username"
                                    render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
                             </Route>
-                            <PrivateRoute authenticated={this.state.isAuthenticated} path="/" currentUser={this.state.currentUser} component={Admin} handleLogout={this.handleLogout}></PrivateRoute>
+                            <PrivateRoute authenticated={this.state.isAuthenticated} path="/a" currentUser={this.state.currentUser} component={Admin} handleLogout={this.handleLogout}></PrivateRoute>
                             <Route component={NotFound}></Route>
                         </Switch>
                     </div>
