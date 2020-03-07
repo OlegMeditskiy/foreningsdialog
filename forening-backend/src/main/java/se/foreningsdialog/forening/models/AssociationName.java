@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import se.foreningsdialog.forening.models.houses.House;
+import se.foreningsdialog.forening.models.users.audit.UserDateAudit;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class AssociationName {
+public class AssociationName extends UserDateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
