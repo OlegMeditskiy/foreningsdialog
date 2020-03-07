@@ -8,11 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import se.foreningsdialog.forening.repository.AssociationRepository;
 import se.foreningsdialog.forening.repository.UserRepository;
 import se.foreningsdialog.forening.security.CurrentUser;
 import se.foreningsdialog.forening.security.UserPrincipal;
-import se.foreningsdialog.forening.service.AssociationService;
+import se.foreningsdialog.forening.service.OrganizationService;
 import se.foreningsdialog.forening.util.AppConstants;
 
 @RestController
@@ -25,7 +24,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private AssociationService associationService;
+    private OrganizationService organizationService;
 
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -53,12 +52,12 @@ public class UserController {
         return userProfile;
     }
 
-    @GetMapping("/users/{username}/associations")
-    public PagedResponse<AssociationResponse> getAssociationsCreatedBy(@PathVariable(value = "username") String username,
+    @GetMapping("/users/{username}/organizations")
+    public PagedResponse<OrganizationResponse> getOrganizationsCreatedBy(@PathVariable(value = "username") String username,
                                                                        @CurrentUser UserPrincipal currentUser,
                                                                        @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
                                                                        @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-        return associationService.getPollsCreatedBy(username, currentUser, page, size);
+        return organizationService.getOrganizationsCreatedBy(username, currentUser, page, size);
     }
 
 //    @GetMapping("/user/checkEmailAvailability")
