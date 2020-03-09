@@ -49,6 +49,29 @@ export function signup(signupRequest) {
         body: JSON.stringify(signupRequest)
     });
 }
+export function createNewOrganisations(createNewOrganisationsRequest) {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/createOrganizations",
+        method: 'POST',
+        body: JSON.stringify(createNewOrganisationsRequest)
+    });
+}
+export function createNewAssociation(createNewAssociationRequest) {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/createAssociation",
+        method: 'POST',
+        body: JSON.stringify(createNewAssociationRequest)
+    });
+}
+
+export function saveAssociation(saveAssociationRequest) {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/saveAssociation",
+        method: 'POST',
+        body: JSON.stringify(saveAssociationRequest)
+    });
+
+}
 
 export function checkUsernameAvailability(username) {
     return request({

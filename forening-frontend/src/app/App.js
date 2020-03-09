@@ -112,14 +112,14 @@ class App extends Component {
                 <Content className="app-content">
                     <div className="container">
                         <Switch>
-                            <Route exact path='/' component={Signup}/>
+                            {/*<Route exact path='/' component={Signup}/>*/}
                             <Route path="/login"
                                    render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
                             <Route path="/signup" component={Signup}></Route>
                             <Route path="/users/:username"
                                    render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
                             </Route>
-                            <PrivateRoute authenticated={this.state.isAuthenticated} path="/a" currentUser={this.state.currentUser} component={Admin} handleLogout={this.handleLogout}></PrivateRoute>
+                            <PrivateRoute authenticated={this.state.isAuthenticated} path="/" currentUser={this.state.currentUser} component={Admin} handleLogout={this.handleLogout}></PrivateRoute>
                             <Route component={NotFound}></Route>
                         </Switch>
                     </div>

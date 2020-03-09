@@ -72,9 +72,6 @@ public class OrganizationService {
                     organizations.getSize(), organizations.getTotalElements(), organizations.getTotalPages(), organizations.isLast());
         }
 
-        // Map Polls to PollResponses containing vote counts and poll creator details
-        List<Long> associationIds = organizations.map(Organization::getId).getContent();
-
         List<OrganizationResponse> organizationsResponses = organizations.map(organization -> {
             return ModelMapper.mapOrganizationResponse(organization,
                     user);

@@ -1,7 +1,11 @@
-import React from 'react';
-import {useAccordionToggle} from "react-bootstrap";
+import React, {useState} from 'react';
+import {Modal, Nav, Tab, Tabs} from "react-bootstrap";
 import {withRouter} from "react-router-dom";
 import {Table} from "antd";
+import Button from "react-bootstrap/Button";
+import '../user/signup/Signup.css';
+import CreateNewOrganisations from "./CreateNewOrganisations";
+import './list.css';
 
 const OrganizationsPage=(props)=>{
     const columns=[
@@ -39,50 +43,88 @@ const OrganizationsPage=(props)=>{
       </span>
             ),
         },
-
-
     ]
-    const dataSource=[]
-    console.log(props)
+    const activated=[]
+    const notActivated=[]
+
     props.organizations.map((org,idx)=>{
-        dataSource.push({
-            key:idx+1,
-            id:org.id,
-            orgNumber:org.orgNumber,
-            totalArea:org.totalArea,
-            numberOfApartments:org.numberOfApartments,
-            associations:org.associations
-        })
+        if (org.activated){
+            activated.push({
+                key:idx,
+                id:org.id,
+                orgNumber:org.orgNumber,
+                totalArea:org.totalArea,
+                numberOfApartments:org.numberOfApartments,
+                associations:org.associations
+            })
+        }
+        else{
+            notActivated.push({
+                key:idx,
+                id:org.id,
+                orgNumber:org.orgNumber,
+                totalArea:org.totalArea,
+                numberOfApartments:org.numberOfApartments,
+                associations:org.associations
+            })
+        }
+
 
     })
     function onChange(pagination, filters, sorter, extra) {
         console.log('params', pagination, filters, sorter, extra);
     }
     function redirectToOrganisation(event,record){
-        console.log(props);
-        return props.history.push(`/a/organisation/${record.id}/foreningar`,{associations: record.associations})
+        return props.history.push({pathname:`/organisation/${record.id}/foreningar`,state:{orgIndex:record.key}})
     }
+
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     return(
         <div>
-            <Table
-                dataSource={dataSource} onChange={onChange} columns={columns} />;
+            <Button  variant="primary" onClick={handleShow}>
+                Ny organisation
+            </Button>
+
+            <Tabs defaultActiveKey='activated' id="uncontrolled-tab-example">
+                <Tab eventKey="activated" title={"Bekräftade ("+activated.length+")"}>
+                    <Table
+                        dataSource={activated} onChange={onChange} columns={columns} />
+                </Tab>
+                <Tab eventKey="not activated" title={"Inte bekräftade ("+notActivated.length+")"}>
+                    <Table
+                        dataSource={notActivated} onChange={onChange} columns={columns} />
+                </Tab>
+            </Tabs>
+
+            <Modal show={show} onHide={handleClose} dialogClassName="modal-90w">
+                <Modal.Header closeButton>
+                    <Modal.Title>Nya organisationer</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="signup-container">
+                        <div className="signup-content">
+                    <CreateNewOrganisations update={props.update} currentUser={props.currentUser} {...props}/>
+                        </div>
+                    </div>
+                </Modal.Body>
+                {/*<Modal.Footer>*/}
+                {/*    <Button variant="secondary" onClick={handleClose}>*/}
+                {/*        Close*/}
+                {/*    </Button>*/}
+                {/*    <Button variant="primary" onClick={handleClose}>*/}
+                {/*        Save Changes*/}
+                {/*    </Button>*/}
+                {/*</Modal.Footer>*/}
+            </Modal>
+
+
         </div>
 
 
     )
-}
-function CustomToggle({ children, eventKey }) {
-    const decoratedOnClick = useAccordionToggle(eventKey, () =>
-        console.log('totally custom!'),
-    );
-
-    return (
-        <div
-            onClick={decoratedOnClick}
-        >
-            {children}
-        </div>
-    );
 }
 
 

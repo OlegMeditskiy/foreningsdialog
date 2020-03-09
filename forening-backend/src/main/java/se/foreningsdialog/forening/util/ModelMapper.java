@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 public class ModelMapper {
 
     public static OrganizationResponse mapOrganizationResponse(Organization organization, User creator) {
-        System.out.println("mapper");
         OrganizationResponse organizationResponse = new OrganizationResponse();
         organizationResponse.setId(organization.getId());
         organizationResponse.setTotalArea(organization.getTotalArea());
         organizationResponse.setOrgNumber(organization.getOrgNumber());
         organizationResponse.setNumberOfApartments(organization.getNumberOfApartments());
+        organizationResponse.setActivated(organization.isActivated());
         List<GrantedAuthority> authorities = creator.getRoles().stream().map(role ->
                 new SimpleGrantedAuthority(role.getName().name())
         ).collect(Collectors.toList());

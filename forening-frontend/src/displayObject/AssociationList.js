@@ -2,13 +2,14 @@ import React, {Component} from 'react';
 import {ASSOCIATION_LIST_SIZE} from "../constants";
 import {getAllAssociations, getUserCreatedOrganizations} from "../util/APIUtils";
 import {Button} from "react-bootstrap";
-import {Route, Switch} from 'react-router-dom';
+import {Link, Route, Switch} from 'react-router-dom';
 import {Icon} from "antd";
 import LoadingIndicator from "../common/LoadingIndicator";
 
 import AssociationPage from "./AssociationPage";
 import HousesPage from "./HousePage";
-import OrganizationPage from "./OrganizationPage";
+import ContactsPage from "./ContactPage";
+import OrganisationPage from "./OrganisationPage";
 
 class AssociationList extends Component{
     constructor(props) {
@@ -21,11 +22,13 @@ class AssociationList extends Component{
             totalPages: 0,
             last: true,
             isLoading: false,
-            display:''
+            display:'',
+            updated:1
         };
         this.loadAssociationList = this.loadAssociationList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
-        console.log("constructor");
+        this.update=this.update.bind(this);
+
     }
 
     loadAssociationList(page = 0, size = ASSOCIATION_LIST_SIZE) {
@@ -56,18 +59,32 @@ class AssociationList extends Component{
                     totalPages: response.totalPages,
                     last: response.last,
                     isLoading: false,
-                    display:this.props.display
+                    display:this.props.display,
+                    updated:1
+
                 })
             }).catch(error => {
             this.setState({
                 isLoading: false
             })
         });
+
     }
 
-
     componentDidMount() {
-        console.log("did mount");
+        this.loadAssociationList();
+    }
+    update(){
+        this.setState({
+            organizations: [],
+            page: 0,
+            size: 10,
+            totalElements: 0,
+            totalPages: 0,
+            last: true,
+            isLoading: false,
+            updated: 0
+        });
         this.loadAssociationList();
     }
     componentDidUpdate(nextProps) {
@@ -84,7 +101,7 @@ class AssociationList extends Component{
             });
             this.loadAssociationList();
         }
-        console.log("did update");
+
     }
 
     handleLoadMore() {
@@ -94,16 +111,19 @@ class AssociationList extends Component{
     render() {
         return (
             <div className="polls-container">
-
+                <Link to={"/organisations"}>Organisationer</Link>
                 <Switch>
-                    <Route path={`${this.props.match.path}/organisations/`}
-                               render={(props) => <OrganizationPage organizations={this.state.organizations} loadList={this.loadAssociationList} {...props}  />}>
+                    <Route path={`${this.props.match.path}organisations/`}
+                               render={(props) => <OrganisationPage currentUser={this.props.currentUser} organizations={this.state.organizations}  {...props} update={this.update}/>}>
                     </Route>
-                    <Route path={`${this.props.match.path}/organisation/:organisationId/foreningar`}
-                           render={(props) => <AssociationPage {...props}  />}>
+                    <Route path={`${this.props.match.path}organisation/:organisationId/foreningar`}
+                           render={(props) => <AssociationPage organizations={this.state.organizations} {...props} what={this.props.match.params.organisationId} currentUser={this.props.currentUser} update={this.update} />}>
                     </Route>
-                    <Route path={`${this.props.match.path}/organisation/:organisationId/association/:associationId/houses`}
+                    <Route path={`${this.props.match.path}organisation/:organisationId/association/:associationId/houses`}
                            render={(props) => <HousesPage {...props}  />}>
+                    </Route>
+                    <Route path={`${this.props.match.path}organisation/:organisationId/association/:associationId/contacts`}
+                           render={(props) => <ContactsPage {...props}  />}>
                     </Route>
 
                 </Switch>
