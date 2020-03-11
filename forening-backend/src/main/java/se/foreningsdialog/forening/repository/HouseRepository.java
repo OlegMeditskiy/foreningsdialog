@@ -1,7 +1,10 @@
 package se.foreningsdialog.forening.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import se.foreningsdialog.forening.models.houses.House;
 
-public interface HouseRepository extends JpaRepository<House,Long> {
+import java.util.Optional;
+
+public interface HouseRepository extends CrudRepository<House,Long> {
+    Optional<House> findById(Long id);
 }

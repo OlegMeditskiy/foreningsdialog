@@ -1,7 +1,6 @@
 package se.foreningsdialog.forening.controllers;
 
 import se.foreningsdialog.forening.exception.AppException;
-import se.foreningsdialog.forening.models.Association;
 import se.foreningsdialog.forening.models.AssociationName;
 import se.foreningsdialog.forening.models.ContactPerson;
 import se.foreningsdialog.forening.models.Organization;
@@ -10,7 +9,6 @@ import se.foreningsdialog.forening.models.users.Admin;
 import se.foreningsdialog.forening.models.users.User;
 import se.foreningsdialog.forening.models.users.constants.Role;
 import se.foreningsdialog.forening.models.users.constants.RoleName;
-import se.foreningsdialog.forening.payload.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +22,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import se.foreningsdialog.forening.payload.common.ApiResponse;
+import se.foreningsdialog.forening.payload.common.JwtAuthenticationResponse;
+import se.foreningsdialog.forening.payload.common.LoginRequest;
+import se.foreningsdialog.forening.payload.common.SignUpRequest;
 import se.foreningsdialog.forening.repository.*;
 import se.foreningsdialog.forening.security.JwtTokenProvider;
 
@@ -47,8 +49,7 @@ public class AuthController {
 
 
 
-    @Autowired
-    AssociationRepository associationRepository;
+
 
     @Autowired
     OrganizationRepository organizationRepository;
@@ -143,23 +144,23 @@ public class AuthController {
 
         //Creating new Organizations
         for (Organization organization: signUpRequest.getAssociation().getOrganizations()){
+            organization.setCreatedBy(user.getId());
+            organizationRepository.save(organization);
             for(AssociationName associationName: organization.getAssociations()){
+                associationName.setOrganization(organization);
+                associationName.setCreatedBy(user.getId());
+                associationNameRepository.save(associationName);
                 for (ContactPerson contactPerson: associationName.getContacts()){
+                    contactPerson.setAssociationName(associationName);
                     contactPerson.setCreatedBy(user.getId());
                     contactPersonRepository.save(contactPerson);
                 }
                 for (House house:associationName.getHouses()){
+                    house.setAssociationName(associationName);
                     house.setCreatedBy(user.getId());
                     houseRepository.save(house);
                 }
-                associationName.setCreatedBy(user.getId());
-                associationName.setHouses(associationName.getHouses());
-                associationName.setContacts(associationName.getContacts());
-                associationNameRepository.save(associationName);
             }
-            organization.setAssociations(organization.getAssociations());
-            organization.setCreatedBy(user.getId());
-            organizationRepository.save(organization);
         }
 
         URI location = ServletUriComponentsBuilder

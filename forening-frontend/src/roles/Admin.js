@@ -1,6 +1,8 @@
 import React from "react";
 import MainAdmin from "./MainAdmin";
 import AssociationAdmin from "./AssociationAdmin";
+import LoadingIndicator from "../common/LoadingIndicator";
+import {Redirect} from "react-router-dom";
 
 const Admin=(props) =>{
    function Who(){
@@ -16,12 +18,23 @@ const Admin=(props) =>{
        }
     }
 
-        return(
-            <div>
-                <Who/>
-            </div>
+        if (!props.currentUser){
+            return <Redirect
+                to={{
+                    pathname: '/login',
+                    state: { from: props.location }
+                }}
+            />
 
-        )
+        }
+        else{
+            return(
+                <div>
+                    <Who/>
+                </div>
+            )
+        }
+
 }
 
 export  default Admin;

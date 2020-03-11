@@ -1,17 +1,16 @@
 package se.foreningsdialog.forening.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 import se.foreningsdialog.forening.models.houses.House;
 import se.foreningsdialog.forening.models.users.audit.UserDateAudit;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 public class AssociationName extends UserDateAudit {
     @Id
@@ -20,10 +19,17 @@ public class AssociationName extends UserDateAudit {
 
     private String associationName;
 
-    @OneToMany
+    @ManyToOne
+    @JoinTable(name = "organizations_associations",joinColumns = @JoinColumn(name = "association_id"),inverseJoinColumns = @JoinColumn(name = "organization_id"))
+    @JsonBackReference
+    private Organization organization;
+
+    @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
+    @JsonManagedReference
     List<ContactPerson> contacts;
 
-    @OneToMany
+    @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
+    @JsonManagedReference
     List<House> houses;
 
 }
