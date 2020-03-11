@@ -1,10 +1,8 @@
 package se.foreningsdialog.forening.models.houses;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import se.foreningsdialog.forening.models.users.Guest;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,11 +17,22 @@ public class Apartment{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToOne
+    @ManyToOne
+    @JoinTable(name = "house_apartments",joinColumns = @JoinColumn(name = "apartment_id"),inverseJoinColumns = @JoinColumn(name = "house_id"))
+    @JsonBackReference
     private House house;
 
-    @OneToMany
+    public Apartment(int number, int roomAndKitchen, int area, House house) {
+        this.number=number;
+        this.roomAndKitchen=roomAndKitchen;
+        this.area=area;
+        this.house=house;
+    }
+
+    @OneToMany(mappedBy = "apartment",cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Guest> guests;
+
 
     private int number;
 

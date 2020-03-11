@@ -1,27 +1,21 @@
 package se.foreningsdialog.forening.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import se.foreningsdialog.forening.exception.BadRequestException;
 import se.foreningsdialog.forening.exception.ResourceNotFoundException;
 import se.foreningsdialog.forening.models.Association;
 import se.foreningsdialog.forening.models.Organization;
 import se.foreningsdialog.forening.models.users.User;
-import se.foreningsdialog.forening.payload.AssociationResponse;
-import se.foreningsdialog.forening.payload.OrganizationResponse;
-import se.foreningsdialog.forening.payload.PagedResponse;
-import se.foreningsdialog.forening.repository.AssociationRepository;
+import se.foreningsdialog.forening.payload.organization.OrganizationResponse;
+import se.foreningsdialog.forening.payload.common.UserSummary;
 import se.foreningsdialog.forening.repository.OrganizationRepository;
 import se.foreningsdialog.forening.repository.UserRepository;
-import se.foreningsdialog.forening.security.UserPrincipal;
 import se.foreningsdialog.forening.util.AppConstants;
-import se.foreningsdialog.forening.util.ModelMapper;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -59,26 +53,57 @@ public class OrganizationService {
 //        return new PagedResponse<>(associationResponses, associations.getNumber(),
 //                associations.getSize(), associations.getTotalElements(), associations.getTotalPages(), associations.isLast());
 //    }
-    public PagedResponse<OrganizationResponse> getOrganizationsCreatedBy(String username, UserPrincipal currentUser, int page, int size) {
-        validatePageNumberAndSize(page, size);
+//    public PagedResponse<OrganizationResponse> getOrganizationsCreatedBy(String username, UserPrincipal currentUser, int page, int size) {
+//        validatePageNumberAndSize(page, size);
+//        User user = userRepository.findByUsername(username)
+//                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+//        // Retrieve all organizations created by the given username
+//        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+//        Page<Organization> organizations = organizationRepository.findByCreatedBy(user.getId(), pageable);
+//
+//        if (organizations.getNumberOfElements() == 0) {
+//            return new PagedResponse<>(Collections.emptyList(), organizations.getNumber(),
+//                    organizations.getSize(), organizations.getTotalElements(), organizations.getTotalPages(), organizations.isLast());
+//        }
+//
+//        List<OrganizationResponse> organizationsResponses = organizations.map(organization -> {
+//            return ModelMapper.mapOrganizationResponse(organization,
+//                    user);
+//        }).getContent();
+//        return new PagedResponse<>(organizationsResponses, organizations.getNumber(),
+//                organizations.getSize(), organizations.getTotalElements(), organizations.getTotalPages(), organizations.isLast());
+//    }
+
+    public List<OrganizationResponse> getAllOrganizationsCreatedBy(String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-        // Retrieve all organizations created by the given username
-        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
-        Page<Organization> organizations = organizationRepository.findByCreatedBy(user.getId(), pageable);
+        List<Organization> organizations = organizationRepository.findByCreatedBy(user.getId());
+        List<OrganizationResponse> organizationResponses=new ArrayList<>();
+        for (Organization organization: organizations){
+            OrganizationResponse organizationResponse = new OrganizationResponse();
+            organizationResponse.setId(organization.getId());
+            organizationResponse.setTotalArea(organization.getTotalArea());
+            organizationResponse.setOrgNumber(organization.getOrgNumber());
+            organizationResponse.setNumberOfApartments(organization.getNumberOfApartments());
+            organizationResponse.setActivated(organization.isActivated());
+            List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
+                    new SimpleGrantedAuthority(role.getName().name())
+            ).collect(Collectors.toList());
+            System.out.println("set associations");
+            try{
+                organizationResponse.setAssociations(organization.getAssociations());
+            }catch (Exception ex){
+                System.out.println(ex);
+            }
 
-        if (organizations.getNumberOfElements() == 0) {
-            return new PagedResponse<>(Collections.emptyList(), organizations.getNumber(),
-                    organizations.getSize(), organizations.getTotalElements(), organizations.getTotalPages(), organizations.isLast());
+            UserSummary creatorSummary = new UserSummary(user.getId(), user.getUsername(),authorities);
+            organizationResponse.setCreatedBy(creatorSummary);
+            organizationResponses.add(organizationResponse);
         }
 
-        List<OrganizationResponse> organizationsResponses = organizations.map(organization -> {
-            return ModelMapper.mapOrganizationResponse(organization,
-                    user);
-        }).getContent();
-        return new PagedResponse<>(organizationsResponses, organizations.getNumber(),
-                organizations.getSize(), organizations.getTotalElements(), organizations.getTotalPages(), organizations.isLast());
+        return organizationResponses;
     }
+
     private void validatePageNumberAndSize(int page, int size) {
         if(page < 0) {
             throw new BadRequestException("Page number cannot be less than zero.");

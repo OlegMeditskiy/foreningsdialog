@@ -1,23 +1,18 @@
 package se.foreningsdialog.forening.models;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 import se.foreningsdialog.forening.models.houses.House;
 import se.foreningsdialog.forening.models.loanobjects.AbstractLoanObject;
 import se.foreningsdialog.forening.models.users.audit.UserDateAudit;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 public class Organization extends UserDateAudit {
     @Id
@@ -30,7 +25,8 @@ public class Organization extends UserDateAudit {
 
     private boolean isActivated=false;
 
-    @OneToMany
+    @OneToMany(mappedBy = "organization",cascade = CascadeType.ALL)
+    @JsonManagedReference
     List<AssociationName> associations;
 
     @OneToMany

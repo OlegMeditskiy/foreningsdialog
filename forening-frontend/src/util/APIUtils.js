@@ -56,11 +56,40 @@ export function createNewOrganisations(createNewOrganisationsRequest) {
         body: JSON.stringify(createNewOrganisationsRequest)
     });
 }
+export function createNewHouse(createNewHouseRequest) {
+    console.log(JSON.stringify(createNewHouseRequest))
+    return request({
+        url: API_BASE_URL + "/associationAdmin/createHouse",
+        method: 'POST',
+        body: JSON.stringify(createNewHouseRequest)
+    });
+}
+export function createNewContact(createNewContactRequest) {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/createContact",
+        method: 'POST',
+        body: JSON.stringify(createNewContactRequest)
+    });
+}
 export function createNewAssociation(createNewAssociationRequest) {
     return request({
         url: API_BASE_URL + "/associationAdmin/createAssociation",
         method: 'POST',
         body: JSON.stringify(createNewAssociationRequest)
+    });
+}
+export function createNewApartment(createNewApartmentRequest) {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/createApartment",
+        method: 'POST',
+        body: JSON.stringify(createNewApartmentRequest)
+    });
+}
+export function createNewGuest(createNewGuestRequest) {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/createGuest",
+        method: 'POST',
+        body: JSON.stringify(createNewGuestRequest)
     });
 }
 
@@ -71,6 +100,73 @@ export function saveAssociation(saveAssociationRequest) {
         body: JSON.stringify(saveAssociationRequest)
     });
 
+}
+export function saveHouse(saveHouseRequest) {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/saveHouse",
+        method: 'POST',
+        body: JSON.stringify(saveHouseRequest)
+    });
+
+}
+export function saveContact(saveContactRequest) {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/saveContact",
+        method: 'POST',
+        body: JSON.stringify(saveContactRequest)
+    });
+
+}
+export function saveApartment(saveApartmentRequest) {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/saveApartment",
+        method: 'POST',
+        body: JSON.stringify(saveApartmentRequest)
+    });
+
+}
+export function saveGuest(saveGuestRequest) {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/saveGuest",
+        method: 'POST',
+        body: JSON.stringify(saveGuestRequest)
+    });
+
+}
+export function deleteAssociationFromOrganization(deleteAssociationRequest) {
+    return request({
+        url:API_BASE_URL+"/associationAdmin/deleteAssociation",
+        method:'DELETE',
+        body: JSON.stringify(deleteAssociationRequest)
+    })
+}
+export function deleteHouseFromAssociation(deleteHouseRequest) {
+    return request({
+        url:API_BASE_URL+"/associationAdmin/deleteHouse",
+        method:'DELETE',
+        body: JSON.stringify(deleteHouseRequest)
+    })
+}
+export function deleteContactFromAssociation(deleteContactRequest) {
+    return request({
+        url:API_BASE_URL+"/associationAdmin/deleteContact",
+        method:'DELETE',
+        body: JSON.stringify(deleteContactRequest)
+    })
+}
+export function deleteApartmentFromAssociation(deleteApartmentRequest) {
+    return request({
+        url:API_BASE_URL+"/associationAdmin/deleteApartment",
+        method:'DELETE',
+        body: JSON.stringify(deleteApartmentRequest)
+    })
+}
+export function deleteGuestFromAssociation(deleteGuestRequest) {
+    return request({
+        url:API_BASE_URL+"/associationAdmin/deleteGuest",
+        method:'DELETE',
+        body: JSON.stringify(deleteGuestRequest)
+    })
 }
 
 export function checkUsernameAvailability(username) {
@@ -96,6 +192,16 @@ export function getUserCreatedOrganizations(username, page, size) {
         method: 'GET'
     });
 }
+export function getUserCreatedOrganizationss(username) {
+    return request({
+        url: API_BASE_URL + "/users/" + username + "/organizations",
+        method: 'GET'
+    });
+}
+
+
+
+
 
 
 export function getCurrentUser() {

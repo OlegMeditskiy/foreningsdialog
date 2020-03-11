@@ -6,7 +6,6 @@ class AssociationAdmin extends Component{
         super(props);
 
     }
-
     render() {
 
         return (

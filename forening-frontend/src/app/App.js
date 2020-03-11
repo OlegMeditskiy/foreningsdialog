@@ -7,7 +7,7 @@ import {
 
 import { getCurrentUser } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
-
+import {AuthContext} from "./auth";
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import AppHeader from '../common/AppHeader';
@@ -17,9 +17,11 @@ import Admin from "../roles/Admin";
 import {Layout, notification} from 'antd';
 import PrivateRoute from "../common/PrivateRoute";
 import Profile from "../user/profile/Profile";
-import OrganisationPage from "../displayObject/OrganisationPage";
+import OrganisationPage from "../displayObject/organization/OrganisationPage";
 import AssociationList from "../displayObject/AssociationList";
+import Router from "./Router";
 const { Content } = Layout;
+
 
 class App extends Component {
     constructor(props) {
@@ -64,6 +66,7 @@ class App extends Component {
         this.loadCurrentUser();
     }
 
+
     componentDidMount() {
         this.loadCurrentUser();
     }
@@ -104,11 +107,11 @@ class App extends Component {
         }
 
         return (
+
             <Layout className="app-container">
                 <AppHeader isAuthenticated={this.state.isAuthenticated}
                            currentUser={this.state.currentUser}
                            onLogout={this.handleLogout} />
-
                 <Content className="app-content">
                     <div className="container">
                         <Switch>
@@ -119,6 +122,9 @@ class App extends Component {
                             <Route path="/users/:username"
                                    render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
                             </Route>
+                            {/*<Route*/}
+                            {/*    path="/"*/}
+                            {/*    render={(props)=><Admin authenticated={this.state.isAuthenticated} path="/" currentUser={this.state.currentUser} {...props} handleLogout={this.handleLogout}/>}></Route>*/}
                             <PrivateRoute authenticated={this.state.isAuthenticated} path="/" currentUser={this.state.currentUser} component={Admin} handleLogout={this.handleLogout}></PrivateRoute>
                             <Route component={NotFound}></Route>
                         </Switch>

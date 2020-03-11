@@ -16,9 +16,6 @@ import java.util.Set;
         @UniqueConstraint(columnNames = {
                 "username"
         }),
-        @UniqueConstraint(columnNames = {
-                "email"
-        })
 })
 public abstract class User extends DateAudit {
     @Id
