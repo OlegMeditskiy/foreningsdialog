@@ -25,7 +25,6 @@ public abstract class User extends DateAudit {
     @NaturalId
     @NotBlank
     @Size(max = 40)
-    @Email
     private String username;
 
     @NotBlank

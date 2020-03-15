@@ -103,7 +103,7 @@ const ApartmentsPage =(props)=>{
                 const saveApartmentRequest = {
                     apartmentId: newData[index].id,
                     number:newData[index].number,
-                    area:newData[index].city,
+                    area:newData[index].area,
                     roomAndKitchen:newData[index].roomAndKitchen,
 
                 };

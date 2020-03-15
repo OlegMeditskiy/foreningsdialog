@@ -43,12 +43,14 @@ class AssociationList extends Component{
             isLoading: true
         });
         promise
+
             .then(response => {
+
                 const organizations = this.state.organizations.slice();
                 this.setState({
                     organizations: organizations.concat(response),
                     isLoading: false,
-                    updated:1
+                    updated:1,
                 })
 
             }).catch(error => {
@@ -60,10 +62,8 @@ class AssociationList extends Component{
     }
 
     componentDidMount() {
+        console.log("Did mount")
         this.loadAssociationList();
-    }
-    componentWillUnmount() {
-        this._isMounted = false;
     }
 
     update(){
@@ -77,6 +77,7 @@ class AssociationList extends Component{
 
 
     componentDidUpdate(nextProps) {
+        console.log("Did update")
         if(this.props.isAuthenticated !== nextProps.isAuthenticated) {
             // Reset State
             this.setState({
@@ -103,7 +104,7 @@ class AssociationList extends Component{
                     </Route>
                     <Route path={`${this.props.match.path}organisation/:organisationId/foreningar`}
                            render={(props) =>
-                               <AssociationPage  organizations={this.state.organizations} {...props} what={this.props.match.params.organisationId} currentUser={this.props.currentUser} update={this.update} />}>
+                               <AssociationPage createdBy={this.state.organizations} organizations={this.state.organizations} {...props}  currentUser={this.props.currentUser} update={this.update} />}>
                     </Route>
                     <Route path={`${this.props.match.path}organisation/:organisationId/association/:associationId/houses`}
                            render={(props) => <HousesPage  organizations={this.state.organizations} {...props} update={this.update} />}>
