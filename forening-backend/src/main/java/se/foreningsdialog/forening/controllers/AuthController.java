@@ -3,9 +3,11 @@ package se.foreningsdialog.forening.controllers;
 import se.foreningsdialog.forening.exception.AppException;
 import se.foreningsdialog.forening.models.AssociationName;
 import se.foreningsdialog.forening.models.ContactPerson;
+import se.foreningsdialog.forening.models.GuestRegister;
 import se.foreningsdialog.forening.models.Organization;
 import se.foreningsdialog.forening.models.houses.House;
 import se.foreningsdialog.forening.models.users.Admin;
+import se.foreningsdialog.forening.models.users.GuestUser;
 import se.foreningsdialog.forening.models.users.User;
 import se.foreningsdialog.forening.models.users.constants.Role;
 import se.foreningsdialog.forening.models.users.constants.RoleName;
@@ -26,6 +28,7 @@ import se.foreningsdialog.forening.payload.common.ApiResponse;
 import se.foreningsdialog.forening.payload.common.JwtAuthenticationResponse;
 import se.foreningsdialog.forening.payload.common.LoginRequest;
 import se.foreningsdialog.forening.payload.common.SignUpRequest;
+import se.foreningsdialog.forening.payload.guestRegister.GuestRegisterRequest;
 import se.foreningsdialog.forening.repository.*;
 import se.foreningsdialog.forening.security.JwtTokenProvider;
 
@@ -109,6 +112,39 @@ public class AuthController {
 
 
         User result = userRepository.save(user);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath().path("/users/{username}")
+                .buildAndExpand(result.getUsername()).toUri();
+
+        return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+//        return ResponseEntity.ok().body("Created");
+    }
+
+    @PostMapping("/signupGuest")
+    public ResponseEntity<?> registerGuest(@Valid @RequestBody GuestRegisterRequest guestRegisterRequest) {
+        System.out.println(guestRegisterRequest);
+        if(userRepository.existsByUsername(guestRegisterRequest.getUsername())) {
+            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+
+        // Creating user's account
+        GuestUser user = new GuestUser(guestRegisterRequest.getUsername(), guestRegisterRequest.getPassword());
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Set<Role> roles = new LinkedHashSet<>();
+        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                .orElseThrow(() -> new AppException("User Role not set."));
+        roles.add(userRole);
+        userRole = roleRepository.findByName(RoleName.ROLE_GUEST)
+                .orElseThrow(() -> new AppException("User Role not set."));
+        roles.add(userRole);
+        user.setRoles(roles);
+
+
+        User result = userRepository.save(user);
+
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/users/{username}")
                 .buildAndExpand(result.getUsername()).toUri();

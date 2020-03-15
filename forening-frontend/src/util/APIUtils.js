@@ -49,6 +49,13 @@ export function signup(signupRequest) {
         body: JSON.stringify(signupRequest)
     });
 }
+export function signupGuest(signupRequest) {
+    return request({
+        url: API_BASE_URL + "/auth/signupGuest",
+        method: 'POST',
+        body: JSON.stringify(signupRequest)
+    });
+}
 export function createNewOrganisations(createNewOrganisationsRequest) {
     return request({
         url: API_BASE_URL + "/associationAdmin/createOrganizations",
@@ -192,6 +199,14 @@ export function getUserCreatedOrganizations(username, page, size) {
         method: 'GET'
     });
 }
+
+export function getGuestRegister(uniqueKey) {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/getGuestRegister/"+uniqueKey,
+        method: 'GET'
+    });
+}
+
 export function getUserCreatedOrganizationss(username) {
     return request({
         url: API_BASE_URL + "/users/" + username + "/organizations",

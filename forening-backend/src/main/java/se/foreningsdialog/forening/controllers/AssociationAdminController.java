@@ -2,10 +2,13 @@ package se.foreningsdialog.forening.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 import se.foreningsdialog.forening.models.AssociationName;
 import se.foreningsdialog.forening.models.ContactPerson;
+import se.foreningsdialog.forening.models.GuestRegister;
 import se.foreningsdialog.forening.models.Organization;
 import se.foreningsdialog.forening.models.houses.Apartment;
 import se.foreningsdialog.forening.models.houses.Guest;
@@ -23,21 +26,27 @@ import se.foreningsdialog.forening.payload.contact.SaveContactRequest;
 import se.foreningsdialog.forening.payload.guest.DeleteGuestRequest;
 import se.foreningsdialog.forening.payload.guest.NewGuestRequest;
 import se.foreningsdialog.forening.payload.guest.SaveGuestRequest;
+import se.foreningsdialog.forening.payload.guestRegister.GuestRegisterResponse;
 import se.foreningsdialog.forening.payload.house.DeleteHouseRequest;
 import se.foreningsdialog.forening.payload.house.NewHouseRequest;
 import se.foreningsdialog.forening.payload.house.SaveHouseRequest;
 import se.foreningsdialog.forening.payload.organization.NewOrganisationsRequest;
 import se.foreningsdialog.forening.repository.*;
+import se.foreningsdialog.forening.service.GuestService;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Iterator;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/associationAdmin")
 public class AssociationAdminController {
     @Autowired
     AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @Autowired
     UserRepository userRepository;
@@ -51,6 +60,8 @@ public class AssociationAdminController {
     @Autowired
     GuestRepository guestRepository;
 
+    @Autowired
+    EmailServiceImpl emailService;
 
     @Autowired
     OrganizationRepository organizationRepository;
@@ -63,6 +74,12 @@ public class AssociationAdminController {
 
     @Autowired
     ContactPersonRepository contactPersonRepository;
+
+    @Autowired
+    GuestRegisterRepository guestRegisterRepository;
+
+    @Autowired
+    GuestService guestService;
 
     @PostMapping("/createOrganizations")
     public ResponseEntity<?> registerUser(@Valid @RequestBody NewOrganisationsRequest signUpRequest) {
@@ -107,6 +124,7 @@ public class AssociationAdminController {
     }
     @PostMapping("/createAssociation")
     public ResponseEntity<?> createAssociation(@Valid @RequestBody NewAssociationRequest newAssociationRequest) {
+
         Organization organization = organizationRepository.findById(newAssociationRequest.getOrganizationId()).get();
         System.out.println("createNew");
         AssociationName association = new AssociationName();
@@ -114,6 +132,8 @@ public class AssociationAdminController {
         association.setAssociationName(newAssociationRequest.getAssociationName());
         association.setCreatedBy(newAssociationRequest.getUserId());
         associationNameRepository.save(association);
+
+
         return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
     }
 
@@ -248,6 +268,17 @@ public class AssociationAdminController {
         Guest guest = guestRepository.findById(saveGuestRequest.getGuestId()).get();
         guest.setEmail(saveGuestRequest.getEmail());
         guestRepository.save(guest);
+        String address= guest.getApartment().getHouse().getStreet();
+        int number=guest.getApartment().getNumber();
+                int area= guest.getApartment().getArea();
+                        int roomAndKitchen=guest.getApartment().getRoomAndKitchen();
+
+        GuestRegister guestRegister = new GuestRegister(address,number,area,roomAndKitchen);
+        guestRegisterRepository.save(guestRegister);
+        String to = "olegmeditskiyprivate@gmail.com";
+        String subject = "Testing from Spring Boot";
+        String text="192.168.0.181:3000/guestRegister/"+guestRegister.getUniqueKey();
+        emailService.sendSimpleMessage(to,subject,text);
         return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
     }
 
@@ -270,6 +301,12 @@ public class AssociationAdminController {
         apartmentRepository.save(apartment);
         guestRepository.delete(guest);
         return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
+    }
+
+    @GetMapping("/getGuestRegister/{uniqueKey}")
+    public GuestRegisterResponse getGuestRegister(@PathVariable(value = "uniqueKey") UUID uniqueKey) {
+
+        return guestService.getGuestRegister(uniqueKey);
     }
 
 

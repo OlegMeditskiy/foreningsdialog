@@ -20,6 +20,7 @@ import Profile from "../user/profile/Profile";
 import OrganisationPage from "../displayObject/organization/OrganisationPage";
 import AssociationList from "../displayObject/AssociationList";
 import Router from "./Router";
+import GuestRegister from "../user/signup/GuestRegister";
 const { Content } = Layout;
 
 
@@ -121,6 +122,9 @@ class App extends Component {
                             <Route path="/signup" component={Signup}></Route>
                             <Route path="/users/:username"
                                    render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
+                            </Route>
+                            <Route path="/guestRegister/:uniqueKey"
+                                   render={(props) => <GuestRegister {...props}  />}>
                             </Route>
                             {/*<Route*/}
                             {/*    path="/"*/}
