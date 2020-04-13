@@ -6,6 +6,7 @@ import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter as Router } from 'react-router-dom';
 import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
+
 ReactDOM.render(
     <Router>
         <App />

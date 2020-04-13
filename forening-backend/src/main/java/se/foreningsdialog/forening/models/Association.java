@@ -18,6 +18,6 @@ public class Association extends UserDateAudit {
     private Long id;
 
     @OneToMany
-    List<Organization> organizations;
+    private List<Organization> organizations;
 
 }

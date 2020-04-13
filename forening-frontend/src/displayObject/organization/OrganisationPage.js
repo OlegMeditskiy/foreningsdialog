@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import '../../user/signup/Signup.css';
 import CreateNewOrganisations from "./CreateNewOrganisations";
 import '../list.css';
-
+import {Switch} from 'react-router-dom';
 const OrganizationsPage=(props)=>{
     const columns=[
         {
@@ -35,11 +35,12 @@ const OrganizationsPage=(props)=>{
             },
         },
         {
-            title: 'Föreningar',
+            title: 'Organization',
             key: 'action',
             render: (text, record) => (
                 <span>
-                <a onClick={event => {redirectToOrganisation(event,record)}}>Föreningar</a>
+                <a onClick={event => {redirectToOrganisation(event,record)}}>Visa
+                </a>
       </span>
             ),
         },
@@ -74,9 +75,8 @@ const OrganizationsPage=(props)=>{
         console.log('params', pagination, filters, sorter, extra);
     }
     function redirectToOrganisation(event,record){
-        return props.history.push({pathname:`/organisation/${record.id}/foreningar`})
+        return props.history.push({pathname:`/organisation/${record.id}`})
     }
-
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -110,8 +110,6 @@ const OrganizationsPage=(props)=>{
                     </div>
                 </Modal.Body>
             </Modal>
-
-
         </div>
 
 

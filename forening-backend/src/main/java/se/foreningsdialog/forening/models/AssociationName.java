@@ -26,10 +26,10 @@ public class AssociationName extends UserDateAudit {
 
     @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
     @JsonManagedReference
-    List<ContactPerson> contacts;
+    private List<ContactPerson> contacts;
 
     @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
     @JsonManagedReference
-    List<House> houses;
+    private List<House> houses;
 
 }

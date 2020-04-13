@@ -87,17 +87,9 @@ public class AssociationAdminController {
         //Creating new Organizations
         for (Organization organization: signUpRequest.getAssociation().getOrganizations()){
             for(AssociationName associationName: organization.getAssociations()){
-//                for (ContactPerson contactPerson: associationName.getContacts()){
-//                    contactPerson.setCreatedBy(signUpRequest.getUserId());
-//                    contactPersonRepository.save(contactPerson);
-//                }
-//                for (House house:associationName.getHouses()){
-//                    house.setCreatedBy(signUpRequest.getUserId());
-//                    houseRepository.save(house);
-//                }
+//
                 associationName.setCreatedBy(signUpRequest.getUserId());
-//                associationName.setHouses(associationName.getHouses());
-//                associationName.setContacts(associationName.getContacts());
+//
                 associationNameRepository.save(associationName);
             }
             organization.setAssociations(organization.getAssociations());

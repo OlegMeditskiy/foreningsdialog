@@ -1,9 +1,11 @@
 package se.foreningsdialog.forening.models.loanobjects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import se.foreningsdialog.forening.models.Organization;
 
 import javax.persistence.*;
 
@@ -17,9 +19,16 @@ import javax.persistence.*;
 public abstract class AbstractLoanObject {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-
     private boolean hasCalendarData;
+
+    private boolean isActivated=false;
+
+
+    @ManyToOne
+    @JoinTable(name = "organization_loan_object",joinColumns = @JoinColumn(name = "association_id"),inverseJoinColumns = @JoinColumn(name = "loan_object_id"))
+    @JsonBackReference
+    private Organization organization;
 }

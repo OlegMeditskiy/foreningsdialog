@@ -15,4 +15,5 @@ import javax.persistence.Entity;
 @Getter
 @Setter
 public class GuestFlat extends AbstractLoanObject {
+    private int number;
 }

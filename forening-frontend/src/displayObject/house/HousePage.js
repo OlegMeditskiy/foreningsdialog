@@ -10,72 +10,20 @@ import NewHouse from "./NewHouse";
 import AddNew from "../association/AddNew";
 
 const HousesPage =(props)=>{
-    // console.log(props)
-    // const columns=[
-    //     {
-    //         title: 'Gatudaddress',
-    //         dataIndex: 'street',
-    //         key: 'street',
-    //         sorter: {
-    //             compare: (a, b) => a.street - b.street
-    //         },
-    //     },
-    //     {
-    //         title: 'Ort',
-    //         dataIndex: 'city',
-    //         key: 'city',
-    //         sorter: {
-    //             compare: (a, b) => a.city - b.city
-    //         },
-    //     },
-    //     {
-    //         title: 'Postnummer',
-    //         dataIndex: 'zipCode',
-    //         key: 'zipCode',
-    //         sorter: {
-    //             compare: (a, b) => a.zipCode - b.zipCode
-    //         },
-    //     },
-    // ]
-    // const dataSource=[]
-    // props.location.state.houses.map((org,idx)=>{
-    //     dataSource.push({
-    //         key:idx+1,
-    //         id:org.id,
-    //         street:org.street,
-    //         city:org.city,
-    //         zipCode:org.zipCode
-    //     })
-    //
-    // })
-    // function onChange(pagination, filters, sorter, extra) {
-    //     console.log('params', pagination, filters, sorter, extra);
-    // }
-    function redirectToApartmens(event,record){
-        console.log(props);
-        return props.history.push(`house/${record.id}/apartments`,{apartments: record.apartments})
+    function redirectToHouse(event,record){
+        return props.history.push({pathname:`/house/${record.id}`})
     }
     const originData = []
-    console.log(props.organizations)
-    props.organizations.map((org1,idx)=>{
-        if (org1.id==props.match.params.organisationId){
-            org1.associations.map((association,idx)=>{
-                if (association.id==props.match.params.associationId){
-                    association.houses.map((house,idx)=>{
+
+                    props.houses.map((house,idx)=>{
                         originData.push({
                             key:idx,
                             id:house.id,
                             street:house.street,
                             city:house.city,
                             zipCode:house.zipCode,
-                            association:association,
-                            apartments:house.apartmens
                         })
-                    })
-                }
-
-            })
-        }});
+                    });
 
     const EditableCell = ({
                               editing,
@@ -143,7 +91,7 @@ const HousesPage =(props)=>{
                         message: 'Föreningsdialog App',
                         description: "You have deleted association",
                     });
-                    props.update();
+                    props.load();
                 }).catch(error => {
                 notification.error({
                     message: 'Föreningsdialog App',
@@ -224,11 +172,11 @@ const HousesPage =(props)=>{
                 editable:true,
             },
             {
-                title: 'Lägenheter',
+                title: 'Open',
                 key: 'action',
                 render: (text, record) => (
                     <span>
-                <a onClick={event => redirectToApartmens(event,record)}>Lägenheter</a>
+                <a onClick={event => {redirectToHouse(event,record)}}>Open</a>
       </span>
                 ),
             },
@@ -313,9 +261,6 @@ const HousesPage =(props)=>{
         <div>
             <NewHouse {...props} update={props.update}/>
             <EditableTable/>
-            {/*<Table*/}
-            {/*    dataSource={dataSource} onChange={onChange} columns={columns} />;*/}
-
         </div>
     );
 }

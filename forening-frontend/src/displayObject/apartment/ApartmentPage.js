@@ -1,28 +1,12 @@
 import React, {useState} from "react";
-import {Form, Input, InputNumber, notification, Popconfirm, Table} from "antd";
-import {
-    deleteApartmentFromAssociation,
-    deleteAssociationFromOrganization,
-    deleteHouseFromAssociation, saveApartment,
-    saveAssociation,
-    saveHouse
-} from "../../util/APIUtils";
-import NewHouse from "../house/NewHouse";
-import AddNew from "../association/AddNew";
+import {Form, notification, Popconfirm, Table} from "antd";
+import {deleteApartmentFromAssociation, saveApartment} from "../../util/APIUtils";
 import {EditableCell} from "../Tables/EditableCell";
 import NewApartment from "./NewApartment";
 
 const ApartmentsPage =(props)=>{
-    // console.log(props)
     const originData = []
-    console.log(props.organizations)
-    props.organizations.map((org1,idx)=>{
-        if (org1.id==props.match.params.organisationId){
-            org1.associations.map((association,idx)=>{
-                if (association.id==props.match.params.associationId){
-                    association.houses.map((house,idx)=>{
-                        if (house.id==props.match.params.houseId){
-                            house.apartments.map((apartment,idx)=>{
+                            props.apartments.map((apartment,idx)=>{
                                 originData.push({
                                     key:idx,
                                     id:apartment.id,
@@ -31,21 +15,10 @@ const ApartmentsPage =(props)=>{
                                     roomAndKitchen:apartment.roomAndKitchen,
                                     guests:apartment.guests
                                 })
-                            })
-                        }
-
-                    })
-                }
-
-            })
-        }});
-
-    function redirectToGuests(event,record){
-        console.log(props);
-        return props.history.push(`apartment/${record.id}/guests`,{guests: record.guests})
+                            });
+    function redirectToApartment(event,record){
+        return props.history.push({pathname:`/apartment/${record.id}`})
     }
-
-
     const EditableTable = () => {
         const [form] = Form.useForm();
         const [data, setData] = useState(originData);
@@ -76,7 +49,7 @@ const ApartmentsPage =(props)=>{
                         message: 'Föreningsdialog App',
                         description: "You have deleted association",
                     });
-                    props.update();
+                    props.load();
                 }).catch(error => {
                 notification.error({
                     message: 'Föreningsdialog App',
@@ -157,11 +130,11 @@ const ApartmentsPage =(props)=>{
                 editable:true,
             },
             {
-                title: 'Gäster',
+                title: 'Open',
                 key: 'action',
                 render: (text, record) => (
                     <span>
-                <a onClick={event => redirectToGuests(event,record)}>Gäster</a>
+                <a onClick={event => redirectToApartment(event,record)}>Open</a>
       </span>
                 ),
             },

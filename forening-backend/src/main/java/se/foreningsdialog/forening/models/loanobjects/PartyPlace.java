@@ -15,4 +15,6 @@ import javax.persistence.Entity;
 @Setter
 @NoArgsConstructor
 public class PartyPlace extends AbstractLoanObject {
+    private String address;
+    private int number;
 }

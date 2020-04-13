@@ -6,6 +6,7 @@ import se.foreningsdialog.forening.models.ContactPerson;
 import se.foreningsdialog.forening.models.GuestRegister;
 import se.foreningsdialog.forening.models.Organization;
 import se.foreningsdialog.forening.models.houses.House;
+import se.foreningsdialog.forening.models.loanobjects.*;
 import se.foreningsdialog.forening.models.users.Admin;
 import se.foreningsdialog.forening.models.users.GuestUser;
 import se.foreningsdialog.forening.models.users.User;
@@ -30,6 +31,7 @@ import se.foreningsdialog.forening.payload.common.LoginRequest;
 import se.foreningsdialog.forening.payload.common.SignUpRequest;
 import se.foreningsdialog.forening.payload.guestRegister.GuestRegisterRequest;
 import se.foreningsdialog.forening.repository.*;
+import se.foreningsdialog.forening.repository.loanObjects.*;
 import se.foreningsdialog.forening.security.JwtTokenProvider;
 
 import javax.validation.Valid;
@@ -41,37 +43,69 @@ import java.util.Set;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
+    final
     AuthenticationManager authenticationManager;
 
-    @Autowired
+    final
     UserRepository userRepository;
 
-    @Autowired
+    final
     RoleRepository roleRepository;
 
-
-
-
-
-    @Autowired
+    final
     OrganizationRepository organizationRepository;
 
-    @Autowired
+    final
     HouseRepository houseRepository;
 
-    @Autowired
+    final
     AssociationNameRepository associationNameRepository;
 
-    @Autowired
+    final
     ContactPersonRepository contactPersonRepository;
 
 
-    @Autowired
+    final
     PasswordEncoder passwordEncoder;
 
-    @Autowired
+    final
     JwtTokenProvider tokenProvider;
+
+    final
+    ExternLokalRepository externLokalRepository;
+
+    final
+    GuestFlatRepository guestFlatRepository;
+
+    final
+    LaundryRepository laundryRepository;
+
+    final
+    ParkingRepository parkingRepository;
+
+    final
+    PartyPlaceRepository partyPlaceRepository;
+
+    final
+    PoolRepository poolRepository;
+
+    public AuthController(UserRepository userRepository, AuthenticationManager authenticationManager, RoleRepository roleRepository, PartyPlaceRepository partyPlaceRepository, OrganizationRepository organizationRepository, LaundryRepository laundryRepository, HouseRepository houseRepository, AssociationNameRepository associationNameRepository, ContactPersonRepository contactPersonRepository, PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider, PoolRepository poolRepository, ExternLokalRepository externLokalRepository, ParkingRepository parkingRepository, GuestFlatRepository guestFlatRepository) {
+        this.userRepository = userRepository;
+        this.authenticationManager = authenticationManager;
+        this.roleRepository = roleRepository;
+        this.partyPlaceRepository = partyPlaceRepository;
+        this.organizationRepository = organizationRepository;
+        this.laundryRepository = laundryRepository;
+        this.houseRepository = houseRepository;
+        this.associationNameRepository = associationNameRepository;
+        this.contactPersonRepository = contactPersonRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.tokenProvider = tokenProvider;
+        this.poolRepository = poolRepository;
+        this.externLokalRepository = externLokalRepository;
+        this.parkingRepository = parkingRepository;
+        this.guestFlatRepository = guestFlatRepository;
+    }
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -96,8 +130,6 @@ public class AuthController {
                     HttpStatus.BAD_REQUEST);
         }
 
-
-
         // Creating user's account
         Admin user = new Admin(signUpRequest.getUsername(), signUpRequest.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -109,8 +141,6 @@ public class AuthController {
                 .orElseThrow(() -> new AppException("User Role not set."));
         roles.add(userRole);
         user.setRoles(roles);
-
-
         User result = userRepository.save(user);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/users/{username}")
@@ -182,6 +212,27 @@ public class AuthController {
         for (Organization organization: signUpRequest.getAssociation().getOrganizations()){
             organization.setCreatedBy(user.getId());
             organizationRepository.save(organization);
+
+
+            ExternLokal externLokal = new ExternLokal();
+            externLokal.setOrganization(organization);
+            externLokalRepository.save(externLokal);
+            GuestFlat guestFlat = new GuestFlat();
+            guestFlat.setOrganization(organization);
+            guestFlatRepository.save(guestFlat);
+            Laundry laundry = new Laundry();
+            laundry.setOrganization(organization);
+            laundryRepository.save(laundry);
+            Parking parking = new Parking();
+            parking.setOrganization(organization);
+            parkingRepository.save(parking);
+            PartyPlace partyPlace = new PartyPlace();
+            partyPlace.setOrganization(organization);
+            partyPlaceRepository.save(partyPlace);
+            Pool pool = new Pool();
+            pool.setOrganization(organization);
+            poolRepository.save(pool);
+
             for(AssociationName associationName: organization.getAssociations()){
                 associationName.setOrganization(organization);
                 associationName.setCreatedBy(user.getId());

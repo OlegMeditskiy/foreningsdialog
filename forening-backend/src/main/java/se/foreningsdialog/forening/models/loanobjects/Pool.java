@@ -15,5 +15,5 @@ import javax.persistence.Entity;
 @Setter
 @NoArgsConstructor
 public class Pool extends AbstractLoanObject {
-
+    private String address;
 }

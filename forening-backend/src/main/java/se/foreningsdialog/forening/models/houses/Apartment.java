@@ -3,6 +3,7 @@ package se.foreningsdialog.forening.models.houses;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import se.foreningsdialog.forening.models.users.audit.UserDateAudit;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,10 +13,10 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 @Entity
-public class Apartment{
+public class Apartment extends UserDateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinTable(name = "house_apartments",joinColumns = @JoinColumn(name = "apartment_id"),inverseJoinColumns = @JoinColumn(name = "house_id"))

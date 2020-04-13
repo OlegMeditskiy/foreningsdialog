@@ -45,7 +45,6 @@ public class OrganizationService {
             List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
                     new SimpleGrantedAuthority(role.getName().name())
             ).collect(Collectors.toList());
-            System.out.println("set associations");
             try{
                 organizationResponse.setAssociations(organization.getAssociations());
             }catch (Exception ex){
@@ -57,6 +56,31 @@ public class OrganizationService {
         }
         return organizationResponses;
     }
+    public OrganizationResponse getOrganizationCreatedBy(String username, Long organizationId){
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+        Organization organization = organizationRepository.findById(organizationId).get();
+        System.out.println(organization.getOrgNumber());
+        OrganizationResponse organizationResponse = new OrganizationResponse();
+        if (organization!=null && organization.getCreatedBy()==user.getId()) {
+            organizationResponse.setId(organization.getId());
+            organizationResponse.setTotalArea(organization.getTotalArea());
+            organizationResponse.setOrgNumber(organization.getOrgNumber());
+            organizationResponse.setNumberOfApartments(organization.getNumberOfApartments());
+            organizationResponse.setActivated(organization.isActivated());
+            List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
+                    new SimpleGrantedAuthority(role.getName().name())
+            ).collect(Collectors.toList());
+            try{
+                organizationResponse.setAssociations(organization.getAssociations());
+                organizationResponse.setLoanObjects(organization.getLoanObjects());
+            }catch (Exception ex){
+                System.out.println(ex);
+            }
+        }
+        return organizationResponse;
+    }
 
     private void validatePageNumberAndSize(int page, int size) {
         if(page < 0) {
@@ -67,16 +91,5 @@ public class OrganizationService {
             throw new BadRequestException("Page size must not be greater than " + AppConstants.MAX_PAGE_SIZE);
         }
     }
-    Map<Long, User> getPollCreatorMap(List<Association> associations) {
-        List<Long> creatorIds = associations.stream()
-                .map(Association::getCreatedBy)
-                .distinct()
-                .collect(Collectors.toList());
 
-        List<User> creators = userRepository.findByIdIn(creatorIds);
-        Map<Long, User> creatorMap = creators.stream()
-                .collect(Collectors.toMap(User::getId, Function.identity()));
-
-        return creatorMap;
-    }
 }

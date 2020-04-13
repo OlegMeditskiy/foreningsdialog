@@ -5,25 +5,16 @@ import NewContact from "./NewContact";
 
 const ContactPage =(props)=>{
     const originData = []
-    console.log(props.organizations)
-    props.organizations.map((org1,idx)=>{
-        if (org1.id==props.match.params.organisationId){
-            org1.associations.map((association,idx)=>{
-                if (association.id==props.match.params.associationId){
-                    association.contacts.map((contact,idx)=>{
+
+                    props.contacts.map((contact,idx)=>{
                         originData.push({
                             key:idx,
                             id:contact.id,
                             contactName:contact.contactName,
                             contactEmail:contact.contactEmail,
                             contactTelephone:contact.contactTelephone,
-                            association:association
                         })
-                    })
-                }
-
-            })
-        }});
+                    });
 
     const EditableCell = ({
                               editing,
@@ -91,7 +82,7 @@ const ContactPage =(props)=>{
                         message: 'Föreningsdialog App',
                         description: "You have deleted association",
                     });
-                    props.update();
+                    props.load();
                 }).catch(error => {
                 notification.error({
                     message: 'Föreningsdialog App',

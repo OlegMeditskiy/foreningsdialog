@@ -7,9 +7,8 @@ import AssociaionTable from "../Tables/AssociaionTable";
 
 const AssociationPage =(props)=>{
     const originData = []
-    props.organizations.map((org1,idx)=>{
-        if (org1.id==props.match.params.organisationId){
-            org1.associations.map((association,idx)=>{
+
+            props.associations.map((association,idx)=>{
                 originData.push({
                     key:idx+1,
                     id:association.id,
@@ -17,12 +16,9 @@ const AssociationPage =(props)=>{
                     houses: association.houses,
                     contacts: association.contacts,
                     association:association,
-                    organisation: org1
                 })
-            })
-        }
+            });
 
-    });
         return(
             <div>
                 <AddNew {...props} update={props.update}/>

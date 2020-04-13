@@ -12,36 +12,17 @@ import AddNew from "../association/AddNew";
 import {EditableCell} from "../Tables/EditableCell";
 import NewGuest from "./NewGuest";
 
-const GuestPage =(props)=>{
+const GuestPage = (props)=>{
     // console.log(props)
     const originData = []
-    console.log(props.organizations)
-    props.organizations.map((org1,idx)=>{
-        if (org1.id==props.match.params.organisationId){
-            org1.associations.map((association,idx)=>{
-                if (association.id==props.match.params.associationId){
-                    association.houses.map((house,idx)=>{
-                        if (house.id==props.match.params.houseId){
-                            house.apartments.map((apartment,idx)=>{
-                                if(apartment.id==props.match.params.apartmentId){
-                                    apartment.guests.map((guest,idx)=>{
+                                    props.guests.map((guest,idx)=> {
                                         originData.push({
-                                            key:idx,
-                                            id:guest.id,
-                                            email:guest.email,
-                                            name:guest.name,
+                                            key: idx,
+                                            id: guest.id,
+                                            email: guest.email,
+                                            name: guest.name,
                                         })
-                                    })
-                                }
-                            })
-                        }
-
-                    })
-                }
-
-            })
-        }});
-
+                                    });
 
 
     const EditableTable = () => {
@@ -74,7 +55,7 @@ const GuestPage =(props)=>{
                         message: 'Föreningsdialog App',
                         description: "You have deleted association",
                     });
-                    props.update();
+                    props.load();
                 }).catch(error => {
                 notification.error({
                     message: 'Föreningsdialog App',

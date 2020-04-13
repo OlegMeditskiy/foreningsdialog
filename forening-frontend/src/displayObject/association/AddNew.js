@@ -22,7 +22,7 @@ export  default class AddNew extends Component{
         const createNewAssociationRequest ={
             userId: this.props.currentUser.id,
             organizationId:this.props.match.params.organisationId,
-            associationName:this.state.associationName,
+            associationName:this.state.associationName
         }
         createNewAssociation(createNewAssociationRequest)
             .then(response => {
@@ -30,14 +30,13 @@ export  default class AddNew extends Component{
                     message: 'Föreningsdialog App',
                     description: "Thank you! You have created new association!",
                 });
-                this.props.update();
+                this.props.load();
             }).catch(error => {
             notification.error({
                 message: 'Föreningsdialog App',
                 description: error.message || 'Sorry! Something went wrong. Please try again!'
             });
         });
-
     }
     render() {
 

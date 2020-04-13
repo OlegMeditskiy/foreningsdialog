@@ -15,5 +15,5 @@ import javax.persistence.Entity;
 @Setter
 @NoArgsConstructor
 public class Parking extends AbstractLoanObject{
-
+    private String number;
 }

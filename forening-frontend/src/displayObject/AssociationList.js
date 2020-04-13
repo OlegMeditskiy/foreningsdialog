@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {ASSOCIATION_LIST_SIZE} from "../constants";
 import {getAllAssociations, getUserCreatedOrganizations, getUserCreatedOrganizationss} from "../util/APIUtils";
-import {Link, Route, Switch} from 'react-router-dom';
+    import {Link, Route, Switch} from 'react-router-dom';
 import LoadingIndicator from "../common/LoadingIndicator";
 
 import HousesPage from "./house/HousePage";
@@ -10,9 +10,16 @@ import OrganisationPage from "./organization/OrganisationPage";
 import AssociationPage from "./association/AssociationPage";
 import ApartmentsPage from "./apartment/ApartmentPage";
 import GuestPage from "./guest/GuestPage";
+import LoanObjects from "../loanObjects/LoanObjects";
+import OrganizationInfo from "./organization/OrganizationInfo";
+import NotFound from "../common/NotFound";
+import Organizations from "./organization/Organizations";
+import AssociationInfo from "./association/AssociationInfo";
+import HouseInfo from "./house/HouseInfo";
+import ApartmentInfo from "./apartment/ApartmentInfo";
 
 class AssociationList extends Component{
-    _isMounted = false;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -23,6 +30,7 @@ class AssociationList extends Component{
         };
         this.loadAssociationList = this.loadAssociationList.bind(this);
         this.update=this.update.bind(this);
+        this._isMounted = false;
     }
 
     loadAssociationList(page = 0, size = ASSOCIATION_LIST_SIZE) {
@@ -62,6 +70,7 @@ class AssociationList extends Component{
     }
 
     componentDidMount() {
+        this._isMounted = true;
         console.log("Did mount")
         this.loadAssociationList();
     }
@@ -91,33 +100,55 @@ class AssociationList extends Component{
 
     }
 
-
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
 
 
     render() {
         return (
             <div className="polls-container">
                 <Link to={"/organisations"}>Organisationer</Link>
+                {/*<Link to={"/loans"}>Lån objekter</Link>*/}
                 <Switch>
                     <Route path={`${this.props.match.path}organisations/`}
                                render={(props) => <OrganisationPage currentUser={this.props.currentUser} organizations={this.state.organizations}  {...props} update={this.update}/>}>
                     </Route>
-                    <Route path={`${this.props.match.path}organisation/:organisationId/foreningar`}
-                           render={(props) =>
-                               <AssociationPage createdBy={this.state.organizations} organizations={this.state.organizations} {...props}  currentUser={this.props.currentUser} update={this.update} />}>
+                    {/*<Route path={`${this.props.match.path}organisations/`}*/}
+                    {/*       render={(props) => <Organizations {...props} />}>*/}
+                    {/*</Route>*/}
+                    <Route path={`${this.props.match.path}organisation/:organisationId`}
+                           render={(props) => <OrganizationInfo currentUser={this.props.currentUser} update={this.update} username={this.props.username} {...props}/> }>
                     </Route>
-                    <Route path={`${this.props.match.path}organisation/:organisationId/association/:associationId/houses`}
-                           render={(props) => <HousesPage  organizations={this.state.organizations} {...props} update={this.update} />}>
+                    <Route path={`${this.props.match.path}association/:associationId`}
+                           render={(props) => <AssociationInfo currentUser={this.props.currentUser} update={this.update} username={this.props.username} {...props}/> }>
                     </Route>
-                    <Route path={`${this.props.match.path}organisation/:organisationId/association/:associationId/contacts`}
-                           render={(props) => <ContactsPage organizations={this.state.organizations} {...props} update={this.update}  />}>
+                    <Route path={`${this.props.match.path}house/:houseId`}
+                           render={(props) => <HouseInfo currentUser={this.props.currentUser} update={this.update} username={this.props.username} {...props}/> }>
                     </Route>
-                    <Route path={`${this.props.match.path}organisation/:organisationId/association/:associationId/house/:houseId/apartments`}
-                           render={(props) => <ApartmentsPage organizations={this.state.organizations} {...props} update={this.update}  />}>
+                    <Route path={`${this.props.match.path}apartment/:apartmentId`}
+                           render={(props) => <ApartmentInfo currentUser={this.props.currentUser} update={this.update} username={this.props.username} {...props}/> }>
                     </Route>
-                    <Route path={`${this.props.match.path}organisation/:organisationId/association/:associationId/house/:houseId/apartment/:apartmentId/guests`}
-                           render={(props) => <GuestPage organizations={this.state.organizations} {...props} update={this.update}  />}>
-                    </Route>
+                    {/*<Route path={`${this.props.match.path}organisation/:organisationId/foreningar`}*/}
+                    {/*       render={(props) =>*/}
+                    {/*           <AssociationPage createdBy={this.state.organizations} organizations={this.state.organizations} {...props}  currentUser={this.props.currentUser} update={this.update} />}>*/}
+                    {/*</Route>*/}
+                    {/*<Route path={`${this.props.match.path}organisation/:organisationId/association/:associationId/houses`}*/}
+                    {/*       render={(props) => <HousesPage  organizations={this.state.organizations} {...props} update={this.update} />}>*/}
+                    {/*</Route>*/}
+                    {/*<Route path={`${this.props.match.path}organisation/:organisationId/association/:associationId/contacts`}*/}
+                    {/*       render={(props) => <ContactsPage organizations={this.state.organizations} {...props} update={this.update}  />}>*/}
+                    {/*</Route>*/}
+                    {/*<Route path={`${this.props.match.path}organisation/:organisationId/association/:associationId/house/:houseId/apartments`}*/}
+                    {/*       render={(props) => <ApartmentsPage organizations={this.state.organizations} {...props} update={this.update}  />}>*/}
+                    {/*</Route>*/}
+                    {/*<Route path={`${this.props.match.path}organisation/:organisationId/association/:associationId/house/:houseId/apartment/:apartmentId/guests`}*/}
+                    {/*       render={(props) => <GuestPage organizations={this.state.organizations} {...props} update={this.update}  />}>*/}
+                    {/*</Route>*/}
+                    {/*<Route path={`${this.props.match.path}loans/`} render={(props)=><LoanObjects/>}>*/}
+
+                    {/*</Route>*/}
+                    <Route component={NotFound}></Route>
 
                 </Switch>
                 {

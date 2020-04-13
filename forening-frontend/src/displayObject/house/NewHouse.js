@@ -34,7 +34,7 @@ export  default class NewHouse extends Component{
                     message: 'Föreningsdialog App',
                     description: "Thank you! You have created new association!",
                 });
-                this.props.update();
+                this.props.load();
             }).catch(error => {
             notification.error({
                 message: 'Föreningsdialog App',

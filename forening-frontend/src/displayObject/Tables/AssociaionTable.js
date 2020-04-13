@@ -6,17 +6,9 @@ import {EditableCell} from "./EditableCell";
 
 
 const AssociaionTable = (props) => {
-
-
-    function redirectToHouses(event,record){
-        console.log(props);
-        return props.history.push(`association/${record.id}/houses`,{houses: record.houses})
+    function redirectToAssociation(event,record){
+        return props.history.push({pathname:`/association/${record.id}`})
     }
-    function redirectToContacts(event,record){
-        console.log(props);
-        return props.history.push(`association/${record.id}/contacts`,{contacts: record.contacts})
-    }
-
     const [form] = Form.useForm();
     const [data, setData] = useState(props.originData);
     useEffect(() => {
@@ -46,13 +38,12 @@ const AssociaionTable = (props) => {
                     message: 'Föreningsdialog App',
                     description: "You have deleted association",
                 });
-                props.update();
+                props.load();
             }).catch(error => {
             notification.error({
                 message: 'Föreningsdialog App',
                 description: error.message || 'Sorry! Something went wrong. Please try again!'
             });});
-
     }
     const save = async key => {
         try {
@@ -107,20 +98,11 @@ const AssociaionTable = (props) => {
             editable:true
         },
         {
-            title: 'Hus',
+            title: 'Open',
             key: 'action',
             render: (text, record) => (
                 <span>
-                <a onClick={event => redirectToHouses(event,record)}>Hus</a>
-      </span>
-            ),
-        },
-        {
-            title: 'Kontakter',
-            key: 'action',
-            render: (text, record) => (
-                <span>
-                <a onClick={event => redirectToContacts(event,record)}>Kontakter</a>
+               <a onClick={event => {redirectToAssociation(event,record)}}>Open</a>
       </span>
             ),
         },

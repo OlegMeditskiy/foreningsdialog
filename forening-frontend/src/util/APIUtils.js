@@ -190,16 +190,32 @@ export function checkEmailAvailability(email) {
     });
 }
 
-export function getUserCreatedOrganizations(username, page, size) {
-    page = page || 0;
-    size = size || ASSOCIATION_LIST_SIZE;
 
+export function getOrganization(username, organizationId) {
     return request({
-        url: API_BASE_URL + "/users/" + username + "/organizations?page=" + page + "&size=" + size,
+        url: API_BASE_URL + "/users/" + username + "/organization/" + organizationId,
         method: 'GET'
     });
 }
 
+export function getAssociation(username, associationId) {
+    return request({
+        url: API_BASE_URL + "/users/" + username + "/association/" + associationId,
+        method: 'GET'
+    });
+}
+export function getHouse(username, houseId) {
+    return request({
+        url: API_BASE_URL + "/users/" + username + "/house/" + houseId,
+        method: 'GET'
+    });
+}
+export function getApartment(username, apartmentId) {
+    return request({
+        url: API_BASE_URL + "/users/" + username + "/apartment/" + apartmentId,
+        method: 'GET'
+    });
+}
 export function getGuestRegister(uniqueKey) {
     return request({
         url: API_BASE_URL + "/associationAdmin/getGuestRegister/"+uniqueKey,
