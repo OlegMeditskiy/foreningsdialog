@@ -1,7 +1,6 @@
 import React from "react";
 import MainAdmin from "./MainAdmin";
 import AssociationAdmin from "./AssociationAdmin";
-import LoadingIndicator from "../common/LoadingIndicator";
 import {Redirect} from "react-router-dom";
 
 const Admin=(props) =>{

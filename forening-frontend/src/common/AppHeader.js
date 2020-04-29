@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
-import {
-    Link,
-    withRouter
-} from 'react-router-dom';
+import React, {Component} from 'react';
+import {Link, withRouter} from 'react-router-dom';
 import './AppHeader.css';
-import {HomeOutlined,UserOutlined} from '@ant-design/icons';
-import {Layout, Menu, Dropdown} from 'antd';
+import {HomeOutlined, UserOutlined} from '@ant-design/icons';
+import {Dropdown, Layout, Menu} from 'antd';
+
 const Header = Layout.Header;
     
 class AppHeader extends Component {
@@ -92,7 +90,7 @@ function ProfileDropdownMenu(props) {
       overlay={dropdownMenu} 
       trigger={['click']}
       getPopupContainer = { () => document.getElementsByClassName('profile-menu')[0]}>
-      <a className="ant-dropdown-link">
+      <a href="/#" className="ant-dropdown-link">
           <UserOutlined />
       </a>
     </Dropdown>

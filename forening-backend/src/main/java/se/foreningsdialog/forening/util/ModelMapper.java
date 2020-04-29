@@ -4,8 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import se.foreningsdialog.forening.models.Organization;
 import se.foreningsdialog.forening.models.users.User;
-import se.foreningsdialog.forening.payload.organization.OrganizationResponse;
 import se.foreningsdialog.forening.payload.common.UserSummary;
+import se.foreningsdialog.forening.payload.organization.OrganizationResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-// import 'antd/dist/antd.css';
-import { Table, Radio, Divider } from 'antd';
-import {text} from "@fortawesome/fontawesome-svg-core";
+import React from 'react';
+import {Divider, Table} from 'antd';
+import {Form} from "react-bootstrap";
 
 const SettingsTable = (props) =>{
 
@@ -10,55 +9,51 @@ const SettingsTable = (props) =>{
         {
             title: 'Objekt',
             dataIndex: 'objekt',
-            render: text => <a>{text}</a>,
+            render: text => <a href="/#">{text}</a>,
         },
     ];
     const data=[];
-    props.loan.map((object,idx)=>{
+    props.loan.forEach((object,idx)=>{
         data.push({
             key: object.id,
-            objekt: object.id,
+            objekt: object.name,
             settings: ''
         })
-        switch (object.id) {
-            case 5: data[idx].settings=<p>ffff</p>
+        switch (object.name) {
+            case "Extern lokal": data[idx].settings=
+                <p>Extern lokal settings</p>
              break;
+            case "Gästlägenhet": data[idx].settings=
+                <p>Gästlägenhet settings</p>
+                break;
+            case "Tvättstuga": data[idx].settings=
+                <div>
+                    <Form>
+                        <Form.Group controlId="exampleForm.ControlSelect1">
+                            <Form.Label>Tid</Form.Label>
+                            <Form.Control as="select">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </Form.Control>
+                        </Form.Group>
+                    </Form>
+                </div>
+                break;
+            case "Parkering": data[idx].settings=
+                <p>Parkering settings</p>
+                break;
+            case "Festlokal": data[idx].settings=
+                <p>Festlokal settings</p>
+                break;
+            case "Pool": data[idx].settings=
+                <p>Pool settings</p>
+                break;
             default:break;
         }
     })
-    // const data = [
-    //     {
-    //         key: '1',
-    //         objekt: 'Tvättstuga',
-    //         settings: <p>ffff</p>
-    //     },
-    //     {
-    //         key: '2',
-    //         objekt: 'Parkering',
-    //         settings: <p>ffff</p>,
-    //     },
-    //     {
-    //         key: '3',
-    //         objekt: 'Gästlägenhet',
-    //         settings: <p>ffff</p> ,
-    //     },
-    //     {
-    //         key: '4',
-    //         objekt: 'Festlokal',
-    //         settings: <p>ffff</p> ,
-    //     },
-    //     {
-    //         key: '5',
-    //         objekt: 'Pool',
-    //         settings: <p>ffff</p>,
-    //     },
-    //     {
-    //         key: '6',
-    //         objekt: 'Extern Lokal',
-    //         settings: <p>ffff</p>,
-    //     },
-    //
-    // ];
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -68,14 +63,13 @@ const SettingsTable = (props) =>{
         }),
     };
     const Demo = () => {
-        const [selectionType, setSelectionType] = useState('checkbox');
+
         return (
             <div>
                 <Divider />
                 <Table
                     rowSelection={{
-                        type: selectionType,
-                        ...rowSelection,
+                        type: rowSelection,
                     }}
                     columns={columns}
                     expandable={{

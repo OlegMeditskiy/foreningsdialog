@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {createNewApartment, createNewAssociation, createNewHouse} from "../../util/APIUtils";
+import {createNewApartment} from "../../util/APIUtils";
 import {notification} from "antd";
 import {Button, Form} from "react-bootstrap";
 
@@ -29,16 +29,16 @@ export  default class NewApartment extends Component{
             area:this.state.area,
         }
         createNewApartment(createNewApartmentRequest)
-            .then(response => {
+            .then(() => {
                 notification.success({
                     message: 'Föreningsdialog App',
                     description: "Thank you! You have created new association!",
                 });
                 this.props.load();
-            }).catch(error => {
+            }).catch(() => {
             notification.error({
                 message: 'Föreningsdialog App',
-                description: error.message || 'Sorry! Something went wrong. Please try again!'
+                description: 'Sorry! Something went wrong. Please try again!'
             });
         });
 

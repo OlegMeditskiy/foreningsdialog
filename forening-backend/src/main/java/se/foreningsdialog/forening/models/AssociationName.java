@@ -2,7 +2,8 @@ package se.foreningsdialog.forening.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import se.foreningsdialog.forening.models.houses.House;
 import se.foreningsdialog.forening.models.users.audit.UserDateAudit;
 
@@ -27,6 +28,18 @@ public class AssociationName extends UserDateAudit {
     @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<ContactPerson> contacts;
+
+    @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<News> news;
+
+    @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List <Event> events;
+
+    @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List <DocumentType> documentTypes;
 
     @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
     @JsonManagedReference

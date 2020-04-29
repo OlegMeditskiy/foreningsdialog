@@ -4,7 +4,6 @@ import {deleteAssociationFromOrganization, saveAssociation} from "../../util/API
 import {EditableCell} from "./EditableCell";
 
 
-
 const AssociaionTable = (props) => {
     function redirectToAssociation(event,record){
         return props.history.push({pathname:`/association/${record.id}`})
@@ -33,16 +32,16 @@ const AssociaionTable = (props) => {
             organizationId:props.match.params.organisationId
         }
         deleteAssociationFromOrganization(deleteAssociationRequest)
-            .then(response => {
+            .then(() => {
                 notification.success({
                     message: 'Föreningsdialog App',
                     description: "You have deleted association",
                 });
                 props.load();
-            }).catch(error => {
+            }).catch(() => {
             notification.error({
                 message: 'Föreningsdialog App',
-                description: error.message || 'Sorry! Something went wrong. Please try again!'
+                description: 'Sorry! Something went wrong. Please try again!'
             });});
     }
     const save = async key => {
@@ -69,15 +68,15 @@ const AssociaionTable = (props) => {
             };
 
             saveAssociation(saveAssociationRequest)
-                .then(response => {
+                .then(() => {
                     notification.success({
                         message: 'Föreningsdialog App',
                         description: "You have updated association",
                     });
-                }).catch(error => {
+                }).catch(() => {
                 notification.error({
                     message: 'Föreningsdialog App',
-                    description: error.message || 'Sorry! Something went wrong. Please try again!'
+                    description: 'Sorry! Something went wrong. Please try again!'
                 });});
 
         } catch (errInfo) {
@@ -102,7 +101,8 @@ const AssociaionTable = (props) => {
             key: 'action',
             render: (text, record) => (
                 <span>
-               <a onClick={event => {redirectToAssociation(event,record)}}>Open</a>
+               <button className={"unstyled-button"}
+                   onClick={event => {redirectToAssociation(event,record)}}>Open</button>
       </span>
             ),
         },
@@ -113,23 +113,24 @@ const AssociaionTable = (props) => {
                 const editable = isEditing(record);
                 return editable ? (
                     <span>
-            <a
-                href="#"
+            <button className={"unstyled-button"}
+
                 onClick={(event) => {event.preventDefault();save(record.key)}}
                 style={{
                     marginRight: 8,
                 }}
             >
               Save
-            </a>
+            </button>
             <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(record.key)}>
-              <a>Cancel</a>
+              <button className={"unstyled-button"} >Cancel</button>
             </Popconfirm>
           </span>
                 ) : (
-                    <a disabled={editingKey !== ''} onClick={() => edit(record)}>
+                    <button className={"unstyled-button"}
+                        disabled={editingKey !== ''} onClick={() => edit(record)}>
                         Edit
-                    </a>
+                    </button>
                 );
             },
         },
@@ -138,7 +139,7 @@ const AssociaionTable = (props) => {
             dataIndex: 'delete',
             render: (text, record) => (
                 <Popconfirm title="Sure to delete?" onConfirm={(event) => {event.preventDefault();deleteAssociation(record.id)}}>
-                    <a>Delete</a>
+                    <button className={"unstyled-button"}>Delete</button>
                 </Popconfirm>
             ),
         },

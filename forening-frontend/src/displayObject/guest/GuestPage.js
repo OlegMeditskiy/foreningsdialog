@@ -1,21 +1,13 @@
 import React, {useState} from "react";
-import {Form, Input, InputNumber, notification, Popconfirm, Table} from "antd";
-import {
-    deleteApartmentFromAssociation,
-    deleteAssociationFromOrganization, deleteGuestFromAssociation,
-    deleteHouseFromAssociation, saveApartment,
-    saveAssociation, saveGuest,
-    saveHouse
-} from "../../util/APIUtils";
-import NewHouse from "../house/NewHouse";
-import AddNew from "../association/AddNew";
+import {Form, notification, Popconfirm, Table} from "antd";
+import {deleteGuestFromAssociation, saveGuest} from "../../util/APIUtils";
 import {EditableCell} from "../Tables/EditableCell";
 import NewGuest from "./NewGuest";
 
 const GuestPage = (props)=>{
     // console.log(props)
     const originData = []
-                                    props.guests.map((guest,idx)=> {
+                                    props.guests.forEach((guest,idx)=> {
                                         originData.push({
                                             key: idx,
                                             id: guest.id,
@@ -42,24 +34,22 @@ const GuestPage = (props)=>{
         };
 
         const deleteGuest=async id=>{
-            const deleteData = [...data];
-            const index = deleteData.findIndex(item => id === item.id);
             console.log(id)
             const deleteGuestRequest={
                 apartmentId:props.match.params.apartmentId,
                 guestId:id
             }
             deleteGuestFromAssociation(deleteGuestRequest)
-                .then(response => {
+                .then(() => {
                     notification.success({
                         message: 'Föreningsdialog App',
                         description: "You have deleted association",
                     });
                     props.load();
-                }).catch(error => {
+                }).catch(() => {
                 notification.error({
                     message: 'Föreningsdialog App',
-                    description: error.message || 'Sorry! Something went wrong. Please try again!'
+                    description: 'Sorry! Something went wrong. Please try again!'
                 });});
 
         }
@@ -85,16 +75,16 @@ const GuestPage = (props)=>{
                 };
 
                 saveGuest(saveGuestRequest)
-                    .then(response => {
+                    .then(() => {
                         notification.success({
                             message: 'Föreningsdialog App',
                             description: "You have updated association",
                         });
                         // props.update();
-                    }).catch(error => {
+                    }).catch(() => {
                     notification.error({
                         message: 'Föreningsdialog App',
-                        description: error.message || 'Sorry! Something went wrong. Please try again!'
+                        description: 'Sorry! Something went wrong. Please try again!'
                     });});
 
             } catch (errInfo) {
@@ -129,23 +119,23 @@ const GuestPage = (props)=>{
                     const editable = isEditing(record);
                     return editable ? (
                         <span>
-            <a
-                href="#"
+            <button className={"unstyled-button"}
+
                 onClick={(event) => {event.preventDefault();save(record.key)}}
                 style={{
                     marginRight: 8,
                 }}
             >
               Save
-            </a>
+            </button>
             <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(record.key)}>
-              <a>Cancel</a>
+              <button className={"unstyled-button"} >Cancel</button>
             </Popconfirm>
           </span>
                     ) : (
-                        <a disabled={editingKey !== ''} onClick={() => edit(record)}>
+                        <button className={"unstyled-button"}  disabled={editingKey !== ''} onClick={() => edit(record)}>
                             Edit
-                        </a>
+                        </button>
                     );
                 },
             },
@@ -154,7 +144,7 @@ const GuestPage = (props)=>{
                 dataIndex: 'delete',
                 render: (text, record) => (
                     <Popconfirm title="Sure to delete?" onConfirm={(event) => {event.preventDefault();deleteGuest(record.id)}}>
-                        <a>Delete</a>
+                        <button className={"unstyled-button"} >Delete</button>
                     </Popconfirm>
                 ),
             },

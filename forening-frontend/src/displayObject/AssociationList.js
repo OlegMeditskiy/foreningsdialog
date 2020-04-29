@@ -1,19 +1,11 @@
 import React, {Component} from 'react';
 import {ASSOCIATION_LIST_SIZE} from "../constants";
-import {getAllAssociations, getUserCreatedOrganizations, getUserCreatedOrganizationss} from "../util/APIUtils";
-    import {Link, Route, Switch} from 'react-router-dom';
+import {getAllAssociations, getUserCreatedOrganizationss} from "../util/APIUtils";
+import {Link, Route, Switch} from 'react-router-dom';
 import LoadingIndicator from "../common/LoadingIndicator";
-
-import HousesPage from "./house/HousePage";
-import ContactsPage from "./contact/ContactPage";
 import OrganisationPage from "./organization/OrganisationPage";
-import AssociationPage from "./association/AssociationPage";
-import ApartmentsPage from "./apartment/ApartmentPage";
-import GuestPage from "./guest/GuestPage";
-import LoanObjects from "../loanObjects/LoanObjects";
 import OrganizationInfo from "./organization/OrganizationInfo";
 import NotFound from "../common/NotFound";
-import Organizations from "./organization/Organizations";
 import AssociationInfo from "./association/AssociationInfo";
 import HouseInfo from "./house/HouseInfo";
 import ApartmentInfo from "./apartment/ApartmentInfo";
@@ -51,7 +43,6 @@ class AssociationList extends Component{
             isLoading: true
         });
         promise
-
             .then(response => {
 
                 const organizations = this.state.organizations.slice();
@@ -61,7 +52,7 @@ class AssociationList extends Component{
                     updated:1,
                 })
 
-            }).catch(error => {
+            }).catch(() => {
             this.setState({
                 isLoading: false
             })
@@ -71,7 +62,6 @@ class AssociationList extends Component{
 
     componentDidMount() {
         this._isMounted = true;
-        console.log("Did mount")
         this.loadAssociationList();
     }
 
@@ -86,7 +76,6 @@ class AssociationList extends Component{
 
 
     componentDidUpdate(nextProps) {
-        console.log("Did update")
         if(this.props.isAuthenticated !== nextProps.isAuthenticated) {
             // Reset State
             this.setState({
@@ -97,7 +86,6 @@ class AssociationList extends Component{
             });
             this.loadAssociationList();
         }
-
     }
 
     componentWillUnmount() {
@@ -148,7 +136,7 @@ class AssociationList extends Component{
                     {/*<Route path={`${this.props.match.path}loans/`} render={(props)=><LoanObjects/>}>*/}
 
                     {/*</Route>*/}
-                    <Route component={NotFound}></Route>
+                    <Route component={NotFound}/>
 
                 </Switch>
                 {

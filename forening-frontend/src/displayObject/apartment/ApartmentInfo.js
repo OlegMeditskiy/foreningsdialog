@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Col, Container, Row, Tab, Tabs} from "react-bootstrap";
-import {getApartment, getHouse, gethouse} from "../../util/APIUtils";
-import ApartmentsPage from "../apartment/ApartmentPage";
+import {getApartment} from "../../util/APIUtils";
 import GuestPage from "../guest/GuestPage";
 
 class ApartmentInfo extends Component{
@@ -37,7 +36,7 @@ class ApartmentInfo extends Component{
                     updated:1,
                 })
 
-            }).catch(error => {
+            }).catch(() => {
             this.setState({
                 isLoading: false
             })

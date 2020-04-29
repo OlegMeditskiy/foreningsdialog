@@ -26,4 +26,5 @@ public class OrganizationResponse {
 
     @OneToMany
     List<AbstractLoanObject> loanObjects;
+
 }

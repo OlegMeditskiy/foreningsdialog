@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 import {Col, Container, Row, Tab, Tabs} from "react-bootstrap";
-import {Table} from "antd";
-import AssociationPage from "../association/AssociationPage";
-import {Route} from "react-router-dom";
-import {ASSOCIATION_LIST_SIZE} from "../../constants";
-import {getAllAssociations, getAssociation, getOrganization, getUserCreatedOrganizationss} from "../../util/APIUtils";
-import AssociaionTable from "../Tables/AssociaionTable";
+import {getAssociation} from "../../util/APIUtils";
 import HousesPage from "../house/HousePage";
 import ContactPage from "../contact/ContactPage";
+import FileUpload from "./FileUpload";
+import AssociationSettings from "./AssociationSettings";
+
 class AssociationInfo extends Component{
     constructor(props) {
         super(props);
@@ -18,6 +16,7 @@ class AssociationInfo extends Component{
                 contacts: [],
                 associationName: "",
                 createdBy: "",
+                documentTypes:[]
             },
             isLoading: false,
             updated:0,
@@ -38,10 +37,10 @@ class AssociationInfo extends Component{
                 this.setState({
                     association: response,
                     isLoading: false,
-                    updated:1,
+                    updated:1
                 })
 
-            }).catch(error => {
+            }).catch(() => {
             this.setState({
                 isLoading: false
             })
@@ -78,6 +77,12 @@ class AssociationInfo extends Component{
                         </Tab>
                         <Tab eventKey="contacts" title={"Contacts"}>
                             <ContactPage  load={this.loadAssociation} contacts={this.state.association.contacts} {...this.props}/>
+                        </Tab>
+                        <Tab eventKey="Files upload" title={"Files upload"}>
+                            <FileUpload load={this.loadAssociation} documents={this.state.association.documentTypes} {...this.props} />
+                        </Tab>
+                        <Tab eventKey="Settings" title={"Settings"}>
+                            <AssociationSettings/>
                         </Tab>
                     </Tabs>
                 </Container>

@@ -5,14 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue(value = "LAUNDRY")
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-@NoArgsConstructor
-public class Laundry extends AbstractLoanObject {
-
+public class GuestFlatSettings extends AbstractLoanObject {
+    private int number;
+    @Override
+    public void setLoanType() {
+        setLoanType("GuestFlat");
+    }
 }

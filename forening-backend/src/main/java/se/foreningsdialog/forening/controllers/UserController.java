@@ -1,12 +1,12 @@
 package se.foreningsdialog.forening.controllers;
 
-import org.springframework.web.bind.annotation.*;
-import se.foreningsdialog.forening.exception.ResourceNotFoundException;
-import se.foreningsdialog.forening.models.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import se.foreningsdialog.forening.exception.ResourceNotFoundException;
+import se.foreningsdialog.forening.models.users.User;
 import se.foreningsdialog.forening.payload.apartment.ApartmentResponse;
 import se.foreningsdialog.forening.payload.association.AssociationNameResponse;
 import se.foreningsdialog.forening.payload.common.UserIdentityAvailability;
@@ -49,8 +49,7 @@ public class UserController {
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-        UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getAuthorities());
-        return userSummary;
+        return new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getAuthorities());
     }
 
     @GetMapping("/user/checkUsernameAvailability")
@@ -64,9 +63,7 @@ public class UserController {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
 
-        UserProfile userProfile = new UserProfile(user.getId(), user.getUsername(), user.getCreatedAt());
-
-        return userProfile;
+        return new UserProfile(user.getId(), user.getUsername(), user.getCreatedAt());
     }
 
 //    @GetMapping("/users/{username}/organizations1")

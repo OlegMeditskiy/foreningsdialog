@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 import {Col, Container, Row, Tab, Tabs} from "react-bootstrap";
-import {Table} from "antd";
 import AssociationPage from "../association/AssociationPage";
-import {Route} from "react-router-dom";
-import {ASSOCIATION_LIST_SIZE} from "../../constants";
-import {getAllAssociations, getOrganization, getUserCreatedOrganizationss} from "../../util/APIUtils";
-import AssociaionTable from "../Tables/AssociaionTable";
+import {getOrganization} from "../../util/APIUtils";
 import Settings from "../../loanObjects/Settings";
+
 class OrganizationInfo extends Component{
     constructor(props) {
         super(props);
@@ -44,18 +41,16 @@ class OrganizationInfo extends Component{
                     updated:1,
                 })
 
-            }).catch(error => {
+            }).catch(() => {
             this.setState({
                 isLoading: false
             })
         });
     }
     componentDidMount() {
-        console.log("Did mount")
         this.loadOrganisation();
     }
     componentDidUpdate(nextProps) {
-        console.log("Did update")
         if(this.props.isAuthenticated !== nextProps.isAuthenticated) {
             // Reset State
             this.setState({

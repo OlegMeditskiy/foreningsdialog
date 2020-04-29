@@ -2,7 +2,10 @@ package se.foreningsdialog.forening.models.houses;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import se.foreningsdialog.forening.models.users.audit.UserDateAudit;
 
 import javax.persistence.*;
@@ -11,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
 @Entity
 public class Apartment extends UserDateAudit {
     @Id

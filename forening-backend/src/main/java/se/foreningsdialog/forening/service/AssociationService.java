@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 import se.foreningsdialog.forening.exception.BadRequestException;
 import se.foreningsdialog.forening.exception.ResourceNotFoundException;
 import se.foreningsdialog.forening.models.AssociationName;
-import se.foreningsdialog.forening.models.Organization;
 import se.foreningsdialog.forening.models.users.User;
 import se.foreningsdialog.forening.payload.association.AssociationNameResponse;
-import se.foreningsdialog.forening.payload.organization.OrganizationResponse;
 import se.foreningsdialog.forening.repository.AssociationNameRepository;
 import se.foreningsdialog.forening.repository.UserRepository;
 import se.foreningsdialog.forening.util.AppConstants;
@@ -34,7 +32,7 @@ public class AssociationService {
         AssociationName associationName = associationNameRepository.findById(associationId).get();
 
         AssociationNameResponse associationNameResponse = new AssociationNameResponse();
-        if(associationName!=null && associationName.getCreatedBy()==user.getId()){
+        if(associationName.getCreatedBy().equals(user.getId())){
             associationNameResponse.setAssociationName(associationName.getAssociationName());
             associationNameResponse.setId(associationName.getId());
             List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
@@ -43,8 +41,11 @@ public class AssociationService {
             try{
                 associationNameResponse.setHouses(associationName.getHouses());
                 associationNameResponse.setContacts(associationName.getContacts());
-            }catch (Exception ex){
-                System.out.println(ex);
+                associationNameResponse.setEvents(associationName.getEvents());
+                associationNameResponse.setNews(associationName.getNews());
+                associationNameResponse.setDocumentTypes(associationName.getDocumentTypes());
+            }catch (Exception ignored){
+
             }
 
         }

@@ -6,19 +6,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import se.foreningsdialog.forening.exception.BadRequestException;
 import se.foreningsdialog.forening.exception.ResourceNotFoundException;
-import se.foreningsdialog.forening.models.Association;
 import se.foreningsdialog.forening.models.Organization;
 import se.foreningsdialog.forening.models.users.User;
-import se.foreningsdialog.forening.payload.organization.OrganizationResponse;
 import se.foreningsdialog.forening.payload.common.UserSummary;
+import se.foreningsdialog.forening.payload.organization.OrganizationResponse;
 import se.foreningsdialog.forening.repository.OrganizationRepository;
 import se.foreningsdialog.forening.repository.UserRepository;
 import se.foreningsdialog.forening.util.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,8 +44,7 @@ public class OrganizationService {
             ).collect(Collectors.toList());
             try{
                 organizationResponse.setAssociations(organization.getAssociations());
-            }catch (Exception ex){
-                System.out.println(ex);
+            }catch (Exception ignored){
             }
             UserSummary creatorSummary = new UserSummary(user.getId(), user.getUsername(),authorities);
             organizationResponse.setCreatedBy(creatorSummary);
@@ -63,7 +59,7 @@ public class OrganizationService {
         Organization organization = organizationRepository.findById(organizationId).get();
         System.out.println(organization.getOrgNumber());
         OrganizationResponse organizationResponse = new OrganizationResponse();
-        if (organization!=null && organization.getCreatedBy()==user.getId()) {
+        if (organization.getCreatedBy().equals(user.getId())) {
             organizationResponse.setId(organization.getId());
             organizationResponse.setTotalArea(organization.getTotalArea());
             organizationResponse.setOrgNumber(organization.getOrgNumber());
@@ -75,8 +71,8 @@ public class OrganizationService {
             try{
                 organizationResponse.setAssociations(organization.getAssociations());
                 organizationResponse.setLoanObjects(organization.getLoanObjects());
-            }catch (Exception ex){
-                System.out.println(ex);
+            }catch (Exception ignored){
+
             }
         }
         return organizationResponse;

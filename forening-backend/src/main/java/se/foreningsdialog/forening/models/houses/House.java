@@ -2,11 +2,9 @@ package se.foreningsdialog.forening.models.houses;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import se.foreningsdialog.forening.models.AssociationName;
-import se.foreningsdialog.forening.models.ContactPerson;
 import se.foreningsdialog.forening.models.users.audit.UserDateAudit;
 
 import javax.persistence.*;

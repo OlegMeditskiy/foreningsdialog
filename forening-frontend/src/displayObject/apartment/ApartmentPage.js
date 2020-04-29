@@ -6,7 +6,7 @@ import NewApartment from "./NewApartment";
 
 const ApartmentsPage =(props)=>{
     const originData = []
-                            props.apartments.map((apartment,idx)=>{
+                            props.apartments.forEach((apartment,idx)=>{
                                 originData.push({
                                     key:idx,
                                     id:apartment.id,
@@ -36,24 +36,21 @@ const ApartmentsPage =(props)=>{
         };
 
         const deleteApartment=async id=>{
-            const deleteData = [...data];
-            const index = deleteData.findIndex(item => id === item.id);
-
             const deleteApartmentRequest={
                 houseId:props.match.params.houseId,
                 apartmentId:id
             }
             deleteApartmentFromAssociation(deleteApartmentRequest)
-                .then(response => {
+                .then(() => {
                     notification.success({
                         message: 'Föreningsdialog App',
                         description: "You have deleted association",
                     });
                     props.load();
-                }).catch(error => {
+                }).catch(() => {
                 notification.error({
                     message: 'Föreningsdialog App',
-                    description: error.message || 'Sorry! Something went wrong. Please try again!'
+                    description: 'Sorry! Something went wrong. Please try again!'
                 });});
 
         }
@@ -82,16 +79,16 @@ const ApartmentsPage =(props)=>{
                 };
 
                 saveApartment(saveApartmentRequest)
-                    .then(response => {
+                    .then(() => {
                         notification.success({
                             message: 'Föreningsdialog App',
                             description: "You have updated association",
                         });
                         // props.update();
-                    }).catch(error => {
+                    }).catch(() => {
                     notification.error({
                         message: 'Föreningsdialog App',
-                        description: error.message || 'Sorry! Something went wrong. Please try again!'
+                        description: 'Sorry! Something went wrong. Please try again!'
                     });});
 
             } catch (errInfo) {
@@ -134,7 +131,7 @@ const ApartmentsPage =(props)=>{
                 key: 'action',
                 render: (text, record) => (
                     <span>
-                <a onClick={event => redirectToApartment(event,record)}>Open</a>
+                <button className={"unstyled-button"}      onClick={event => redirectToApartment(event,record)}>Open</button>
       </span>
                 ),
             },
@@ -145,23 +142,23 @@ const ApartmentsPage =(props)=>{
                     const editable = isEditing(record);
                     return editable ? (
                         <span>
-            <a
-                href="#"
+            <button className={"unstyled-button"}
+
                 onClick={(event) => {event.preventDefault();save(record.key)}}
                 style={{
                     marginRight: 8,
                 }}
             >
               Save
-            </a>
+            </button>
             <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(record.key)}>
-              <a>Cancel</a>
+              <button className={"unstyled-button"} >Cancel</button>
             </Popconfirm>
           </span>
                     ) : (
-                        <a disabled={editingKey !== ''} onClick={() => edit(record)}>
+                        <button className={"unstyled-button"}  disabled={editingKey !== ''} onClick={() => edit(record)}>
                             Edit
-                        </a>
+                        </button>
                     );
                 },
             },
@@ -170,7 +167,7 @@ const ApartmentsPage =(props)=>{
                 dataIndex: 'delete',
                 render: (text, record) => (
                     <Popconfirm title="Sure to delete?" onConfirm={(event) => {event.preventDefault();deleteApartment(record.id)}}>
-                        <a>Delete</a>
+                        <button className={"unstyled-button"} >Delete</button>
                     </Popconfirm>
                 ),
             },

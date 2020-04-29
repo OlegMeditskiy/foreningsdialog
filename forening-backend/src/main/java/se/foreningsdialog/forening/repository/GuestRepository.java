@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface GuestRepository extends CrudRepository<Guest, Long> {
  Optional<Guest> findById(Long id);
+
 }

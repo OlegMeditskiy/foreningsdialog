@@ -1,18 +1,5 @@
 package se.foreningsdialog.forening.controllers;
 
-import se.foreningsdialog.forening.exception.AppException;
-import se.foreningsdialog.forening.models.AssociationName;
-import se.foreningsdialog.forening.models.ContactPerson;
-import se.foreningsdialog.forening.models.GuestRegister;
-import se.foreningsdialog.forening.models.Organization;
-import se.foreningsdialog.forening.models.houses.House;
-import se.foreningsdialog.forening.models.loanobjects.*;
-import se.foreningsdialog.forening.models.users.Admin;
-import se.foreningsdialog.forening.models.users.GuestUser;
-import se.foreningsdialog.forening.models.users.User;
-import se.foreningsdialog.forening.models.users.constants.Role;
-import se.foreningsdialog.forening.models.users.constants.RoleName;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +12,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import se.foreningsdialog.forening.exception.AppException;
+import se.foreningsdialog.forening.models.AssociationName;
+import se.foreningsdialog.forening.models.ContactPerson;
+import se.foreningsdialog.forening.models.GuestRegister;
+import se.foreningsdialog.forening.models.Organization;
+import se.foreningsdialog.forening.models.houses.House;
+import se.foreningsdialog.forening.models.loanobjects.*;
+import se.foreningsdialog.forening.models.users.Admin;
+import se.foreningsdialog.forening.models.users.GuestUser;
+import se.foreningsdialog.forening.models.users.User;
+import se.foreningsdialog.forening.models.users.constants.Role;
+import se.foreningsdialog.forening.models.users.constants.RoleName;
 import se.foreningsdialog.forening.payload.common.ApiResponse;
 import se.foreningsdialog.forening.payload.common.JwtAuthenticationResponse;
 import se.foreningsdialog.forening.payload.common.LoginRequest;
@@ -88,8 +87,10 @@ public class AuthController {
 
     final
     PoolRepository poolRepository;
+    final
+    GuestRegisterRepository guestRegisterRepository;
 
-    public AuthController(UserRepository userRepository, AuthenticationManager authenticationManager, RoleRepository roleRepository, PartyPlaceRepository partyPlaceRepository, OrganizationRepository organizationRepository, LaundryRepository laundryRepository, HouseRepository houseRepository, AssociationNameRepository associationNameRepository, ContactPersonRepository contactPersonRepository, PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider, PoolRepository poolRepository, ExternLokalRepository externLokalRepository, ParkingRepository parkingRepository, GuestFlatRepository guestFlatRepository) {
+    public AuthController(UserRepository userRepository, AuthenticationManager authenticationManager, RoleRepository roleRepository, PartyPlaceRepository partyPlaceRepository, OrganizationRepository organizationRepository, LaundryRepository laundryRepository, HouseRepository houseRepository, AssociationNameRepository associationNameRepository, ContactPersonRepository contactPersonRepository, PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider, PoolRepository poolRepository, ExternLokalRepository externLokalRepository, ParkingRepository parkingRepository, GuestFlatRepository guestFlatRepository, GuestRegisterRepository guestRegisterRepository) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.roleRepository = roleRepository;
@@ -105,6 +106,7 @@ public class AuthController {
         this.externLokalRepository = externLokalRepository;
         this.parkingRepository = parkingRepository;
         this.guestFlatRepository = guestFlatRepository;
+        this.guestRegisterRepository = guestRegisterRepository;
     }
 
     @PostMapping("/signin")
@@ -126,7 +128,7 @@ public class AuthController {
     @PostMapping("/signup/main")
     public ResponseEntity<?> registerMainAdmin(@Valid @RequestBody SignUpRequest signUpRequest) {
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+            return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -152,13 +154,11 @@ public class AuthController {
 
     @PostMapping("/signupGuest")
     public ResponseEntity<?> registerGuest(@Valid @RequestBody GuestRegisterRequest guestRegisterRequest) {
-        System.out.println(guestRegisterRequest);
         if(userRepository.existsByUsername(guestRegisterRequest.getUsername())) {
-            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+            return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
-
-
+        System.out.println(guestRegisterRequest.toString());
         // Creating user's account
         GuestUser user = new GuestUser(guestRegisterRequest.getUsername(), guestRegisterRequest.getPassword());
 
@@ -179,6 +179,10 @@ public class AuthController {
                 .fromCurrentContextPath().path("/users/{username}")
                 .buildAndExpand(result.getUsername()).toUri();
 
+        GuestRegister guestRegister = guestRegisterRepository.findByUniqueKey(guestRegisterRequest.getUniqueKey());
+        guestRegister.setActivated(true);
+        guestRegisterRepository.save(guestRegister);
+
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
 //        return ResponseEntity.ok().body("Created");
     }
@@ -188,7 +192,7 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         System.out.println("sign up");
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+            return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -214,24 +218,35 @@ public class AuthController {
             organizationRepository.save(organization);
 
 
-            ExternLokal externLokal = new ExternLokal();
+            ExternLokalSettings externLokal = new ExternLokalSettings();
+            externLokal.setLoanType();
             externLokal.setOrganization(organization);
             externLokalRepository.save(externLokal);
-            GuestFlat guestFlat = new GuestFlat();
-            guestFlat.setOrganization(organization);
-            guestFlatRepository.save(guestFlat);
-            Laundry laundry = new Laundry();
-            laundry.setOrganization(organization);
-            laundryRepository.save(laundry);
-            Parking parking = new Parking();
-            parking.setOrganization(organization);
-            parkingRepository.save(parking);
-            PartyPlace partyPlace = new PartyPlace();
-            partyPlace.setOrganization(organization);
-            partyPlaceRepository.save(partyPlace);
-            Pool pool = new Pool();
-            pool.setOrganization(organization);
-            poolRepository.save(pool);
+
+            GuestFlatSettings guestFlatSettings = new GuestFlatSettings();
+            guestFlatSettings.setOrganization(organization);
+            guestFlatSettings.setLoanType();
+            guestFlatRepository.save(guestFlatSettings);
+
+            LaundrySettings laundrySettings = new LaundrySettings();
+            laundrySettings.setOrganization(organization);
+            laundrySettings.setLoanType();
+            laundryRepository.save(laundrySettings);
+
+            ParkingSettings parkingSettings = new ParkingSettings();
+            parkingSettings.setOrganization(organization);
+            parkingSettings.setLoanType();
+            parkingRepository.save(parkingSettings);
+
+            PartyPlaceSettings partyPlaceSettings = new PartyPlaceSettings();
+            partyPlaceSettings.setOrganization(organization);
+            partyPlaceSettings.setLoanType();
+            partyPlaceRepository.save(partyPlaceSettings);
+
+            PoolSettings poolSettings = new PoolSettings();
+            poolSettings.setOrganization(organization);
+            poolSettings.setLoanType();
+            poolRepository.save(poolSettings);
 
             for(AssociationName associationName: organization.getAssociations()){
                 associationName.setOrganization(organization);

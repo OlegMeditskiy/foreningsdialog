@@ -1,14 +1,11 @@
 package se.foreningsdialog.forening.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import se.foreningsdialog.forening.models.users.audit.UserDateAudit;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter

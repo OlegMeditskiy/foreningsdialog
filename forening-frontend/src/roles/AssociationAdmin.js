@@ -1,11 +1,8 @@
 import React, {Component} from 'react';
 import AssociationList from "../displayObject/AssociationList";
 import '../displayObject/list.css'
-class AssociationAdmin extends Component{
-    constructor(props) {
-        super(props);
 
-    }
+class AssociationAdmin extends Component{
     render() {
 
         return (

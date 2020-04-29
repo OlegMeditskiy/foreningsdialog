@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
-class LoanObjects extends Component{
-    constructor(props) {
-        super(props);
-    }
 
+class LoanObjects extends Component{
     render() {
         return (
             <div>this is loan objects</div>

@@ -4,7 +4,6 @@ package se.foreningsdialog.forening.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.foreningsdialog.forening.models.GuestRegister;
-import se.foreningsdialog.forening.models.houses.Guest;
 import se.foreningsdialog.forening.payload.guestRegister.GuestRegisterResponse;
 import se.foreningsdialog.forening.repository.GuestRegisterRepository;
 
@@ -23,6 +22,7 @@ public class GuestService {
         guestRegisterResponse.setArea(guestRegister.getArea());
         guestRegisterResponse.setNumber(guestRegister.getNumber());
         guestRegisterResponse.setRoomAndKitchen(guestRegister.getRoomAndKitchen());
+        guestRegisterResponse.setActivated(guestRegister.isActivated());
         return  guestRegisterResponse;
     }
 }

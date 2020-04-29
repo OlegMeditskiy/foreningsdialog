@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface GuestRegisterRepository extends CrudRepository<GuestRegister,Long> {
     GuestRegister findByUniqueKey(UUID uniqueKey);
+    GuestRegister findByGuestId (Long Id);
 }

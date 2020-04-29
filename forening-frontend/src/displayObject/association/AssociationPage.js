@@ -1,14 +1,11 @@
-import React, {useState} from 'react';
-import {Form, Input, InputNumber, notification, Popconfirm, Table} from 'antd';
-import {deleteAssociationFromOrganization, saveAssociation} from "../../util/APIUtils";
+import React from 'react';
 import AddNew from "./AddNew";
-import {EditableCell} from "../Tables/EditableCell";
 import AssociaionTable from "../Tables/AssociaionTable";
 
 const AssociationPage =(props)=>{
     const originData = []
 
-            props.associations.map((association,idx)=>{
+            props.associations.forEach((association,idx)=>{
                 originData.push({
                     key:idx+1,
                     id:association.id,

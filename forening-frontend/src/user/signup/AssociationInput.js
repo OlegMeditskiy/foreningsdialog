@@ -1,5 +1,5 @@
 import React from 'react';
-import {Accordion, Button, Card, Form, useAccordionToggle} from "react-bootstrap";
+import {Accordion, Button, Card, Form} from "react-bootstrap";
 import ContactInput from "./ContactInput";
 import HouseInput from "./HouseInput";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -67,19 +67,6 @@ const AssociationInput = (props)=>{
             )
         })
     )
-}
-function CustomToggle({ children, eventKey }) {
-    const decoratedOnClick = useAccordionToggle(eventKey, () =>
-        console.log('totally custom!'),
-    );
-
-    return (
-        <div
-            onClick={decoratedOnClick}
-        >
-            {children}
-        </div>
-    );
 }
 
 export default AssociationInput;

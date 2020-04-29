@@ -1,5 +1,5 @@
-import React,{Component} from "react";
-import {getGuestRegister, signup, signupGuest} from "../../util/APIUtils";
+import React, {Component} from "react";
+import {getGuestRegister, signupGuest} from "../../util/APIUtils";
 import {Button, Form} from "react-bootstrap";
 import {notification} from "antd";
 
@@ -13,7 +13,9 @@ class GuestRegister extends Component{
             number:0,
             area:0,
             roomAndKitchen:0,
-            isLoading: false
+            isLoading: false,
+            uniqueKey:'',
+            activated:false
         }
         this.loadGuestUser=this.loadGuestUser.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -32,7 +34,9 @@ class GuestRegister extends Component{
                 number: response.number,
                 area: response.area,
                 roomAndKitchen: response.roomAndKitchen,
-                isLoading: false
+                isLoading: false,
+                uniqueKey:uniqueKey,
+                activated:response.activated
             });
         }).catch(error => {
             if(error.status === 404) {
@@ -65,19 +69,20 @@ class GuestRegister extends Component{
 
         const signupRequest = {
             username: this.state.username,
-            password: this.state.password
+            password: this.state.password,
+            uniqueKey: this.state.uniqueKey
         };
         signupGuest(signupRequest)
-            .then(response => {
+            .then(() => {
                 notification.success({
                     message: 'Föreningsdialog App',
                     description: "Thank you! You're successfully registered. Please Login to continue!",
                 });
                 this.props.history.push("/login");
-            }).catch(error => {
+            }).catch(() => {
             notification.error({
                 message: 'Föreningsdialog App',
-                description: error.message || 'Sorry! Something went wrong. Please try again!'
+                description: 'Sorry! Something went wrong. Please try again!'
             });
         });
     }
@@ -86,40 +91,54 @@ class GuestRegister extends Component{
         this.setState({[event.target.name]: event.target.value});
         console.log(this.state)
     }
+
+    Activated(){
+
+
+    }
+
     render() {
-        return (
-            <div>
-                <p>{this.state.address}</p>
-                <p>{this.state.number}</p>
-                <p>{this.state.area}</p>
-                <p>{this.state.roomAndKitchen}</p>
-                <Form onSubmit={this.handleSubmit} className="signup-form" >
-                    <Form.Group>
-                        <Form.Control
-                            size="large"
-                            name="username"
-                            type="text"
-                            autoComplete="new-email"
-                            className={"username"}
-                            placeholder="Username"
-                            onChange={this.handleChange}
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Control
-                            size="large"
-                            name="password"
-                            type="password"
-                            autoComplete="new-password"
-                            className={"password"}
-                            placeholder="A password between 6 to 20 characters"
-                            onChange={this.handleChange}
-                        />
-                    </Form.Group>
-                    <Button variant="primary" type="submit">Register</Button>
-                </Form>
-            </div>
-        )
+        console.log(this.state.activated)
+        if (this.state.activated){
+            return (
+                <div>ACTIVATED</div>
+            )
+        }
+        else {
+            return(
+                <div>
+                    <p>{this.state.address}</p>
+                    <p>{this.state.number}</p>
+                    <p>{this.state.area}</p>
+                    <p>{this.state.roomAndKitchen}</p>
+                    <Form onSubmit={this.handleSubmit} className="signup-form" >
+                        <Form.Group>
+                            <Form.Control
+                                size="large"
+                                name="username"
+                                type="text"
+                                autoComplete="new-email"
+                                className={"username"}
+                                placeholder="Username"
+                                onChange={this.handleChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Control
+                                size="large"
+                                name="password"
+                                type="password"
+                                autoComplete="new-password"
+                                className={"password"}
+                                placeholder="A password between 6 to 20 characters"
+                                onChange={this.handleChange}
+                            />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">Register</Button>
+                    </Form>
+                </div>
+            )
+        }
     }
 }
 export default GuestRegister;

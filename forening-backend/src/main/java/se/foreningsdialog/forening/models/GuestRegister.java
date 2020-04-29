@@ -1,12 +1,11 @@
 package se.foreningsdialog.forening.models;
 
-import javax.persistence.*;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 import se.foreningsdialog.forening.models.houses.Guest;
 
+import javax.persistence.*;
 import java.util.UUID;
 
 
@@ -23,6 +22,10 @@ public class GuestRegister {
     private int number;
     private int area;
     private int roomAndKitchen;
+
+    @OneToOne
+    @JoinTable(name = "guest_register_guest",joinColumns = @JoinColumn(name = "guest_register_id"),inverseJoinColumns = @JoinColumn(name = "guest_id"))
+    Guest guest;
 
     @Type(type = "uuid-char")
     private UUID uniqueKey=UUID.randomUUID();

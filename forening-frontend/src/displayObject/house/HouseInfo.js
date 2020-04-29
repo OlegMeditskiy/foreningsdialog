@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Col, Container, Row, Tab, Tabs} from "react-bootstrap";
-import {getHouse, gethouse} from "../../util/APIUtils";
+import {getHouse} from "../../util/APIUtils";
 import ApartmentsPage from "../apartment/ApartmentPage";
 import GuestPage from "../guest/GuestPage";
 
@@ -40,7 +40,7 @@ class HouseInfo extends Component{
                     updated:1,
                 })
 
-            }).catch(error => {
+            }).catch(() => {
             this.setState({
                 isLoading: false
             })

@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import {Modal, Nav, Tab, Tabs} from "react-bootstrap";
+import {Modal, Tab, Tabs} from "react-bootstrap";
 import {withRouter} from "react-router-dom";
 import {Table} from "antd";
 import Button from "react-bootstrap/Button";
 import '../../user/signup/Signup.css';
 import CreateNewOrganisations from "./CreateNewOrganisations";
 import '../list.css';
-import {Switch} from 'react-router-dom';
+
 const OrganizationsPage=(props)=>{
     const columns=[
         {
@@ -39,15 +39,15 @@ const OrganizationsPage=(props)=>{
             key: 'action',
             render: (text, record) => (
                 <span>
-                <a onClick={event => {redirectToOrganisation(event,record)}}>Visa
-                </a>
+                <button className={"unstyled-button"} onClick={event => {redirectToOrganisation(event,record)}}>Visa
+                </button>
       </span>
             ),
         },
     ]
     const activated=[]
     const notActivated=[]
-    props.organizations.map((org,idx)=>{
+    props.organizations.forEach((org,idx)=>{
         if (org.activated){
             activated.push({
                 key:idx,

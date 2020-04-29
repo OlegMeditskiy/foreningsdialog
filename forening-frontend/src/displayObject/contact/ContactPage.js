@@ -6,7 +6,7 @@ import NewContact from "./NewContact";
 const ContactPage =(props)=>{
     const originData = []
 
-                    props.contacts.map((contact,idx)=>{
+                    props.contacts.forEach((contact,idx)=>{
                         originData.push({
                             key:idx,
                             id:contact.id,
@@ -70,23 +70,21 @@ const ContactPage =(props)=>{
         };
 
         const deleteContact=async id=>{
-            const deleteData = [...data];
-            const index = deleteData.findIndex(item => id === item.id);
             const deleteContactRequest={
                 associationId:props.match.params.associationId,
                 contactId:id
             }
             deleteContactFromAssociation(deleteContactRequest)
-                .then(response => {
+                .then(() => {
                     notification.success({
                         message: 'Föreningsdialog App',
                         description: "You have deleted association",
                     });
                     props.load();
-                }).catch(error => {
+                }).catch(() => {
                 notification.error({
                     message: 'Föreningsdialog App',
-                    description: error.message || 'Sorry! Something went wrong. Please try again!'
+                    description: 'Sorry! Something went wrong. Please try again!'
                 });});
 
         }
@@ -115,16 +113,16 @@ const ContactPage =(props)=>{
                 };
 
                 saveContact(saveContactRequest)
-                    .then(response => {
+                    .then(() => {
                         notification.success({
                             message: 'Föreningsdialog App',
                             description: "You have updated association",
                         });
                         // props.update();
-                    }).catch(error => {
+                    }).catch(() => {
                     notification.error({
                         message: 'Föreningsdialog App',
-                        description: error.message || 'Sorry! Something went wrong. Please try again!'
+                        description: 'Sorry! Something went wrong. Please try again!'
                     });});
 
             } catch (errInfo) {
@@ -169,23 +167,23 @@ const ContactPage =(props)=>{
                     const editable = isEditing(record);
                     return editable ? (
                         <span>
-            <a
-                href="#"
+            <button className={"unstyled-button"}
+
                 onClick={(event) => {event.preventDefault();save(record.key)}}
                 style={{
                     marginRight: 8,
                 }}
             >
               Save
-            </a>
+            </button>
             <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(record.key)}>
-              <a>Cancel</a>
+              <button className={"unstyled-button"} >Cancel</button>
             </Popconfirm>
           </span>
                     ) : (
-                        <a disabled={editingKey !== ''} onClick={() => edit(record)}>
+                        <button className={"unstyled-button"}  disabled={editingKey !== ''} onClick={() => edit(record)}>
                             Edit
-                        </a>
+                        </button>
                     );
                 },
             },
@@ -194,7 +192,7 @@ const ContactPage =(props)=>{
                 dataIndex: 'delete',
                 render: (text, record) => (
                     <Popconfirm title="Sure to delete?" onConfirm={(event) => {event.preventDefault();deleteContact(record.id)}}>
-                        <a>Delete</a>
+                        <button className={"unstyled-button"} >Delete</button>
                     </Popconfirm>
                 ),
             },

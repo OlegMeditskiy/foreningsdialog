@@ -11,7 +11,6 @@ import javax.persistence.*;
 
 @Entity(name = "LOAN_OBJECT")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "LOAN_TYPE")
 @NoArgsConstructor
 @EqualsAndHashCode
 @Getter
@@ -26,9 +25,23 @@ public abstract class AbstractLoanObject {
 
     private boolean isActivated=false;
 
-
     @ManyToOne
     @JoinTable(name = "organization_loan_object",joinColumns = @JoinColumn(name = "association_id"),inverseJoinColumns = @JoinColumn(name = "loan_object_id"))
     @JsonBackReference
     private Organization organization;
+
+    @Column(name = "LOAN_TYPE")
+    private String loanType;
+
+    public abstract void setLoanType();
+
+    @Override
+    public String toString() {
+        return "AbstractLoanObject{" +
+                "id=" + id +
+                ", hasCalendarData=" + hasCalendarData +
+                ", isActivated=" + isActivated +
+                ", organization=" + organization +
+                '}';
+    }
 }

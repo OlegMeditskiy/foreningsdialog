@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import {Link, Route, Switch} from 'react-router-dom';
-import OrganizationInfo from "./OrganizationInfo";
+import {Switch} from 'react-router-dom';
+
 class Organizations extends Component{
-    constructor(props) {
-        super(props);
-    }
+
     render() {
         return(
             <div>

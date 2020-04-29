@@ -5,15 +5,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue(value = "POOL")
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @NoArgsConstructor
-public class Pool extends AbstractLoanObject {
+public class ExternLokalSettings extends AbstractLoanObject {
     private String address;
+
+
+    @Override
+    public void setLoanType() {
+        setLoanType("ExternLokal");
+    }
+
+    @Override
+    public String toString() {
+        return "ExternLokalSettings{" +
+                "address='" + address + '\'' +
+                '}';
+    }
 }

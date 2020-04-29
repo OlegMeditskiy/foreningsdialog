@@ -1,4 +1,4 @@
-import { API_BASE_URL, ASSOCIATION_LIST_SIZE, ACCESS_TOKEN } from '../constants';
+import {ACCESS_TOKEN, API_BASE_URL, ASSOCIATION_LIST_SIZE} from '../constants';
 
 const request = (options) => {
     const headers = new Headers({
@@ -22,6 +22,30 @@ const request = (options) => {
         })
     );
 };
+const requestFile = (options) => {
+    const headers = new Headers({
+        // 'Content-Type': 'multipart/form-data;boundary=TZxXnSfSXQlmvRM3BDU-pz1xDJvno-acZxKIA'
+    })
+
+    if(localStorage.getItem(ACCESS_TOKEN)) {
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
+    }
+
+    const defaults = {headers: headers};
+    options = Object.assign({}, defaults, options);
+
+    return fetch(options.url, options)
+        .then(response =>{
+                if(response.ok) {
+                    console.log(response.data);
+                    alert("File uploaded successfully.")
+                }
+
+        }
+
+
+        );
+};
 
 export function getAllAssociations(page, size) {
     page = page || 0;
@@ -29,6 +53,13 @@ export function getAllAssociations(page, size) {
 
     return request({
         url: API_BASE_URL + "/associations?page=" + page + "&size=" + size,
+        method: 'GET'
+    });
+}
+
+export function getAllFiles() {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/getAllFiles",
         method: 'GET'
     });
 }
@@ -49,6 +80,14 @@ export function signup(signupRequest) {
         body: JSON.stringify(signupRequest)
     });
 }
+export function saveSettings(saveSettingsRequest) {
+    return request({
+        url: API_BASE_URL+"/associationAdmin/saveSettings",
+        method:'POST',
+        body: JSON.stringify(saveSettingsRequest)
+    });
+}
+
 export function signupGuest(signupRequest) {
     return request({
         url: API_BASE_URL + "/auth/signupGuest",
@@ -62,6 +101,14 @@ export function createNewOrganisations(createNewOrganisationsRequest) {
         method: 'POST',
         body: JSON.stringify(createNewOrganisationsRequest)
     });
+}
+export function fileUpload(file) {
+    return requestFile({
+        url: API_BASE_URL + "/associationAdmin/upload",
+        method: 'POST',
+        body: file
+    })
+
 }
 export function createNewHouse(createNewHouseRequest) {
     console.log(JSON.stringify(createNewHouseRequest))
@@ -83,6 +130,13 @@ export function createNewAssociation(createNewAssociationRequest) {
         url: API_BASE_URL + "/associationAdmin/createAssociation",
         method: 'POST',
         body: JSON.stringify(createNewAssociationRequest)
+    });
+}
+export function createDocumentType(createDocumentType) {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/createDocumentType",
+        method: 'POST',
+        body: JSON.stringify(createDocumentType)
     });
 }
 export function createNewApartment(createNewApartmentRequest) {

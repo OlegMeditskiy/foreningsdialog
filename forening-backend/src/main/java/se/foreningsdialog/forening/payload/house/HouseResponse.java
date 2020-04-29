@@ -1,14 +1,12 @@
 package se.foreningsdialog.forening.payload.house;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
-import se.foreningsdialog.forening.models.AssociationName;
 import se.foreningsdialog.forening.models.houses.Apartment;
 import se.foreningsdialog.forening.models.houses.Guest;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Getter
