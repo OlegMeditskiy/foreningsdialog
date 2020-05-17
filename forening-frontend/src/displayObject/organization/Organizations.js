@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Switch} from 'react-router-dom';
 
-class Organizations extends Component{
+class Organizations extends Component {
 
     render() {
-        return(
+        return (
             <div>
                 <Switch>
                     {/*<Route path={`${this.props.match.path}organisation/:organisationId`}*/}
@@ -15,4 +15,5 @@ class Organizations extends Component{
         )
     }
 }
+
 export default Organizations;

@@ -21,7 +21,7 @@ public class Event {
     private String description;
 
     @ManyToOne
-    @JoinTable(name = "associations_news",joinColumns = @JoinColumn(name = "event_id"),inverseJoinColumns = @JoinColumn(name = "association_id"))
+    @JoinTable(name = "associations_event", joinColumns = @JoinColumn(name = "event_id"), inverseJoinColumns = @JoinColumn(name = "association_id"))
     @JsonBackReference
     private AssociationName associationName;
 }

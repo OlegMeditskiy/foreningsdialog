@@ -20,7 +20,7 @@ public class HouseResponse {
 
     private int zipCode;
 
-    @OneToMany(mappedBy = "house",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "house", cascade = CascadeType.ALL)
     private List<Apartment> apartments;
 
     @OneToMany

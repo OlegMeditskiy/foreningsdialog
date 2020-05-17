@@ -15,6 +15,7 @@ import javax.persistence.Entity;
 public class PartyPlaceSettings extends AbstractLoanObject {
     private String address;
     private int number;
+
     @Override
     public void setLoanType() {
         setLoanType("PartyPlace");

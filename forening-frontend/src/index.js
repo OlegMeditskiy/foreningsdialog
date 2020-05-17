@@ -9,7 +9,7 @@ import 'react-app-polyfill/stable';
 
 ReactDOM.render(
     <Router>
-        <App />
+        <App/>
     </Router>,
     document.getElementById('root')
 );

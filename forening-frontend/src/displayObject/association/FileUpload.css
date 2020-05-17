@@ -1,0 +1,9 @@
+.imageAsDocument{
+    height: 100px;
+    width: auto;
+}
+.documentBlock{
+    margin:10px;
+    border: solid black 1px;
+    padding: 20px;
+}

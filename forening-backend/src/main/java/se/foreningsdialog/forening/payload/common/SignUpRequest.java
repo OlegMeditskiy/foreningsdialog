@@ -8,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 
-
 public class SignUpRequest {
     @NotBlank
     @Size(max = 40)

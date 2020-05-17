@@ -22,3 +22,6 @@ export const EMAIL_MAX_LENGTH = 40;
 
 export const PASSWORD_MIN_LENGTH = 6;
 export const PASSWORD_MAX_LENGTH = 20;
+
+export const ORGANIZATION_NUMBER_MIN_LENGTH = 10;
+export const ORGANIZATION_NUMBER_MAX_LENGTH = 10;

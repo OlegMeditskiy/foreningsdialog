@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 @Setter
 public class GuestFlatSettings extends AbstractLoanObject {
     private int number;
+
     @Override
     public void setLoanType() {
         setLoanType("GuestFlat");

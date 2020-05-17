@@ -24,7 +24,7 @@ public class AssociationService {
     @Autowired
     AssociationNameRepository associationNameRepository;
 
-    public AssociationNameResponse getAssociationCreatedBy(String username, Long associationId){
+    public AssociationNameResponse getAssociationCreatedBy(String username, Long associationId) {
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
@@ -32,20 +32,20 @@ public class AssociationService {
         AssociationName associationName = associationNameRepository.findById(associationId).get();
 
         AssociationNameResponse associationNameResponse = new AssociationNameResponse();
-        if(associationName.getCreatedBy().equals(user.getId())){
+        if (associationName.getCreatedBy().equals(user.getId())) {
             associationNameResponse.setAssociationName(associationName.getAssociationName());
             associationNameResponse.setId(associationName.getId());
             List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
                     new SimpleGrantedAuthority(role.getName().name())
             ).collect(Collectors.toList());
-            try{
+            try {
                 associationNameResponse.setHouses(associationName.getHouses());
                 associationNameResponse.setContacts(associationName.getContacts());
                 associationNameResponse.setEvents(associationName.getEvents());
                 associationNameResponse.setNews(associationName.getNews());
                 associationNameResponse.setDocumentTypes(associationName.getDocumentTypes());
-            }catch (Exception ignored){
-
+            } catch (Exception ex) {
+                System.out.println(ex);
             }
 
         }
@@ -53,12 +53,12 @@ public class AssociationService {
     }
 
     private void validatePageNumberAndSize(int page, int size) {
-        if(page < 0) {
+        if (page < 0) {
             throw new BadRequestException("Page number cannot be less than zero.");
         }
 
-        if(size > AppConstants.MAX_PAGE_SIZE) {
-            throw new BadRequestException("Page size must not be greater than " + AppConstants.MAX_PAGE_SIZE);
+        if (size > AppConstants.MAX_PAGE_SIZE) {
+            throw new BadRequestException("Page ust not be greater than " + AppConstants.MAX_PAGE_SIZE);
         }
     }
 }

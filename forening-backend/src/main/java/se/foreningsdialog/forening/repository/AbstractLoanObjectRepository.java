@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import se.foreningsdialog.forening.models.loanobjects.AbstractLoanObject;
 
 @Repository
-public interface AbstractLoanObjectRepository extends JpaRepository<AbstractLoanObject,Long> {
+public interface AbstractLoanObjectRepository extends JpaRepository<AbstractLoanObject, Long> {
 
 }

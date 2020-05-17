@@ -15,7 +15,7 @@ public class GuestService {
     @Autowired
     private GuestRegisterRepository guestRegisterRepository;
 
-    public GuestRegisterResponse getGuestRegister(UUID uniqueKey){
+    public GuestRegisterResponse getGuestRegister(UUID uniqueKey) {
         GuestRegister guestRegister = guestRegisterRepository.findByUniqueKey(uniqueKey);
         GuestRegisterResponse guestRegisterResponse = new GuestRegisterResponse();
         guestRegisterResponse.setAddress(guestRegister.getAddress());
@@ -23,6 +23,6 @@ public class GuestService {
         guestRegisterResponse.setNumber(guestRegister.getNumber());
         guestRegisterResponse.setRoomAndKitchen(guestRegister.getRoomAndKitchen());
         guestRegisterResponse.setActivated(guestRegister.isActivated());
-        return  guestRegisterResponse;
+        return guestRegisterResponse;
     }
 }

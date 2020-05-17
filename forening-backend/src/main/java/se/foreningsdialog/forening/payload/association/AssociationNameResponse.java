@@ -27,9 +27,9 @@ public class AssociationNameResponse {
     private List<News> news;
 
     @OneToMany
-    private List <DocumentType> documentTypes;
+    private List<DocumentType> documentTypes;
 
     @OneToMany
-    private List <Event> events;
+    private List<Event> events;
 
 }

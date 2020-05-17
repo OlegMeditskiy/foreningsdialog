@@ -11,7 +11,7 @@ import se.foreningsdialog.forening.storage.StorageService;
 
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
-public class ForeningApplication{
+public class ForeningApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ForeningApplication.class, args);
@@ -20,7 +20,6 @@ public class ForeningApplication{
     @Bean
     CommandLineRunner init(StorageService storageService) {
         return (args) -> {
-            storageService.deleteAll();
             storageService.init();
         };
     }

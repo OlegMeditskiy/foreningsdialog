@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 
-class Router extends Component{
+class Router extends Component {
     constructor(props) {
         super(props);
     }
+
     render() {
-        console.log(this.props)
         return (
             <div>
 
@@ -13,4 +13,5 @@ class Router extends Component{
         )
     }
 }
-export  default Router;
+
+export default Router;

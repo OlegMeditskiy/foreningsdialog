@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {Col, Container, Row, Tab, Tabs} from "react-bootstrap";
-import {getAssociation} from "../../util/APIUtils";
+
 import HousesPage from "../house/HousePage";
 import ContactPage from "../contact/ContactPage";
-import FileUpload from "./FileUpload";
 import AssociationSettings from "./AssociationSettings";
+import {getAssociation} from "../../util/GetAPI";
+import DocumentUpload from "./DocumentUpload";
+import News from "./News";
 
-class AssociationInfo extends Component{
+class AssociationInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,17 +18,18 @@ class AssociationInfo extends Component{
                 contacts: [],
                 associationName: "",
                 createdBy: "",
-                documentTypes:[]
+                documentTypes: []
             },
             isLoading: false,
-            updated:0,
+            updated: 0,
         };
         this.loadAssociation = this.loadAssociation.bind(this);
     }
+
     loadAssociation() {
-        let promise = getAssociation(this.props.username,this.props.match.params.associationId);
-        if(!promise) {
-            console.log("no promise");
+        let promise = getAssociation(this.props.username, this.props.match.params.associationId);
+        if (!promise) {
+
             return;
         }
         this.setState({
@@ -37,7 +40,7 @@ class AssociationInfo extends Component{
                 this.setState({
                     association: response,
                     isLoading: false,
-                    updated:1
+                    updated: 1
                 })
 
             }).catch(() => {
@@ -46,22 +49,25 @@ class AssociationInfo extends Component{
             })
         });
     }
+
     componentDidMount() {
-        console.log("Did mount")
+
         this.loadAssociation();
     }
+
     componentDidUpdate(nextProps) {
-        console.log("Did update")
-        if(this.props.isAuthenticated !== nextProps.isAuthenticated) {
+
+        if (this.props.isAuthenticated !== nextProps.isAuthenticated) {
             // Reset State
             this.setState({
                 association: {},
                 isLoading: false,
-                updated:0,
+                updated: 0,
             });
             this.loadAssociation();
         }
     }
+
     render() {
         return (
             <div>
@@ -73,16 +79,26 @@ class AssociationInfo extends Component{
                             </Row>
                         </Tab>
                         <Tab eventKey="houses" title={"Hus"}>
-                                <HousesPage  load={this.loadAssociation} houses={this.state.association.houses} {...this.props}/>
+                            <HousesPage load={this.loadAssociation}
+                                        houses={this.state.association.houses} {...this.props}/>
                         </Tab>
-                        <Tab eventKey="contacts" title={"Contacts"}>
-                            <ContactPage  load={this.loadAssociation} contacts={this.state.association.contacts} {...this.props}/>
+                        <Tab eventKey="contacts" title={"Kontakter"}>
+                            <ContactPage load={this.loadAssociation}
+                                         contacts={this.state.association.contacts} {...this.props}/>
                         </Tab>
-                        <Tab eventKey="Files upload" title={"Files upload"}>
-                            <FileUpload load={this.loadAssociation} documents={this.state.association.documentTypes} {...this.props} />
+                        {/*<Tab eventKey="Files upload" title={"Files upload"}>*/}
+                        {/*    <FileUpload load={this.loadAssociation}*/}
+                        {/*                documents={this.state.association.documentTypes} {...this.props} />*/}
+                        {/*</Tab>*/}
+                        <Tab eventKey="dokumenter" title={"Dokumenter"}>
+                            <DocumentUpload load={this.loadAssociation}
+                                        documents={this.state.association.documentTypes} {...this.props} />
                         </Tab>
-                        <Tab eventKey="Settings" title={"Settings"}>
+                        <Tab eventKey="settings" title={"Inställningar"}>
                             <AssociationSettings/>
+                        </Tab>
+                        <Tab eventKey="news" title={"News"}>
+                            <News {...this.props}/>
                         </Tab>
                     </Tabs>
                 </Container>
@@ -92,4 +108,5 @@ class AssociationInfo extends Component{
 
 
 }
+
 export default AssociationInfo;

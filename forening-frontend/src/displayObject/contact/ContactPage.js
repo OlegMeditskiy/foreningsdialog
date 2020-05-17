@@ -1,56 +1,22 @@
 import React, {useState} from "react";
-import {Form, Input, InputNumber, notification, Popconfirm, Table} from "antd";
-import {deleteContactFromAssociation, saveContact} from "../../util/APIUtils";
+import {Form, notification, Popconfirm} from "antd";
 import NewContact from "./NewContact";
+import {deleteContactFromAssociation} from "../../util/DeleteAPI";
+import {saveContact} from "../../util/SaveAPI";
+import {returns} from "../Tables/EditableCell";
 
-const ContactPage =(props)=>{
+const ContactPage = (props) => {
     const originData = []
 
-                    props.contacts.forEach((contact,idx)=>{
-                        originData.push({
-                            key:idx,
-                            id:contact.id,
-                            contactName:contact.contactName,
-                            contactEmail:contact.contactEmail,
-                            contactTelephone:contact.contactTelephone,
-                        })
-                    });
-
-    const EditableCell = ({
-                              editing,
-                              dataIndex,
-                              title,
-                              inputType,
-                              record,
-                              index,
-                              children,
-                              ...restProps
-                          }) => {
-        const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-        return (
-            <td {...restProps}>
-                {editing ? (
-                    <Form.Item
-                        name={dataIndex}
-                        style={{
-                            margin: 0,
-                        }}
-                        rules={[
-                            {
-                                required: true,
-                                message: `Please Input ${title}!`,
-                            },
-                        ]}
-                    >
-                        {inputNode}
-                    </Form.Item>
-                ) : (
-                    children
-                )}
-            </td>
-        );
-    };
-
+    props.contacts.forEach((contact, idx) => {
+        originData.push({
+            key: idx,
+            id: contact.id,
+            contactName: contact.contactName,
+            contactEmail: contact.contactEmail,
+            contactTelephone: contact.contactTelephone,
+        })
+    });
 
 
     const EditableTable = () => {
@@ -61,7 +27,7 @@ const ContactPage =(props)=>{
         const isEditing = record => record.key === editingKey;
 
         const edit = record => {
-            form.setFieldsValue({ ...record });
+            form.setFieldsValue({...record});
             setEditingKey(record.key);
         };
 
@@ -69,10 +35,10 @@ const ContactPage =(props)=>{
             setEditingKey('');
         };
 
-        const deleteContact=async id=>{
-            const deleteContactRequest={
-                associationId:props.match.params.associationId,
-                contactId:id
+        const deleteContact = async id => {
+            const deleteContactRequest = {
+                associationId: props.match.params.associationId,
+                contactId: id
             }
             deleteContactFromAssociation(deleteContactRequest)
                 .then(() => {
@@ -85,7 +51,8 @@ const ContactPage =(props)=>{
                 notification.error({
                     message: 'Föreningsdialog App',
                     description: 'Sorry! Something went wrong. Please try again!'
-                });});
+                });
+            });
 
         }
         const save = async key => {
@@ -95,7 +62,7 @@ const ContactPage =(props)=>{
                 const index = newData.findIndex(item => key === item.key);
                 if (index > -1) {
                     const item = newData[index];
-                    newData.splice(index, 1, { ...item, ...row });
+                    newData.splice(index, 1, {...item, ...row});
                     setData(newData);
                     setEditingKey('');
                 } else {
@@ -106,9 +73,9 @@ const ContactPage =(props)=>{
 
                 const saveContactRequest = {
                     contactId: newData[index].id,
-                    contactEmail:newData[index].contactEmail,
-                    contactName:newData[index].contactName,
-                    contactTelephone:newData[index].contactTelephone,
+                    contactEmail: newData[index].contactEmail,
+                    contactName: newData[index].contactName,
+                    contactTelephone: newData[index].contactTelephone,
 
                 };
 
@@ -123,12 +90,14 @@ const ContactPage =(props)=>{
                     notification.error({
                         message: 'Föreningsdialog App',
                         description: 'Sorry! Something went wrong. Please try again!'
-                    });});
+                    });
+                });
 
             } catch (errInfo) {
                 console.log('Validate Failed:', errInfo);
             }
         };
+
 
 
 
@@ -140,7 +109,7 @@ const ContactPage =(props)=>{
                 sorter: {
                     compare: (a, b) => a.contactName - b.contactName
                 },
-                editable:true,
+                editable: true,
             },
             {
                 title: 'E-mail',
@@ -149,7 +118,7 @@ const ContactPage =(props)=>{
                 sorter: {
                     compare: (a, b) => a.contactEmail - b.contactEmail
                 },
-                editable:true,
+                editable: true,
             },
             {
                 title: 'Telefonnummer',
@@ -158,10 +127,10 @@ const ContactPage =(props)=>{
                 sorter: {
                     compare: (a, b) => a.contactTelephone - b.contactTelephone
                 },
-                editable:true,
+                editable: true,
             },
             {
-                title: 'operation',
+                title: 'Ändra',
                 dataIndex: 'operation',
                 render: (text, record) => {
                     const editable = isEditing(record);
@@ -169,75 +138,43 @@ const ContactPage =(props)=>{
                         <span>
             <button className={"unstyled-button"}
 
-                onClick={(event) => {event.preventDefault();save(record.key)}}
-                style={{
-                    marginRight: 8,
-                }}
+                    onClick={(event) => {
+                        event.preventDefault();
+                        save(record.key)
+                    }}
+                    style={{
+                        marginRight: 8,
+                    }}
             >
-              Save
+              Spara
             </button>
             <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(record.key)}>
-              <button className={"unstyled-button"} >Cancel</button>
+              <button className={"unstyled-button"}>Cancel</button>
             </Popconfirm>
           </span>
                     ) : (
-                        <button className={"unstyled-button"}  disabled={editingKey !== ''} onClick={() => edit(record)}>
-                            Edit
+                        <button className={"unstyled-button"} disabled={editingKey !== ''} onClick={() => edit(record)}>
+                            Ändra
                         </button>
                     );
                 },
             },
             {
-                title: 'Delete',
+                title: 'Ta bort',
                 dataIndex: 'delete',
                 render: (text, record) => (
-                    <Popconfirm title="Sure to delete?" onConfirm={(event) => {event.preventDefault();deleteContact(record.id)}}>
-                        <button className={"unstyled-button"} >Delete</button>
+                    <Popconfirm title="Är du säker att du vill ta bort?" onConfirm={(event) => {
+                        event.preventDefault();
+                        deleteContact(record.id)
+                    }}>
+                        <button className={"unstyled-button"}>Ta bort</button>
                     </Popconfirm>
                 ),
             },
         ];
-        const components = {
-            body: {
-                cell: EditableCell,
-            },
-        };
-        const mergedColumns = columns.map(col => {
-            if (!col.editable) {
-                return col;
-            }
-
-            return {
-                ...col,
-                onCell: record => ({
-                    record,
-                    inputType: col.dataIndex === 'age' ? 'number' : 'text',
-                    dataIndex: col.dataIndex,
-                    title: col.title,
-                    editing: isEditing(record),
-                }),
-            };
-        });
-        return (
-            <div>
-
-                <Form form={form} component={false}>
-                    <Table
-                        components={components}
-                        bordered
-                        dataSource={data}
-                        columns={mergedColumns}
-                        rowClassName="editable-row"
-                        pagination={{
-                            onChange: cancel,
-                        }}
-                    />
-                </Form>
-            </div>
-
-        );
+        return(returns(columns,isEditing,form,data,cancel))
     };
-    return(
+    return (
         <div>
             <NewContact {...props} update={props.update}/>
             <EditableTable/>

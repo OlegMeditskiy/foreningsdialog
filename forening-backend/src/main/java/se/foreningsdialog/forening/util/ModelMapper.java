@@ -23,7 +23,7 @@ public class ModelMapper {
                 new SimpleGrantedAuthority(role.getName().name())
         ).collect(Collectors.toList());
         organizationResponse.setAssociations(organization.getAssociations());
-        UserSummary creatorSummary = new UserSummary(creator.getId(), creator.getUsername(),authorities);
+        UserSummary creatorSummary = new UserSummary(creator.getId(), creator.getUsername(), authorities);
         organizationResponse.setCreatedBy(creatorSummary);
         return organizationResponse;
     }

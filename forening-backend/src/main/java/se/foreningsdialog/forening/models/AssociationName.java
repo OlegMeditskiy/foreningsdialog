@@ -21,27 +21,27 @@ public class AssociationName extends UserDateAudit {
     private String associationName;
 
     @ManyToOne
-    @JoinTable(name = "organizations_associations",joinColumns = @JoinColumn(name = "association_id"),inverseJoinColumns = @JoinColumn(name = "organization_id"))
+    @JoinTable(name = "organizations_associations", joinColumns = @JoinColumn(name = "association_id"), inverseJoinColumns = @JoinColumn(name = "organization_id"))
     @JsonBackReference
     private Organization organization;
 
-    @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "associationName", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<ContactPerson> contacts;
 
-    @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "associationName", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<News> news;
 
-    @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "associationName", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List <Event> events;
+    private List<Event> events;
 
-    @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "associationName", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List <DocumentType> documentTypes;
+    private List<DocumentType> documentTypes;
 
-    @OneToMany(mappedBy = "associationName",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "associationName", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<House> houses;
 

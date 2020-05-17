@@ -22,7 +22,7 @@ public class HouseService {
     @Autowired
     HouseRepository houseRepository;
 
-    public HouseResponse getHouseCreatedBy(String username, Long houseId){
+    public HouseResponse getHouseCreatedBy(String username, Long houseId) {
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
@@ -30,21 +30,21 @@ public class HouseService {
         House house = houseRepository.findById(houseId).get();
 
         HouseResponse houseResponse = new HouseResponse();
-        if(house.getCreatedBy().equals(user.getId())){
+        if (house.getCreatedBy().equals(user.getId())) {
             houseResponse.setCity(house.getCity());
             houseResponse.setStreet(house.getStreet());
             houseResponse.setZipCode(house.getZipCode());
             houseResponse.setId(house.getId());
-            try{
+            try {
                 houseResponse.setApartments(house.getApartments());
                 List<Guest> guests = new ArrayList<>();
-                for (Apartment apartment: house.getApartments()){
+                for (Apartment apartment : house.getApartments()) {
                     guests.addAll(apartment.getGuests());
                 }
                 houseResponse.setGuests(guests);
 
-            }catch (Exception ignored){
-
+            } catch (Exception ex) {
+                System.out.println(ex);
             }
 
         }

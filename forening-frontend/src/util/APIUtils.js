@@ -1,11 +1,11 @@
-import {ACCESS_TOKEN, API_BASE_URL, ASSOCIATION_LIST_SIZE} from '../constants';
+import {ACCESS_TOKEN, API_BASE_URL} from '../constants';
 
-const request = (options) => {
+export const request = (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
     })
-    
-    if(localStorage.getItem(ACCESS_TOKEN)) {
+
+    if (localStorage.getItem(ACCESS_TOKEN)) {
         headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
     }
 
@@ -13,21 +13,21 @@ const request = (options) => {
     options = Object.assign({}, defaults, options);
 
     return fetch(options.url, options)
-    .then(response => 
-        response.json().then(json => {
-            if(!response.ok) {
-                return Promise.reject(json);
-            }
-            return json;
-        })
-    );
+        .then(response =>
+            response.json().then(json => {
+                if (!response.ok) {
+                    return Promise.reject(json);
+                }
+                return json;
+            })
+        );
 };
-const requestFile = (options) => {
+export const requestFile = (options) => {
     const headers = new Headers({
-        // 'Content-Type': 'multipart/form-data;boundary=TZxXnSfSXQlmvRM3BDU-pz1xDJvno-acZxKIA'
+        // "Content-Type": undefined
     })
 
-    if(localStorage.getItem(ACCESS_TOKEN)) {
+    if (localStorage.getItem(ACCESS_TOKEN)) {
         headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
     }
 
@@ -35,73 +35,15 @@ const requestFile = (options) => {
     options = Object.assign({}, defaults, options);
 
     return fetch(options.url, options)
-        .then(response =>{
-                if(response.ok) {
-                    console.log(response.data);
+        .then(response => {
+                if (response.ok) {
                     alert("File uploaded successfully.")
                 }
 
-        }
-
-
+            }
         );
 };
 
-export function getAllAssociations(page, size) {
-    page = page || 0;
-    size = size || ASSOCIATION_LIST_SIZE;
-
-    return request({
-        url: API_BASE_URL + "/associations?page=" + page + "&size=" + size,
-        method: 'GET'
-    });
-}
-
-export function getAllFiles() {
-    return request({
-        url: API_BASE_URL + "/associationAdmin/getAllFiles",
-        method: 'GET'
-    });
-}
-
-
-export function login(loginRequest) {
-    return request({
-        url: API_BASE_URL + "/auth/signin",
-        method: 'POST',
-        body: JSON.stringify(loginRequest)
-    });
-}
-
-export function signup(signupRequest) {
-    return request({
-        url: API_BASE_URL + "/auth/signup",
-        method: 'POST',
-        body: JSON.stringify(signupRequest)
-    });
-}
-export function saveSettings(saveSettingsRequest) {
-    return request({
-        url: API_BASE_URL+"/associationAdmin/saveSettings",
-        method:'POST',
-        body: JSON.stringify(saveSettingsRequest)
-    });
-}
-
-export function signupGuest(signupRequest) {
-    return request({
-        url: API_BASE_URL + "/auth/signupGuest",
-        method: 'POST',
-        body: JSON.stringify(signupRequest)
-    });
-}
-export function createNewOrganisations(createNewOrganisationsRequest) {
-    return request({
-        url: API_BASE_URL + "/associationAdmin/createOrganizations",
-        method: 'POST',
-        body: JSON.stringify(createNewOrganisationsRequest)
-    });
-}
 export function fileUpload(file) {
     return requestFile({
         url: API_BASE_URL + "/associationAdmin/upload",
@@ -110,123 +52,45 @@ export function fileUpload(file) {
     })
 
 }
-export function createNewHouse(createNewHouseRequest) {
-    console.log(JSON.stringify(createNewHouseRequest))
-    return request({
-        url: API_BASE_URL + "/associationAdmin/createHouse",
+export function createNewDocument(file) {
+    return requestFile({
+        url: API_BASE_URL + "/associationAdmin/create/document",
         method: 'POST',
-        body: JSON.stringify(createNewHouseRequest)
-    });
-}
-export function createNewContact(createNewContactRequest) {
-    return request({
-        url: API_BASE_URL + "/associationAdmin/createContact",
-        method: 'POST',
-        body: JSON.stringify(createNewContactRequest)
-    });
-}
-export function createNewAssociation(createNewAssociationRequest) {
-    return request({
-        url: API_BASE_URL + "/associationAdmin/createAssociation",
-        method: 'POST',
-        body: JSON.stringify(createNewAssociationRequest)
-    });
-}
-export function createDocumentType(createDocumentType) {
-    return request({
-        url: API_BASE_URL + "/associationAdmin/createDocumentType",
-        method: 'POST',
-        body: JSON.stringify(createDocumentType)
-    });
-}
-export function createNewApartment(createNewApartmentRequest) {
-    return request({
-        url: API_BASE_URL + "/associationAdmin/createApartment",
-        method: 'POST',
-        body: JSON.stringify(createNewApartmentRequest)
-    });
-}
-export function createNewGuest(createNewGuestRequest) {
-    return request({
-        url: API_BASE_URL + "/associationAdmin/createGuest",
-        method: 'POST',
-        body: JSON.stringify(createNewGuestRequest)
-    });
-}
-
-export function saveAssociation(saveAssociationRequest) {
-    return request({
-        url: API_BASE_URL + "/associationAdmin/saveAssociation",
-        method: 'POST',
-        body: JSON.stringify(saveAssociationRequest)
-    });
-
-}
-export function saveHouse(saveHouseRequest) {
-    return request({
-        url: API_BASE_URL + "/associationAdmin/saveHouse",
-        method: 'POST',
-        body: JSON.stringify(saveHouseRequest)
-    });
-
-}
-export function saveContact(saveContactRequest) {
-    return request({
-        url: API_BASE_URL + "/associationAdmin/saveContact",
-        method: 'POST',
-        body: JSON.stringify(saveContactRequest)
-    });
-
-}
-export function saveApartment(saveApartmentRequest) {
-    return request({
-        url: API_BASE_URL + "/associationAdmin/saveApartment",
-        method: 'POST',
-        body: JSON.stringify(saveApartmentRequest)
-    });
-
-}
-export function saveGuest(saveGuestRequest) {
-    return request({
-        url: API_BASE_URL + "/associationAdmin/saveGuest",
-        method: 'POST',
-        body: JSON.stringify(saveGuestRequest)
-    });
-
-}
-export function deleteAssociationFromOrganization(deleteAssociationRequest) {
-    return request({
-        url:API_BASE_URL+"/associationAdmin/deleteAssociation",
-        method:'DELETE',
-        body: JSON.stringify(deleteAssociationRequest)
+        body: file
     })
+
 }
-export function deleteHouseFromAssociation(deleteHouseRequest) {
-    return request({
-        url:API_BASE_URL+"/associationAdmin/deleteHouse",
-        method:'DELETE',
-        body: JSON.stringify(deleteHouseRequest)
+export function GDPRUpload(file) {
+    return requestFile({
+        url: API_BASE_URL + "/mainAdmin/uploadGDPR",
+        method: 'POST',
+        body: file
     })
+
 }
-export function deleteContactFromAssociation(deleteContactRequest) {
-    return request({
-        url:API_BASE_URL+"/associationAdmin/deleteContact",
-        method:'DELETE',
-        body: JSON.stringify(deleteContactRequest)
+
+export function logoUpload(file) {
+    return requestFile({
+        url: API_BASE_URL + "/associationAdmin/logoUpload",
+        method: 'POST',
+        body: file
     })
+
 }
-export function deleteApartmentFromAssociation(deleteApartmentRequest) {
-    return request({
-        url:API_BASE_URL+"/associationAdmin/deleteApartment",
-        method:'DELETE',
-        body: JSON.stringify(deleteApartmentRequest)
+export function VillkorUpload(file) {
+    return requestFile({
+        url: API_BASE_URL + "/mainAdmin/uploadVillkor",
+        method: 'POST',
+        body: file
     })
+
 }
-export function deleteGuestFromAssociation(deleteGuestRequest) {
-    return request({
-        url:API_BASE_URL+"/associationAdmin/deleteGuest",
-        method:'DELETE',
-        body: JSON.stringify(deleteGuestRequest)
+
+export function fileUpload2(createDocument) {
+    return requestFile({
+        url: API_BASE_URL + "/associationAdmin/createDocument",
+        method: 'POST',
+        body: JSON.stringify(createDocument)
     })
 }
 
@@ -245,63 +109,9 @@ export function checkEmailAvailability(email) {
 }
 
 
-export function getOrganization(username, organizationId) {
-    return request({
-        url: API_BASE_URL + "/users/" + username + "/organization/" + organizationId,
-        method: 'GET'
-    });
-}
-
-export function getAssociation(username, associationId) {
-    return request({
-        url: API_BASE_URL + "/users/" + username + "/association/" + associationId,
-        method: 'GET'
-    });
-}
-export function getHouse(username, houseId) {
-    return request({
-        url: API_BASE_URL + "/users/" + username + "/house/" + houseId,
-        method: 'GET'
-    });
-}
-export function getApartment(username, apartmentId) {
-    return request({
-        url: API_BASE_URL + "/users/" + username + "/apartment/" + apartmentId,
-        method: 'GET'
-    });
-}
-export function getGuestRegister(uniqueKey) {
-    return request({
-        url: API_BASE_URL + "/associationAdmin/getGuestRegister/"+uniqueKey,
-        method: 'GET'
-    });
-}
-
-export function getUserCreatedOrganizationss(username) {
-    return request({
-        url: API_BASE_URL + "/users/" + username + "/organizations",
-        method: 'GET'
-    });
-}
 
 
 
 
 
 
-export function getCurrentUser() {
-    if(!localStorage.getItem(ACCESS_TOKEN)) {
-        return Promise.reject("No access token set.");
-    }
-    return request({
-        url: API_BASE_URL + "/user/me",
-        method: 'GET'
-    });
-}
-
-export function getUserProfile(username) {
-    return request({
-        url: API_BASE_URL + "/users/" + username,
-        method: 'GET'
-    });
-}

@@ -18,7 +18,7 @@ public class ApartmentService {
     @Autowired
     ApartmentRepository apartmentRepository;
 
-    public ApartmentResponse getApartmentCreatedBy(String username, Long apartmentId){
+    public ApartmentResponse getApartmentCreatedBy(String username, Long apartmentId) {
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
@@ -26,14 +26,14 @@ public class ApartmentService {
         Apartment apartment = apartmentRepository.findById(apartmentId).get();
 
         ApartmentResponse apartmentResponse = new ApartmentResponse();
-        if(apartment.getCreatedBy().equals(user.getId())){
-           apartmentResponse.setArea(apartment.getArea());
-           apartmentResponse.setNumber(apartment.getNumber());
-           apartmentResponse.setRoomAndKitchen(apartment.getRoomAndKitchen());
-            try{
+        if (apartment.getCreatedBy().equals(user.getId())) {
+            apartmentResponse.setArea(apartment.getArea());
+            apartmentResponse.setNumber(apartment.getNumber());
+            apartmentResponse.setRoomAndKitchen(apartment.getRoomAndKitchen());
+            try {
                 apartmentResponse.setGuests(apartment.getGuests());
-            }catch (Exception ignored){
-
+            } catch (Exception ex) {
+                System.out.println(ex);
             }
 
         }

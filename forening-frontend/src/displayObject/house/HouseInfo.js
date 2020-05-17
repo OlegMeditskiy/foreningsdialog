@@ -1,32 +1,32 @@
 import React, {Component} from 'react';
 import {Col, Container, Row, Tab, Tabs} from "react-bootstrap";
-import {getHouse} from "../../util/APIUtils";
 import ApartmentsPage from "../apartment/ApartmentPage";
-import GuestPage from "../guest/GuestPage";
+import {getHouse} from "../../util/GetAPI";
 
-class HouseInfo extends Component{
+class HouseInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
             house: {
                 id: '',
                 guests: [],
-                street:'',
-                city:'',
-                zipCode:'',
-                apartments:[]
+                street: '',
+                city: '',
+                zipCode: '',
+                apartments: []
             },
             isLoading: false,
-            updated:0,
+            updated: 0,
         };
         this.loadHouse
             = this.loadHouse
             .bind(this);
     }
+
     loadHouse() {
-        let promise = getHouse(this.props.username,this.props.match.params.houseId);
-        if(!promise) {
-            console.log("no promise");
+        let promise = getHouse(this.props.username, this.props.match.params.houseId);
+        if (!promise) {
+
             return;
         }
         this.setState({
@@ -37,7 +37,7 @@ class HouseInfo extends Component{
                 this.setState({
                     house: response,
                     isLoading: false,
-                    updated:1,
+                    updated: 1,
                 })
 
             }).catch(() => {
@@ -46,24 +46,23 @@ class HouseInfo extends Component{
             })
         });
     }
+
     componentDidMount() {
-        console.log("Did mount")
-        this.loadHouse
-        ();
+        this.loadHouse();
     }
+
     componentDidUpdate(nextProps) {
-        console.log("Did update")
-        if(this.props.isAuthenticated !== nextProps.isAuthenticated) {
+        if (this.props.isAuthenticated !== nextProps.isAuthenticated) {
             // Reset State
             this.setState({
                 house: {},
                 isLoading: false,
-                updated:0,
+                updated: 0,
             });
-            this.loadHouse
-            ();
+            this.loadHouse();
         }
     }
+
     render() {
         return (
             <div>
@@ -76,11 +75,9 @@ class HouseInfo extends Component{
                                 <Col>Postnummer + {this.state.house.zipCode}</Col>
                             </Row>
                         </Tab>
-                        <Tab eventKey="apartments" title={"Apartments"}>
-                            <ApartmentsPage  load={this.loadHouse} apartments={this.state.house.apartments} {...this.props}/>
-                        </Tab>
-                        <Tab eventKey="Guests" title={"Guests"}>
-                            <GuestPage  load={this.loadHouse} guests={this.state.house.guests} {...this.props}/>
+                        <Tab eventKey="apartments" title={"Lägenheter"}>
+                            <ApartmentsPage load={this.loadHouse}
+                                            apartments={this.state.house.apartments} {...this.props}/>
                         </Tab>
                     </Tabs>
                 </Container>
@@ -90,4 +87,5 @@ class HouseInfo extends Component{
 
 
 }
+
 export default HouseInfo;

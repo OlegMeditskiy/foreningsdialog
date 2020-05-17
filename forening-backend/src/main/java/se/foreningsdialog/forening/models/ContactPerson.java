@@ -10,13 +10,13 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class ContactPerson extends UserDateAudit{
+public class ContactPerson extends UserDateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
-    @JoinTable(name = "associations_contacts",joinColumns = @JoinColumn(name = "contact_id"),inverseJoinColumns = @JoinColumn(name = "association_id"))
+    @JoinTable(name = "associations_contacts", joinColumns = @JoinColumn(name = "contact_id"), inverseJoinColumns = @JoinColumn(name = "association_id"))
     @JsonBackReference
     private AssociationName associationName;
 

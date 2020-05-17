@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 public class PoolSettings extends AbstractLoanObject {
     private String address;
+
     @Override
     public void setLoanType() {
         setLoanType("Pool");

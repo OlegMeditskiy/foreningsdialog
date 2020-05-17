@@ -1,28 +1,28 @@
 import React, {Component} from 'react';
 import {Col, Container, Row, Tab, Tabs} from "react-bootstrap";
-import {getApartment} from "../../util/APIUtils";
 import GuestPage from "../guest/GuestPage";
+import {getApartment} from "../../util/GetAPI";
 
-class ApartmentInfo extends Component{
+class ApartmentInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
             apartment: {
                 id: '',
                 guests: [],
-                number:'',
-                area:'',
-                roomAndKitchen:''
+                number: '',
+                area: '',
+                roomAndKitchen: ''
             },
             isLoading: false,
-            updated:0,
+            updated: 0,
         };
         this.loadApartment = this.loadApartment.bind(this);
     }
+
     loadApartment() {
-        let promise = getApartment(this.props.username,this.props.match.params.apartmentId);
-        if(!promise) {
-            console.log("no promise");
+        let promise = getApartment(this.props.username, this.props.match.params.apartmentId);
+        if (!promise) {
             return;
         }
         this.setState({
@@ -33,7 +33,7 @@ class ApartmentInfo extends Component{
                 this.setState({
                     apartment: response,
                     isLoading: false,
-                    updated:1,
+                    updated: 1,
                 })
 
             }).catch(() => {
@@ -42,22 +42,25 @@ class ApartmentInfo extends Component{
             })
         });
     }
+
     componentDidMount() {
-        console.log("Did mount")
+
         this.loadApartment();
     }
+
     componentDidUpdate(nextProps) {
-        console.log("Did update")
-        if(this.props.isAuthenticated !== nextProps.isAuthenticated) {
+
+        if (this.props.isAuthenticated !== nextProps.isAuthenticated) {
             // Reset State
             this.setState({
                 house: {},
                 isLoading: false,
-                updated:0,
+                updated: 0,
             });
             this.loadApartment();
         }
     }
+
     render() {
         return (
             <div>
@@ -70,8 +73,8 @@ class ApartmentInfo extends Component{
                                 <Col>RoomAndKitchen + {this.state.apartment.roomAndKitchen}</Col>
                             </Row>
                         </Tab>
-                        <Tab eventKey="Guests" title={"Guests"}>
-                            <GuestPage  load={this.loadApartment} guests={this.state.apartment.guests} {...this.props}/>
+                        <Tab eventKey="Guests" title={"Gäst"}>
+                            <GuestPage load={this.loadApartment} guests={this.state.apartment.guests} {...this.props}/>
                         </Tab>
                     </Tabs>
                 </Container>
@@ -81,4 +84,5 @@ class ApartmentInfo extends Component{
 
 
 }
+
 export default ApartmentInfo;

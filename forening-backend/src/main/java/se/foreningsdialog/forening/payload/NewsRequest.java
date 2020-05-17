@@ -2,7 +2,6 @@ package se.foreningsdialog.forening.payload;
 
 import lombok.Getter;
 import lombok.Setter;
-import se.foreningsdialog.forening.models.AssociationName;
 
 import javax.persistence.Lob;
 
@@ -14,5 +13,5 @@ public class NewsRequest {
     @Lob
     private String newsText;
 
-    private AssociationName associationName;
+    private Long associationNameId;
 }

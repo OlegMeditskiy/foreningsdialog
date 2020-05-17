@@ -20,6 +20,7 @@ public class OrganizationResponse {
 
     private UserSummary createdBy;
     private boolean isActivated;
+    private boolean isDeclined;
 
     @OneToMany
     List<AssociationName> associations;

@@ -1,45 +1,46 @@
 import React, {Component} from "react";
-import {getGuestRegister, signupGuest} from "../../util/APIUtils";
 import {Button, Form} from "react-bootstrap";
 import {notification} from "antd";
+import {signupGuest} from "../../util/AuthorizationAPI";
+import {getGuestRegister} from "../../util/GetAPI";
 
-class GuestRegister extends Component{
+class GuestRegister extends Component {
     constructor(props) {
         super(props);
-        this.state={
-            username:"",
-            password:"",
-            address:"",
-            number:0,
-            area:0,
-            roomAndKitchen:0,
+        this.state = {
+            username: "",
+            password: "",
+            address: "",
+            number: 0,
+            area: 0,
+            roomAndKitchen: 0,
             isLoading: false,
-            uniqueKey:'',
-            activated:false
+            uniqueKey: '',
+            activated: false
         }
-        this.loadGuestUser=this.loadGuestUser.bind(this);
+        this.loadGuestUser = this.loadGuestUser.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    loadGuestUser(uniqueKey){
+    loadGuestUser(uniqueKey) {
         this.setState({
             isLoading: true
         });
 
         getGuestRegister(uniqueKey).then(response => {
-            console.log(response);
+
             this.setState({
                 address: response.address,
                 number: response.number,
                 area: response.area,
                 roomAndKitchen: response.roomAndKitchen,
                 isLoading: false,
-                uniqueKey:uniqueKey,
-                activated:response.activated
+                uniqueKey: uniqueKey,
+                activated: response.activated
             });
         }).catch(error => {
-            if(error.status === 404) {
+            if (error.status === 404) {
                 this.setState({
                     notFound: true,
                     isLoading: false
@@ -59,11 +60,12 @@ class GuestRegister extends Component{
     }
 
     componentDidUpdate(nextProps) {
-        if(this.props.match.params.uniqueKey !== nextProps.match.params.uniqueKey) {
+        if (this.props.match.params.uniqueKey !== nextProps.match.params.uniqueKey) {
             this.loadGuestUser(nextProps.match.params.username);
         }
 
     }
+
     handleSubmit(event) {
         event.preventDefault();
 
@@ -86,32 +88,32 @@ class GuestRegister extends Component{
             });
         });
     }
+
     handleChange(event) {
 
         this.setState({[event.target.name]: event.target.value});
-        console.log(this.state)
+
     }
 
-    Activated(){
+    Activated() {
 
 
     }
 
     render() {
-        console.log(this.state.activated)
-        if (this.state.activated){
+
+        if (this.state.activated) {
             return (
                 <div>ACTIVATED</div>
             )
-        }
-        else {
-            return(
+        } else {
+            return (
                 <div>
                     <p>{this.state.address}</p>
                     <p>{this.state.number}</p>
                     <p>{this.state.area}</p>
                     <p>{this.state.roomAndKitchen}</p>
-                    <Form onSubmit={this.handleSubmit} className="signup-form" >
+                    <Form onSubmit={this.handleSubmit} className="signup-form">
                         <Form.Group>
                             <Form.Control
                                 size="large"
@@ -141,4 +143,5 @@ class GuestRegister extends Component{
         }
     }
 }
+
 export default GuestRegister;

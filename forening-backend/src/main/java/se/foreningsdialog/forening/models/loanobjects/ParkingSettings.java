@@ -13,12 +13,13 @@ import javax.persistence.Entity;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ParkingSettings extends AbstractLoanObject{
+public class ParkingSettings extends AbstractLoanObject {
     private String parkingNumber;
 
-    public void vvvvv(){
+    public void vvvvv() {
         Organization organization;
     }
+
     @Override
     public void setLoanType() {
         setLoanType("Parking");

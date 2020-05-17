@@ -17,6 +17,7 @@ public class LaundrySettings extends AbstractLoanObject {
     private Date startTime;
     private Date finishTime;
     private int lengthOfLaundry;
+
     @Override
     public void setLoanType() {
         setLoanType("Laundry");

@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Col, Container, Row, Tab, Tabs} from "react-bootstrap";
 import AssociationPage from "../association/AssociationPage";
-import {getOrganization} from "../../util/APIUtils";
 import Settings from "../../loanObjects/Settings";
+import {getOrganization} from "../../util/GetAPI";
 
-class OrganizationInfo extends Component{
+class OrganizationInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,14 +20,15 @@ class OrganizationInfo extends Component{
 
             },
             isLoading: false,
-            updated:0,
+            updated: 0,
         };
         this.loadOrganisation = this.loadOrganisation.bind(this);
     }
+
     loadOrganisation() {
-        let promise = getOrganization(this.props.username,this.props.match.params.organisationId);
-        if(!promise) {
-            console.log("no promise");
+        let promise = getOrganization(this.props.username, this.props.match.params.organisationId);
+        if (!promise) {
+
             return;
         }
         this.setState({
@@ -38,7 +39,7 @@ class OrganizationInfo extends Component{
                 this.setState({
                     organization: response,
                     isLoading: false,
-                    updated:1,
+                    updated: 1,
                 })
 
             }).catch(() => {
@@ -47,20 +48,23 @@ class OrganizationInfo extends Component{
             })
         });
     }
+
     componentDidMount() {
         this.loadOrganisation();
     }
+
     componentDidUpdate(nextProps) {
-        if(this.props.isAuthenticated !== nextProps.isAuthenticated) {
+        if (this.props.isAuthenticated !== nextProps.isAuthenticated) {
             // Reset State
             this.setState({
                 organization: {},
                 isLoading: false,
-                updated:0,
+                updated: 0,
             });
             this.loadOrganisation();
         }
     }
+
     render() {
         return (
             <div>
@@ -74,9 +78,10 @@ class OrganizationInfo extends Component{
                             </Row>
                         </Tab>
                         <Tab eventKey="associations" title={"Föreningar"}>
-                                <AssociationPage  load={this.loadOrganisation} associations={this.state.organization.associations} {...this.props}/>
+                            <AssociationPage load={this.loadOrganisation}
+                                             associations={this.state.organization.associations} {...this.props}/>
                         </Tab>
-                        <Tab eventKey="settings" title={"Settings"}>
+                        <Tab eventKey="settings" title={"Inställningar"}>
                             <Settings loan={this.state.organization.loanObjects} {...this.props} />
                         </Tab>
                     </Tabs>
@@ -87,4 +92,5 @@ class OrganizationInfo extends Component{
 
 
 }
+
 export default OrganizationInfo;

@@ -23,10 +23,10 @@ public abstract class AbstractLoanObject {
 
     private boolean hasCalendarData;
 
-    private boolean isActivated=false;
+    private boolean isActivated = false;
 
     @ManyToOne
-    @JoinTable(name = "organization_loan_object",joinColumns = @JoinColumn(name = "association_id"),inverseJoinColumns = @JoinColumn(name = "loan_object_id"))
+    @JoinTable(name = "organization_loan_object", joinColumns = @JoinColumn(name = "association_id"), inverseJoinColumns = @JoinColumn(name = "loan_object_id"))
     @JsonBackReference
     private Organization organization;
 

@@ -25,11 +25,11 @@ public class House extends UserDateAudit {
     private int zipCode;
 
     @ManyToOne
-    @JoinTable(name = "associations_houses",joinColumns = @JoinColumn(name = "house_id"),inverseJoinColumns = @JoinColumn(name = "association_id"))
+    @JoinTable(name = "associations_houses", joinColumns = @JoinColumn(name = "house_id"), inverseJoinColumns = @JoinColumn(name = "association_id"))
     @JsonBackReference
     private AssociationName associationName;
 
-    @OneToMany(mappedBy = "house",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "house", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Apartment> apartments;
 

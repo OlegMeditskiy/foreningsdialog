@@ -6,7 +6,7 @@ export default function LoadingIndicator() {
     // return (
     //     <Spin indicator={antIcon} style = {{display: 'block', textAlign: 'center', marginTop: 30}} />
     // );
-    return(
+    return (
         <Spin/>
     )
 }

@@ -23,13 +23,15 @@ public class Organization extends UserDateAudit {
     private int numberOfApartments;
     private int totalArea;
 
-    private boolean isActivated=false;
+    private boolean isActivated = false;
 
-    @OneToMany(mappedBy = "organization",cascade = CascadeType.ALL)
+    private boolean isDeclined = false;
+
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<AssociationName> associations;
 
-    @OneToMany(mappedBy = "organization",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<AbstractLoanObject> loanObjects;
 

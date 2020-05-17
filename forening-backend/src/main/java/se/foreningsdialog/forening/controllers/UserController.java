@@ -29,7 +29,6 @@ import java.util.List;
 public class UserController {
 
 
-
     @Autowired
     private UserRepository userRepository;
 
@@ -66,7 +65,8 @@ public class UserController {
         return new UserProfile(user.getId(), user.getUsername(), user.getCreatedAt());
     }
 
-//    @GetMapping("/users/{username}/organizations1")
+
+    //    @GetMapping("/users/{username}/organizations1")
 //    public PagedResponse<OrganizationResponse> getOrganizationsCreatedBy1(@PathVariable(value = "username") String username,
 //                                                                       @CurrentUser UserPrincipal currentUser,
 //                                                                       @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
@@ -78,21 +78,25 @@ public class UserController {
 
         return organizationService.getAllOrganizationsCreatedBy(username);
     }
+
     @GetMapping("/users/{username}/organization/{organisationId}")
-    public OrganizationResponse getOrganization(@PathVariable(value = "username") String username,@PathVariable(value = "organisationId") Long organisationId) {
-        return organizationService.getOrganizationCreatedBy(username,organisationId);
+    public OrganizationResponse getOrganization(@PathVariable(value = "username") String username, @PathVariable(value = "organisationId") Long organisationId) {
+        return organizationService.getOrganizationCreatedBy(username, organisationId);
     }
+
     @GetMapping("/users/{username}/association/{associationId}")
     public AssociationNameResponse getAssociation(@PathVariable(value = "username") String username, @PathVariable(value = "associationId") Long associationId) {
-        return associationService.getAssociationCreatedBy(username,associationId);
+        return associationService.getAssociationCreatedBy(username, associationId);
     }
+
     @GetMapping("/users/{username}/house/{houseId}")
     public HouseResponse getHouse(@PathVariable(value = "username") String username, @PathVariable(value = "houseId") Long houseId) {
-        return houseService.getHouseCreatedBy(username,houseId);
+        return houseService.getHouseCreatedBy(username, houseId);
     }
+
     @GetMapping("/users/{username}/apartment/{apartmentId}")
     public ApartmentResponse getApartment(@PathVariable(value = "username") String username, @PathVariable(value = "apartmentId") Long apartmentId) {
-        return apartmentService.getApartmentCreatedBy(username,apartmentId);
+        return apartmentService.getApartmentCreatedBy(username, apartmentId);
     }
 
 //    @GetMapping("/user/checkEmailAvailability")
@@ -100,7 +104,6 @@ public class UserController {
 //        Boolean isAvailable = !userRepository.existsByEmail(email);
 //        return new UserIdentityAvailability(isAvailable);
 //    }
-
 
 
 }

@@ -20,9 +20,6 @@ import se.foreningsdialog.forening.security.JwtAuthenticationEntryPoint;
 import se.foreningsdialog.forening.security.JwtAuthenticationFilter;
 
 
-/**
- * Created by rajeevkumarsingh on 01/08/17.
- */
 
 @Configuration
 @EnableWebSecurity
@@ -66,17 +63,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors()
-                    .and()
+                .and()
                 .csrf()
-                    .disable()
+                .disable()
                 .exceptionHandling()
-                    .authenticationEntryPoint(unauthorizedHandler)
-                    .and()
+                .authenticationEntryPoint(unauthorizedHandler)
+                .and()
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
-                    .antMatchers("/",
+                .antMatchers("/",
                         "/favicon.ico",
                         "/**/*.pdf",
                         "/**/*.png",
@@ -85,16 +82,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.jpg",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js")
-                        .permitAll()
-                    .antMatchers("/api/auth/**")
-                        .permitAll()
-                    .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
-                        .permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**")
-                        .permitAll()
-                    .anyRequest()
-                        .authenticated();
+                        "/**/*.js",
+                        "/files/**")
+                .permitAll()
+                .antMatchers("/api/auth/**")
+                .permitAll()
+                .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
+                .permitAll()
+                .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated();
 
         // Add our custom JWT security filter
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

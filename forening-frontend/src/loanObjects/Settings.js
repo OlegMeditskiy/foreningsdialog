@@ -4,52 +4,51 @@ import Row from "react-bootstrap/Row";
 import {Button, Col, Container, Form} from "react-bootstrap";
 
 import {notification} from "antd";
-import {saveSettings} from "../util/APIUtils";
 import SettingOutlined from "@ant-design/icons/lib/icons/SettingOutlined";
 import "./Settings.css";
+import {saveSettings} from "../util/SaveAPI";
 
-class Settings extends Component{
+class Settings extends Component {
     constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             externLokal: false,
-            guestFlat:false,
-            laundry:false,
-            parking:false,
-            partyPlace:false,
-            pool:false,
-            isLoading:false
+            guestFlat: false,
+            laundry: false,
+            parking: false,
+            partyPlace: false,
+            pool: false,
+            isLoading: false
         }
-        this.handleSubmit=this.handleSubmit.bind(this);
-        this.loadSettings=this.loadSettings.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.loadSettings = this.loadSettings.bind(this);
     }
 
-    loadSettings(){
+    loadSettings() {
         this.setState({
             isLoading: true
         });
-        this.props.loan.forEach((object)=>{
-            switch (object.loanType){
+        this.props.loan.forEach((object) => {
+            switch (object.loanType) {
                 case "ExternLokal":
-                    this.setState({externLokal:object.activated})
+                    this.setState({externLokal: object.activated})
                     break;
                 case "GuestFlat":
-                    this.setState({guestFlat:object.activated})
+                    this.setState({guestFlat: object.activated})
                     break;
                 case "Laundry":
-                    this.setState({laundry:object.activated})
+                    this.setState({laundry: object.activated})
                     break;
                 case "Parking":
-                    this.setState({parking:object.activated})
+                    this.setState({parking: object.activated})
                     break;
                 case "PartyPlace":
-                    this.setState({partyPlace:object.activated})
+                    this.setState({partyPlace: object.activated})
                     break;
                 case "Pool":
-                    this.setState({pool:object.activated})
+                    this.setState({pool: object.activated})
                     break;
                 default:
-                    console.log("DEFAULT")
                     break;
             }
         })
@@ -57,18 +56,20 @@ class Settings extends Component{
             isLoading: false
         });
     }
-    componentDidMount(){
+
+    componentDidMount() {
         this.loadSettings();
     }
+
     componentDidUpdate(nextProps) {
-        if(this.props.loan !== nextProps.loan){
+        if (this.props.loan !== nextProps.loan) {
             this.setState({
                 externLokal: false,
-                guestFlat:false,
-                laundry:false,
-                parking:false,
-                partyPlace:false,
-                pool:false
+                guestFlat: false,
+                laundry: false,
+                parking: false,
+                partyPlace: false,
+                pool: false
             });
             this.loadSettings();
         }
@@ -86,12 +87,12 @@ class Settings extends Component{
             pool: this.state.pool,
             organisationId: this.props.match.params.organisationId
         };
-        console.log(saveSettingsRequest);
+
         saveSettings(saveSettingsRequest)
             .then(() => {
                 notification.success({
                     message: 'Föreningsdialog App',
-                    description: "Your settings was saved.",
+                    description: "Inställningar var sparad",
                 });
             }).catch(() => {
             notification.error({
@@ -100,9 +101,10 @@ class Settings extends Component{
             });
         });
     }
+
     render() {
 
-        return(
+        return (
             <div className={"settingsList"}>
                 <Container>
                     <Row>
@@ -115,7 +117,7 @@ class Settings extends Component{
                             offstyle='danger'
 
                             onChange={(checked: boolean) => {
-                                this.setState({ externLokal: checked })
+                                this.setState({externLokal: checked})
                             }}
                         /></Col>
                         <Col md={2}>
@@ -135,7 +137,7 @@ class Settings extends Component{
                             offstyle='danger'
 
                             onChange={(checked: boolean) => {
-                                this.setState({ guestFlat: checked })
+                                this.setState({guestFlat: checked})
                             }}
                         /></Col>
                         <Col md={2}>
@@ -156,7 +158,7 @@ class Settings extends Component{
                             offstyle='danger'
 
                             onChange={(checked: boolean) => {
-                                this.setState({ laundry: checked })
+                                this.setState({laundry: checked})
                             }}
                         /></Col>
                         <Col md={2}>
@@ -177,7 +179,7 @@ class Settings extends Component{
                             offstyle='danger'
 
                             onChange={(checked: boolean) => {
-                                this.setState({ parking: checked })
+                                this.setState({parking: checked})
                             }}
                         /></Col>
                         <Col md={2}>
@@ -198,7 +200,7 @@ class Settings extends Component{
                             offstyle='danger'
 
                             onChange={(checked: boolean) => {
-                                this.setState({ partyPlace: checked })
+                                this.setState({partyPlace: checked})
                             }}
                         /></Col>
                         <Col md={2}>
@@ -219,7 +221,7 @@ class Settings extends Component{
                             offstyle='danger'
 
                             onChange={(checked: boolean) => {
-                                this.setState({ pool: checked })
+                                this.setState({pool: checked})
                             }}
                         /></Col>
                         <Col md={2}>
@@ -232,14 +234,14 @@ class Settings extends Component{
                 </Container>
 
 
-               <Form onSubmit={this.handleSubmit}>
-                   <Button className={"pull-right saveSettingButton"} variant="primary" type="submit">
-                       Spara inställningar
-                   </Button>
-               </Form>
+                <Form onSubmit={this.handleSubmit}>
+                    <Button className={"pull-right saveSettingButton"} variant="primary" type="submit">
+                        Spara inställningar
+                    </Button>
+                </Form>
             </div>
         )
     }
 }
 
-export default  Settings;
+export default Settings;

@@ -10,9 +10,6 @@ import se.foreningsdialog.forening.exception.ResourceNotFoundException;
 import se.foreningsdialog.forening.models.users.User;
 import se.foreningsdialog.forening.repository.UserRepository;
 
-/**
- * Created by rajeevkumarsingh on 02/08/17.
- */
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -24,11 +21,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        // Let people login with either username or email
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found with email : " + username)
-        );
+                );
 
         return UserPrincipal.create(user);
     }
@@ -36,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-            () -> new ResourceNotFoundException("User", "id", id)
+                () -> new ResourceNotFoundException("User", "id", id)
         );
 
         return UserPrincipal.create(user);

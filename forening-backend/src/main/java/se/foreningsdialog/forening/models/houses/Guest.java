@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class Guest{
+public class Guest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -19,11 +19,22 @@ public class Guest{
 
     private String email;
 
-    @OneToOne(mappedBy = "guest",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "guest", cascade = CascadeType.ALL)
     GuestRegister guestRegister;
 
     @ManyToOne
-    @JoinTable(name = "apartment_guests",joinColumns = @JoinColumn(name = "guest_id"),inverseJoinColumns = @JoinColumn(name = "apartment_id"))
+    @JoinTable(name = "apartment_guests", joinColumns = @JoinColumn(name = "guest_id"), inverseJoinColumns = @JoinColumn(name = "apartment_id"))
     @JsonBackReference
     private Apartment apartment;
+
+    @Override
+    public String toString() {
+        return "Guest{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", guestRegister=" + guestRegister +
+                ", apartment=" + apartment +
+                '}';
+    }
 }
