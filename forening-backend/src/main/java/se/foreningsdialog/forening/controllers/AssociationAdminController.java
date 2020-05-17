@@ -1,312 +1,197 @@
 package se.foreningsdialog.forening.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import se.foreningsdialog.forening.models.AssociationName;
 import se.foreningsdialog.forening.models.ContactPerson;
-import se.foreningsdialog.forening.models.GuestRegister;
 import se.foreningsdialog.forening.models.Organization;
-import se.foreningsdialog.forening.models.houses.Apartment;
-import se.foreningsdialog.forening.models.houses.Guest;
 import se.foreningsdialog.forening.models.houses.House;
-import se.foreningsdialog.forening.payload.apartment.DeleteApartmentRequest;
-import se.foreningsdialog.forening.payload.apartment.NewApartmentRequest;
-import se.foreningsdialog.forening.payload.apartment.SaveApartmentRequest;
-import se.foreningsdialog.forening.payload.association.DeleteAssociationRequest;
-import se.foreningsdialog.forening.payload.association.NewAssociationRequest;
-import se.foreningsdialog.forening.payload.association.SaveAssociationRequest;
+import se.foreningsdialog.forening.models.loanobjects.*;
+import se.foreningsdialog.forening.payload.LogoUploadRequest;
 import se.foreningsdialog.forening.payload.common.ApiResponse;
-import se.foreningsdialog.forening.payload.contact.DeleteContactRequest;
-import se.foreningsdialog.forening.payload.contact.NewContactRequest;
-import se.foreningsdialog.forening.payload.contact.SaveContactRequest;
-import se.foreningsdialog.forening.payload.guest.DeleteGuestRequest;
-import se.foreningsdialog.forening.payload.guest.NewGuestRequest;
-import se.foreningsdialog.forening.payload.guest.SaveGuestRequest;
 import se.foreningsdialog.forening.payload.guestRegister.GuestRegisterResponse;
-import se.foreningsdialog.forening.payload.house.DeleteHouseRequest;
-import se.foreningsdialog.forening.payload.house.NewHouseRequest;
-import se.foreningsdialog.forening.payload.house.SaveHouseRequest;
 import se.foreningsdialog.forening.payload.organization.NewOrganisationsRequest;
-import se.foreningsdialog.forening.repository.*;
+import se.foreningsdialog.forening.repository.AssociationNameRepository;
+import se.foreningsdialog.forening.repository.ContactPersonRepository;
+import se.foreningsdialog.forening.repository.HouseRepository;
+import se.foreningsdialog.forening.repository.OrganizationRepository;
+import se.foreningsdialog.forening.repository.loanObjects.*;
 import se.foreningsdialog.forening.service.GuestService;
+import se.foreningsdialog.forening.storage.StorageFileNotFoundException;
+import se.foreningsdialog.forening.storage.StorageService;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.util.Iterator;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/associationAdmin")
 public class AssociationAdminController {
-    @Autowired
-    AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JavaMailSender javaMailSender;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    ApartmentRepository apartmentRepository;
-
-    @Autowired
-    GuestRepository guestRepository;
-
-    @Autowired
-    EmailServiceImpl emailService;
-
-    @Autowired
+    final
     OrganizationRepository organizationRepository;
 
-    @Autowired
-    HouseRepository houseRepository;
 
-    @Autowired
+    final
     AssociationNameRepository associationNameRepository;
 
-    @Autowired
+    final
+    GuestService guestService;
+
+
+    final StorageService storageService;
+
+    final
+    ExternLokalRepository externLokalRepository;
+
+    final
+    GuestFlatRepository guestFlatRepository;
+
+    final
+    LaundryRepository laundryRepository;
+
+    final
+    ParkingRepository parkingRepository;
+
+    final
+    PartyPlaceRepository partyPlaceRepository;
+
+    final
+    PoolRepository poolRepository;
+
+    final
     ContactPersonRepository contactPersonRepository;
 
-    @Autowired
-    GuestRegisterRepository guestRegisterRepository;
+    final
+    HouseRepository houseRepository;
 
-    @Autowired
-    GuestService guestService;
+    public AssociationAdminController(OrganizationRepository organizationRepository, AssociationNameRepository associationNameRepository, GuestService guestService, StorageService storageService, ExternLokalRepository externLokalRepository, GuestFlatRepository guestFlatRepository, LaundryRepository laundryRepository, ParkingRepository parkingRepository, PartyPlaceRepository partyPlaceRepository, PoolRepository poolRepository, ContactPersonRepository contactPersonRepository, HouseRepository houseRepository) {
+        this.organizationRepository = organizationRepository;
+        this.associationNameRepository = associationNameRepository;
+        this.guestService = guestService;
+        this.storageService = storageService;
+        this.externLokalRepository = externLokalRepository;
+        this.guestFlatRepository = guestFlatRepository;
+        this.laundryRepository = laundryRepository;
+        this.parkingRepository = parkingRepository;
+        this.partyPlaceRepository = partyPlaceRepository;
+        this.poolRepository = poolRepository;
+        this.contactPersonRepository = contactPersonRepository;
+        this.houseRepository = houseRepository;
+    }
+
 
     @PostMapping("/createOrganizations")
     public ResponseEntity<?> registerUser(@Valid @RequestBody NewOrganisationsRequest signUpRequest) {
-        System.out.println(signUpRequest);
         //Creating new Organizations
-        for (Organization organization: signUpRequest.getAssociation().getOrganizations()){
-            for(AssociationName associationName: organization.getAssociations()){
-//                for (ContactPerson contactPerson: associationName.getContacts()){
-//                    contactPerson.setCreatedBy(signUpRequest.getUserId());
-//                    contactPersonRepository.save(contactPerson);
-//                }
-//                for (House house:associationName.getHouses()){
-//                    house.setCreatedBy(signUpRequest.getUserId());
-//                    houseRepository.save(house);
-//                }
-                associationName.setCreatedBy(signUpRequest.getUserId());
-//                associationName.setHouses(associationName.getHouses());
-//                associationName.setContacts(associationName.getContacts());
-                associationNameRepository.save(associationName);
-            }
-            organization.setAssociations(organization.getAssociations());
+        for (Organization organization : signUpRequest.getAssociation().getOrganizations()) {
             organization.setCreatedBy(signUpRequest.getUserId());
             organizationRepository.save(organization);
+
+            ExternLokalSettings externLokal = new ExternLokalSettings();
+            externLokal.setLoanType();
+            externLokal.setOrganization(organization);
+            externLokalRepository.save(externLokal);
+
+            GuestFlatSettings guestFlatSettings = new GuestFlatSettings();
+            guestFlatSettings.setOrganization(organization);
+            guestFlatSettings.setLoanType();
+            guestFlatRepository.save(guestFlatSettings);
+
+            LaundrySettings laundrySettings = new LaundrySettings();
+            laundrySettings.setOrganization(organization);
+            laundrySettings.setLoanType();
+            laundryRepository.save(laundrySettings);
+
+            ParkingSettings parkingSettings = new ParkingSettings();
+            parkingSettings.setOrganization(organization);
+            parkingSettings.setLoanType();
+            parkingRepository.save(parkingSettings);
+
+            PartyPlaceSettings partyPlaceSettings = new PartyPlaceSettings();
+            partyPlaceSettings.setOrganization(organization);
+            partyPlaceSettings.setLoanType();
+            partyPlaceRepository.save(partyPlaceSettings);
+
+            PoolSettings poolSettings = new PoolSettings();
+            poolSettings.setOrganization(organization);
+            poolSettings.setLoanType();
+            poolRepository.save(poolSettings);
+
+            for (AssociationName associationName : organization.getAssociations()) {
+                associationName.setOrganization(organization);
+                associationName.setCreatedBy(signUpRequest.getUserId());
+                associationNameRepository.save(associationName);
+                for (ContactPerson contactPerson : associationName.getContacts()) {
+                    contactPerson.setAssociationName(associationName);
+                    contactPerson.setCreatedBy(signUpRequest.getUserId());
+                    contactPersonRepository.save(contactPerson);
+                }
+                for (House house : associationName.getHouses()) {
+                    house.setAssociationName(associationName);
+                    house.setCreatedBy(signUpRequest.getUserId());
+                    houseRepository.save(house);
+                }
+            }
         }
 
-//        URI location = ServletUriComponentsBuilder
-//                .fromCurrentContextPath().path("/users/{username}")
-//                .buildAndExpand(result.getUsername()).toUri();
-
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-//        return ResponseEntity.ok().body("Created");
-    }
-
-    @PostMapping("/saveAssociation")
-    public ResponseEntity<?> saveAssociation(@Valid @RequestBody SaveAssociationRequest saveAssociationRequest) {
-        AssociationName association = associationNameRepository.findById(saveAssociationRequest.getAssociation().getId()).get();
-        System.out.println(saveAssociationRequest.getAssociationName());
-        association.setAssociationName(saveAssociationRequest.getAssociationName());
-        associationNameRepository.save(association);
-
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
-    @PostMapping("/createAssociation")
-    public ResponseEntity<?> createAssociation(@Valid @RequestBody NewAssociationRequest newAssociationRequest) {
-
-        Organization organization = organizationRepository.findById(newAssociationRequest.getOrganizationId()).get();
-        System.out.println("createNew");
-        AssociationName association = new AssociationName();
-        association.setOrganization(organization);
-        association.setAssociationName(newAssociationRequest.getAssociationName());
-        association.setCreatedBy(newAssociationRequest.getUserId());
-        associationNameRepository.save(association);
-
 
         return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
     }
 
-    @DeleteMapping("/deleteAssociation")
-    @Transactional
-    public ResponseEntity<?> deleteAssociation(@Valid @RequestBody DeleteAssociationRequest deleteAssociationRequest) {
-        Organization organization = organizationRepository.findById(deleteAssociationRequest.getOrganizationId()).get();
-        AssociationName associationName = deleteAssociationRequest.getAssociation();
-        System.out.println("Houses before:"+associationName.getHouses());
-        for (Iterator<House> iterator = associationName.getHouses().iterator(); iterator.hasNext();) {
-                House house = iterator.next();
-                house.setAssociationName(null);
-                iterator.remove();
-                houseRepository.delete(house);
-        }
-        for (Iterator<ContactPerson> iterator = associationName.getContacts().iterator(); iterator.hasNext();) {
-            ContactPerson contactPerson = iterator.next();
-            contactPerson.setAssociationName(null);
-            iterator.remove();
-            contactPersonRepository.delete(contactPerson);
-        }
-        System.out.println("Houses after:"+associationName.getHouses());
-        associationNameRepository.delete(associationName);
-
-//
-
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
-
-    @PostMapping("/saveHouse")
-    public ResponseEntity<?> saveHouse(@Valid @RequestBody SaveHouseRequest saveHouseRequest) {
-        System.out.println("Save house");
-        House house = houseRepository.findById(saveHouseRequest.getHouseId()).get();
-        house.setCity(saveHouseRequest.getCity());
-        house.setStreet(saveHouseRequest.getStreet());
-        house.setZipCode(saveHouseRequest.getZipCode());
-        houseRepository.save(house);
-
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
-
-    @PostMapping("/createHouse")
-    public ResponseEntity<?> createHouse(@Valid @RequestBody NewHouseRequest newHouseRequest) {
-        System.out.println("Create house: "+newHouseRequest);
-        AssociationName association = associationNameRepository.findById(newHouseRequest.getAssociationId()).get();
-        House house = new House();
-        house.setCity(newHouseRequest.getCity());
-        house.setZipCode(newHouseRequest.getZipCode());
-        house.setStreet(newHouseRequest.getStreet());
-        house.setAssociationName(association);
-        houseRepository.save(house);
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
-    @DeleteMapping("/deleteHouse")
-    @Transactional
-    public ResponseEntity<?> deleteHouse(@Valid @RequestBody DeleteHouseRequest deleteHouseRequest) {
-        AssociationName association = associationNameRepository.findById(deleteHouseRequest.getAssociationId()).get();
-        House house = houseRepository.findById(deleteHouseRequest.getHouseId()).get();
-        association.getHouses().remove(house);
-        house.setAssociationName(null);
-        associationNameRepository.save(association);
-        houseRepository.delete(house);
-
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
-    @PostMapping("/saveContact")
-    public ResponseEntity<?> saveContact(@Valid @RequestBody SaveContactRequest saveContactRequest) {
-        ContactPerson contactPerson = contactPersonRepository.findById(saveContactRequest.getContactId()).get();
-        contactPerson.setContactEmail(saveContactRequest.getContactEmail());
-        contactPerson.setContactName(saveContactRequest.getContactName());
-        contactPerson.setContactTelephone(saveContactRequest.getContactTelephone());
-        contactPersonRepository.save(contactPerson);
-
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
-
-    @PostMapping("/createContact")
-    public ResponseEntity<?> createContact(@Valid @RequestBody NewContactRequest newContactRequest) {
-        AssociationName association = associationNameRepository.findById(newContactRequest.getAssociationId()).get();
-        ContactPerson contactPerson = new ContactPerson();
-        contactPerson.setContactEmail(newContactRequest.getContactEmail());
-        contactPerson.setContactName(newContactRequest.getContactName());
-        contactPerson.setContactTelephone(newContactRequest.getContactTelephone());
-        contactPerson.setAssociationName(association);
-        contactPersonRepository.save(contactPerson);
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
-    @DeleteMapping("/deleteContact")
-    @Transactional
-    public ResponseEntity<?> deleteContact(@Valid @RequestBody DeleteContactRequest deleteContactRequest) {
-        AssociationName association = associationNameRepository.findById(deleteContactRequest.getAssociationId()).get();
-        ContactPerson contactPerson = contactPersonRepository.findById(deleteContactRequest.getContactId()).get();
-        association.getContacts().remove(contactPerson);
-        contactPerson.setAssociationName(null);
-        associationNameRepository.save(association);
-        contactPersonRepository.delete(contactPerson);
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
-
-    @PostMapping("/saveApartment")
-    public ResponseEntity<?> saveApartment(@Valid @RequestBody SaveApartmentRequest saveApartmentRequest) {
-        Apartment apartment = apartmentRepository.findById(saveApartmentRequest.getApartmentId()).get();
-        apartment.setRoomAndKitchen(saveApartmentRequest.getRoomAndKitchen());
-        apartment.setNumber(saveApartmentRequest.getNumber());
-        apartment.setArea(saveApartmentRequest.getArea());
-        apartmentRepository.save(apartment);
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
-
-    @PostMapping("/createApartment")
-    public ResponseEntity<?> createApartment(@Valid @RequestBody NewApartmentRequest newApartmentRequest) {
-        House house = houseRepository.findById(newApartmentRequest.getHouseId()).get();
-        System.out.println(newApartmentRequest);
-        Apartment apartment = new Apartment(newApartmentRequest.getNumber(),newApartmentRequest.getRoomAndKitchen(),newApartmentRequest.getArea(),house);
-        apartmentRepository.save(apartment);
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
-    @DeleteMapping("/deleteApartment")
-    @Transactional
-    public ResponseEntity<?> deleteApartment(@Valid @RequestBody DeleteApartmentRequest deleteApartmentRequest) {
-        House house = houseRepository.findById(deleteApartmentRequest.getHouseId()).get();
-        Apartment apartment = apartmentRepository.findById(deleteApartmentRequest.getApartmentId()).get();
-        house.getApartments().remove(apartment);
-        apartment.setHouse(null);
-        houseRepository.save(house);
-        apartmentRepository.delete(apartment);
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
-
-    @PostMapping("/saveGuest")
-    public ResponseEntity<?> saveApartment(@Valid @RequestBody SaveGuestRequest saveGuestRequest) {
-        Guest guest = guestRepository.findById(saveGuestRequest.getGuestId()).get();
-        guest.setEmail(saveGuestRequest.getEmail());
-        guestRepository.save(guest);
-        String address= guest.getApartment().getHouse().getStreet();
-        int number=guest.getApartment().getNumber();
-                int area= guest.getApartment().getArea();
-                        int roomAndKitchen=guest.getApartment().getRoomAndKitchen();
-
-        GuestRegister guestRegister = new GuestRegister(address,number,area,roomAndKitchen);
-        guestRegisterRepository.save(guestRegister);
-        String to = "olegmeditskiyprivate@gmail.com";
-        String subject = "Testing from Spring Boot";
-        String text="192.168.0.181:3000/guestRegister/"+guestRegister.getUniqueKey();
-        emailService.sendSimpleMessage(to,subject,text);
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
-
-    @PostMapping("/createGuest")
-    public ResponseEntity<?> createApartment(@Valid @RequestBody NewGuestRequest newGuestRequest) {
-        Apartment apartment = apartmentRepository.findById(newGuestRequest.getApartmentId()).get();
-        Guest guest = new Guest();
-        guest.setEmail(newGuestRequest.getEmail());
-        guest.setApartment(apartment);
-        guestRepository.save(guest);
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
-    @DeleteMapping("/deleteGuest")
-    @Transactional
-    public ResponseEntity<?> deleteApartment(@Valid @RequestBody DeleteGuestRequest deleteGuestRequest) {
-        Apartment apartment = apartmentRepository.findById(deleteGuestRequest.getApartmentId()).get();
-        Guest guest = guestRepository.findById(deleteGuestRequest.getGuestId()).get();
-        apartment.getGuests().remove(guest);
-        guest.setApartment(null);
-        apartmentRepository.save(apartment);
-        guestRepository.delete(guest);
-        return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
-    }
 
     @GetMapping("/getGuestRegister/{uniqueKey}")
     public GuestRegisterResponse getGuestRegister(@PathVariable(value = "uniqueKey") UUID uniqueKey) {
 
         return guestService.getGuestRegister(uniqueKey);
+    }
+
+
+
+
+    @ExceptionHandler(StorageFileNotFoundException.class)
+    public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/files/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+
+        Resource file = storageService.loadAsResource(filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @GetMapping("/getAllFiles")
+    public List<?> listUploadedFiles() {
+        return storageService.loadAll().map(
+                path -> MvcUriComponentsBuilder.fromMethodName(AssociationAdminController.class,
+                        "serveFile", path.getFileName().toString()).build().toUri().toString())
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity uploadFile(@RequestParam MultipartFile file) {
+        storageService.store(file);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/logoUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity logoUpload(
+            @RequestPart("file") @Valid @NotNull @NotBlank  @RequestParam MultipartFile file,
+            @RequestPart ("properties") @Valid LogoUploadRequest logoUploadRequest) {
+        String filename = "association_"+logoUploadRequest.getAssociationId()+"_Logo";
+        storageService.saveAs(file,filename);
+        return ResponseEntity.ok().build();
     }
 
 

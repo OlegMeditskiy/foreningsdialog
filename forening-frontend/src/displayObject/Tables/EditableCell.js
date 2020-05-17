@@ -1,17 +1,17 @@
-import {Form, Input, InputNumber} from "antd";
+import {Form, Input, InputNumber, Table} from "antd";
 import React from "react";
 
-export const EditableCell = ({
-                          editing,
-                          dataIndex,
-                          title,
-                          inputType,
-                          record,
-                          index,
-                          children,
-                          ...restProps
-                      }) => {
-    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+export const editableCell = ({
+                                 editing,
+                                 dataIndex,
+                                 title,
+                                 inputType,
+                                 record,
+                                 index,
+                                 children,
+                                 ...restProps
+                             }) => {
+    const inputNode = inputType === 'number' ? <InputNumber/> : <Input/>;
     return (
         <td {...restProps}>
             {editing ? (
@@ -35,3 +35,46 @@ export const EditableCell = ({
         </td>
     );
 };
+export const returns=(columns,isEditing,form,data,cancel)=> {
+    const components = {
+        body: {
+            cell: editableCell,
+        },
+    };
+    const mergedColumns = columns.map(col => {
+        if (!col.editable) {
+            return col;
+        }
+
+        return {
+            ...col,
+            onCell: record => ({
+                record,
+                inputType: col.dataIndex === 'age' ? 'number' : 'text',
+                dataIndex: col.dataIndex,
+                title: col.title,
+                editing: isEditing(record),
+            }),
+        };
+    });
+
+    return (
+        <div>
+            <Form form={form} component={false}>
+                <Table
+                    components={components}
+                    bordered
+                    dataSource={data}
+                    columns={mergedColumns}
+                    rowClassName="editable-row"
+                    pagination={{
+                        onChange: cancel,
+                    }}
+                />
+            </Form>
+        </div>
+
+    );
+}
+
+

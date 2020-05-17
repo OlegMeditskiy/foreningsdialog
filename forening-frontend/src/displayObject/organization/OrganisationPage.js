@@ -1,101 +1,81 @@
 import React, {useState} from 'react';
-import {Modal, Nav, Tab, Tabs} from "react-bootstrap";
+import {Modal, Tab, Tabs} from "react-bootstrap";
 import {withRouter} from "react-router-dom";
-import {Table} from "antd";
 import Button from "react-bootstrap/Button";
 import '../../user/signup/Signup.css';
 import CreateNewOrganisations from "./CreateNewOrganisations";
 import '../list.css';
+import OrganizationTable from "./OrganizationTable";
+import {saveActivatedOrganization, saveDeclinedOrganization, saveNotActivatedOrganization} from "../../util/SaveAPI";
 
-const OrganizationsPage=(props)=>{
-    const columns=[
-        {
-            title: 'Organisationsnummer',
-            dataIndex: 'orgNumber',
-            key: 'orgNumber',
-            sorter: {
-                compare: (a, b) => a.orgNumber - b.orgNumber
-            },
-        },
-        {
-            title: 'Area',
-            dataIndex: 'totalArea',
-            key: 'totalArea',
-            sorter: {
-                compare: (a, b) => a.totalArea - b.totalArea
-            },
-
-        },
-        {
-            title: 'Antal lägenheter',
-            dataIndex: 'numberOfApartments',
-            key: 'numberOfApartments',
-            sorter: {
-                compare: (a, b) => a.numberOfApartments - b.numberOfApartments
-            },
-        },
-        {
-            title: 'Föreningar',
-            key: 'action',
-            render: (text, record) => (
-                <span>
-                <a onClick={event => {redirectToOrganisation(event,record)}}>Föreningar</a>
-      </span>
-            ),
-        },
-    ]
-    const activated=[]
-    const notActivated=[]
-    props.organizations.map((org,idx)=>{
-        if (org.activated){
+const OrganizationsPage = (props) => {
+    const activated = []
+    const notActivated = []
+    const declined = []
+    props.organizations.forEach((org, idx) => {
+        console.log(org);
+        if (org.activated) {
             activated.push({
-                key:idx,
-                id:org.id,
-                orgNumber:org.orgNumber,
-                totalArea:org.totalArea,
-                numberOfApartments:org.numberOfApartments,
-                associations:org.associations
+                key: idx,
+                id: org.id,
+                orgNumber: org.orgNumber,
+                totalArea: org.totalArea,
+                numberOfApartments: org.numberOfApartments,
+                associations: org.associations
             })
-        }
-        else{
-            notActivated.push({
-                key:idx,
-                id:org.id,
-                orgNumber:org.orgNumber,
-                totalArea:org.totalArea,
-                numberOfApartments:org.numberOfApartments,
-                associations:org.associations
-            })
-        }
+        } else {
+            if(org.declined){
+                declined.push({
+                    key: idx,
+                    id: org.id,
+                    orgNumber: org.orgNumber,
+                    totalArea: org.totalArea,
+                    numberOfApartments: org.numberOfApartments,
+                    associations: org.associations
+                })
+            }
+            else{
+                notActivated.push({
+                    key: idx,
+                    id: org.id,
+                    orgNumber: org.orgNumber,
+                    totalArea: org.totalArea,
+                    numberOfApartments: org.numberOfApartments,
+                    associations: org.associations
+                })
+            }
 
 
+        }
     })
-    function onChange(pagination, filters, sorter, extra) {
-        console.log('params', pagination, filters, sorter, extra);
-    }
-    function redirectToOrganisation(event,record){
-        return props.history.push({pathname:`/organisation/${record.id}/foreningar`})
-    }
 
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    return(
+    return (
         <div>
-            <Button  variant="primary" onClick={handleShow}>
+            <Button variant="primary" onClick={handleShow}>
                 Ny organisation
             </Button>
 
             <Tabs defaultActiveKey='activated' id="uncontrolled-tab-example">
-                <Tab eventKey="activated" title={"Bekräftade ("+activated.length+")"}>
-                    <Table
-                        dataSource={activated} onChange={onChange} columns={columns} />
+                <Tab eventKey="activated" title={"Bekräftade (" + activated.length + ")"}>
+                    <OrganizationTable originData={activated} update={props.update} saveMethod={saveActivatedOrganization} {...props}/>
+                    {/*<Table*/}
+                    {/*    dataSource={activated}  columns={columns}/>*/}
                 </Tab>
-                <Tab eventKey="not activated" title={"Inte bekräftade ("+notActivated.length+")"}>
-                    <Table
-                        dataSource={notActivated} onChange={onChange} columns={columns} />
+                <Tab eventKey="not activated" title={"Väntar på bekräfting (" + notActivated.length + ")"}>
+                    {/*<Table*/}
+                    {/*    dataSource={notActivated}  columns={columns}/>*/}
+                    <OrganizationTable originData={notActivated} update={props.update} saveMethod={saveNotActivatedOrganization} {...props}/>
                 </Tab>
+                <Tab eventKey="declined" title={"Neckade (" + declined.length + ")"}>
+                    <OrganizationTable originData={declined} update={props.update} saveMethod={saveDeclinedOrganization} {...props}/>
+                    {/*<Table*/}
+                    {/*    dataSource={declined}  columns={columns}/>*/}
+                </Tab>
+
             </Tabs>
 
             <Modal show={show} onHide={handleClose} dialogClassName="modal-90w">
@@ -105,13 +85,11 @@ const OrganizationsPage=(props)=>{
                 <Modal.Body>
                     <div className="signup-container">
                         <div className="signup-content">
-                    <CreateNewOrganisations update={props.update} currentUser={props.currentUser} {...props}/>
+                            <CreateNewOrganisations handleClose={handleClose} update={props.update} currentUser={props.currentUser} {...props}/>
                         </div>
                     </div>
                 </Modal.Body>
             </Modal>
-
-
         </div>
 
 

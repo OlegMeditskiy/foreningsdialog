@@ -2,8 +2,8 @@ package se.foreningsdialog.forening.models;
 
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
-import se.foreningsdialog.forening.models.houses.House;
+import lombok.Getter;
+import lombok.Setter;
 import se.foreningsdialog.forening.models.loanobjects.AbstractLoanObject;
 import se.foreningsdialog.forening.models.users.audit.UserDateAudit;
 
@@ -23,15 +23,29 @@ public class Organization extends UserDateAudit {
     private int numberOfApartments;
     private int totalArea;
 
-    private boolean isActivated=false;
+    private boolean isActivated = false;
 
-    @OneToMany(mappedBy = "organization",cascade = CascadeType.ALL)
+    private boolean isDeclined = false;
+
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     @JsonManagedReference
-    List<AssociationName> associations;
+    private List<AssociationName> associations;
 
-    @OneToMany
-    List<AbstractLoanObject> loanObjects;
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<AbstractLoanObject> loanObjects;
 
 
-
+    @Override
+    public String toString() {
+        return "Organization{" +
+                "id=" + id +
+                ", orgNumber='" + orgNumber + '\'' +
+                ", numberOfApartments=" + numberOfApartments +
+                ", totalArea=" + totalArea +
+                ", isActivated=" + isActivated +
+                ", associations=" + associations +
+                ", loanObjects=" + loanObjects +
+                '}';
+    }
 }

@@ -10,4 +10,5 @@ public class GuestRegisterResponse {
     private int number;
     private int area;
     private int roomAndKitchen;
+    private boolean isActivated;
 }

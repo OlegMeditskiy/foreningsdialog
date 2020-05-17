@@ -1,16 +1,19 @@
-.list-container{
+.list-container {
     margin: 0 auto;
     margin: 0 auto;
     margin-top: 40px;
 }
-.list-content{
+
+.list-content {
     margin: 0 auto;
     margin: 0 auto;
     margin-top: 40px;
 }
-.modal-90w{
+
+.modal-90w {
     max-width: 90%;
 }
+
 .editable-cell {
     position: relative;
 }

@@ -1,0 +1,25 @@
+.organisations{
+    border: 1px solid black;
+    padding: 15px;
+    /*margin: 20px 20px;*/
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.associations{
+    border: 1px solid black;
+    margin-left: 40px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.contacts{
+    border: 1px solid black;
+    margin-left: 40px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.adresses{
+    border: 1px solid black;
+    margin-left: 40px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

@@ -3,8 +3,9 @@ package se.foreningsdialog.forening.payload.common;
 import se.foreningsdialog.forening.models.Association;
 import se.foreningsdialog.forening.models.Organization;
 
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 
 public class SignUpRequest {

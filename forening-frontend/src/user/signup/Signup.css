@@ -1,7 +1,7 @@
 .signup-container {
     max-width: 70%;
     margin: 0 auto;
-    margin-top: 40px;    
+    margin-top: 40px;
 }
 
 .signup-form-button {
@@ -20,25 +20,30 @@
     margin-bottom: 3px;
 }
 
-.association{
+.association {
     margin-left: 30px;
 }
-.house{
+
+.house {
     margin-left: 60px;
     margin-bottom: 30px;
 }
-.contact{
+
+.contact {
     margin-left: 60px;
     margin-bottom: 30px;
 }
+
 .error {
-    color:#db2269;
+    color: #db2269;
     font-size: 0.625em;
     display: relative;
 }
-.pull-right{
+
+.pull-right {
     float: right;
 }
-.dddd{
+
+.dddd {
     padding-top: -10px;
 }

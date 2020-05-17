@@ -1,7 +1,5 @@
 package se.foreningsdialog.forening.service;
 
-import org.springframework.context.annotation.Bean;
-
 import javax.mail.MessagingException;
 
 public interface EmailService {

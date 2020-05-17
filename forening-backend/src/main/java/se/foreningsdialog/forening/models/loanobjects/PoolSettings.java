@@ -5,14 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue(value = "GUEST_FLAT")
-@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-public class GuestFlat extends AbstractLoanObject {
+@NoArgsConstructor
+public class PoolSettings extends AbstractLoanObject {
+    private String address;
+
+    @Override
+    public void setLoanType() {
+        setLoanType("Pool");
+    }
 }

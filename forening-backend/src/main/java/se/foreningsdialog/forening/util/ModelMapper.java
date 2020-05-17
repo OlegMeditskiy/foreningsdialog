@@ -4,8 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import se.foreningsdialog.forening.models.Organization;
 import se.foreningsdialog.forening.models.users.User;
-import se.foreningsdialog.forening.payload.organization.OrganizationResponse;
 import se.foreningsdialog.forening.payload.common.UserSummary;
+import se.foreningsdialog.forening.payload.organization.OrganizationResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +23,7 @@ public class ModelMapper {
                 new SimpleGrantedAuthority(role.getName().name())
         ).collect(Collectors.toList());
         organizationResponse.setAssociations(organization.getAssociations());
-        UserSummary creatorSummary = new UserSummary(creator.getId(), creator.getUsername(),authorities);
+        UserSummary creatorSummary = new UserSummary(creator.getId(), creator.getUsername(), authorities);
         organizationResponse.setCreatedBy(creatorSummary);
         return organizationResponse;
     }

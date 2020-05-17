@@ -1,50 +1,26 @@
 import React, {useState} from "react";
-import {Form, Input, InputNumber, notification, Popconfirm, Table} from "antd";
-import {
-    deleteApartmentFromAssociation,
-    deleteAssociationFromOrganization,
-    deleteHouseFromAssociation, saveApartment,
-    saveAssociation,
-    saveHouse
-} from "../../util/APIUtils";
-import NewHouse from "../house/NewHouse";
-import AddNew from "../association/AddNew";
-import {EditableCell} from "../Tables/EditableCell";
+import {Form, notification, Popconfirm} from "antd";
+import {returns} from "../Tables/EditableCell";
 import NewApartment from "./NewApartment";
+import {deleteApartmentFromAssociation} from "../../util/DeleteAPI";
+import {saveApartment} from "../../util/SaveAPI";
 
-const ApartmentsPage =(props)=>{
-    // console.log(props)
+const ApartmentsPage = (props) => {
     const originData = []
-    console.log(props.organizations)
-    props.organizations.map((org1,idx)=>{
-        if (org1.id==props.match.params.organisationId){
-            org1.associations.map((association,idx)=>{
-                if (association.id==props.match.params.associationId){
-                    association.houses.map((house,idx)=>{
-                        if (house.id==props.match.params.houseId){
-                            house.apartments.map((apartment,idx)=>{
-                                originData.push({
-                                    key:idx,
-                                    id:apartment.id,
-                                    number:apartment.number,
-                                    area:apartment.area,
-                                    roomAndKitchen:apartment.roomAndKitchen,
-                                    guests:apartment.guests
-                                })
-                            })
-                        }
+    props.apartments.forEach((apartment, idx) => {
+        originData.push({
+            key: idx,
+            id: apartment.id,
+            number: apartment.number,
+            area: apartment.area,
+            roomAndKitchen: apartment.roomAndKitchen,
+            guests: apartment.guests
+        })
+    });
 
-                    })
-                }
-
-            })
-        }});
-
-    function redirectToGuests(event,record){
-        console.log(props);
-        return props.history.push(`apartment/${record.id}/guests`,{guests: record.guests})
+    function redirectToApartment(event, record) {
+        return props.history.push({pathname: `/apartment/${record.id}`})
     }
-
 
     const EditableTable = () => {
         const [form] = Form.useForm();
@@ -54,7 +30,7 @@ const ApartmentsPage =(props)=>{
         const isEditing = record => record.key === editingKey;
 
         const edit = record => {
-            form.setFieldsValue({ ...record });
+            form.setFieldsValue({...record});
             setEditingKey(record.key);
         };
 
@@ -62,26 +38,24 @@ const ApartmentsPage =(props)=>{
             setEditingKey('');
         };
 
-        const deleteApartment=async id=>{
-            const deleteData = [...data];
-            const index = deleteData.findIndex(item => id === item.id);
-
-            const deleteApartmentRequest={
-                houseId:props.match.params.houseId,
-                apartmentId:id
+        const deleteApartment = async id => {
+            const deleteApartmentRequest = {
+                houseId: props.match.params.houseId,
+                apartmentId: id
             }
             deleteApartmentFromAssociation(deleteApartmentRequest)
-                .then(response => {
+                .then(() => {
                     notification.success({
                         message: 'Föreningsdialog App',
-                        description: "You have deleted association",
+                        description: "Du har tagit bort lägenhet",
                     });
-                    props.update();
-                }).catch(error => {
+                    props.load();
+                }).catch(() => {
                 notification.error({
                     message: 'Föreningsdialog App',
-                    description: error.message || 'Sorry! Something went wrong. Please try again!'
-                });});
+                    description: 'Sorry! Something went wrong. Please try again!'
+                });
+            });
 
         }
         const save = async key => {
@@ -91,7 +65,7 @@ const ApartmentsPage =(props)=>{
                 const index = newData.findIndex(item => key === item.key);
                 if (index > -1) {
                     const item = newData[index];
-                    newData.splice(index, 1, { ...item, ...row });
+                    newData.splice(index, 1, {...item, ...row});
                     setData(newData);
                     setEditingKey('');
                 } else {
@@ -102,33 +76,42 @@ const ApartmentsPage =(props)=>{
 
                 const saveApartmentRequest = {
                     apartmentId: newData[index].id,
-                    number:newData[index].number,
-                    area:newData[index].area,
-                    roomAndKitchen:newData[index].roomAndKitchen,
+                    number: newData[index].number,
+                    area: newData[index].area,
+                    roomAndKitchen: newData[index].roomAndKitchen,
 
                 };
 
                 saveApartment(saveApartmentRequest)
-                    .then(response => {
+                    .then(() => {
                         notification.success({
                             message: 'Föreningsdialog App',
                             description: "You have updated association",
                         });
-                        // props.update();
-                    }).catch(error => {
+                    }).catch(() => {
                     notification.error({
                         message: 'Föreningsdialog App',
-                        description: error.message || 'Sorry! Something went wrong. Please try again!'
-                    });});
+                        description: 'Sorry! Something went wrong. Please try again!'
+                    });
+                });
 
             } catch (errInfo) {
-                console.log('Validate Failed:', errInfo);
+
             }
         };
 
 
-
         const columns = [
+            {
+                title: 'Lägenhet',
+                key: 'action',
+                render: (text, record) => (
+                    <span>
+                <button className={"unstyled-button"}
+                        onClick={event => redirectToApartment(event, record)}>Öppna</button>
+      </span>
+                ),
+            },
             {
                 title: 'Lägenhetsnummer',
                 dataIndex: 'number',
@@ -136,7 +119,7 @@ const ApartmentsPage =(props)=>{
                 sorter: {
                     compare: (a, b) => a.number - b.number
                 },
-                editable:true,
+                editable: true,
             },
             {
                 title: 'Area',
@@ -145,7 +128,7 @@ const ApartmentsPage =(props)=>{
                 sorter: {
                     compare: (a, b) => a.area - b.area
                 },
-                editable:true,
+                editable: true,
             },
             {
                 title: 'Rum och Kök',
@@ -154,95 +137,54 @@ const ApartmentsPage =(props)=>{
                 sorter: {
                     compare: (a, b) => a.roomAndKitchen - b.roomAndKitchen
                 },
-                editable:true,
+                editable: true,
             },
             {
-                title: 'Gäster',
-                key: 'action',
-                render: (text, record) => (
-                    <span>
-                <a onClick={event => redirectToGuests(event,record)}>Gäster</a>
-      </span>
-                ),
-            },
-            {
-                title: 'operation',
+                title: 'Ändra',
                 dataIndex: 'operation',
                 render: (text, record) => {
                     const editable = isEditing(record);
                     return editable ? (
                         <span>
-            <a
-                href="#"
-                onClick={(event) => {event.preventDefault();save(record.key)}}
-                style={{
-                    marginRight: 8,
-                }}
+            <button className={"unstyled-button"}
+
+                    onClick={(event) => {
+                        event.preventDefault();
+                        save(record.key)
+                    }}
+                    style={{
+                        marginRight: 8,
+                    }}
             >
-              Save
-            </a>
+              Spara
+            </button>
             <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(record.key)}>
-              <a>Cancel</a>
+              <button className={"unstyled-button"}>Cancel</button>
             </Popconfirm>
           </span>
                     ) : (
-                        <a disabled={editingKey !== ''} onClick={() => edit(record)}>
-                            Edit
-                        </a>
+                        <button className={"unstyled-button"} disabled={editingKey !== ''} onClick={() => edit(record)}>
+                            Ändra
+                        </button>
                     );
                 },
             },
             {
-                title: 'Delete',
+                title: 'Ta bort',
                 dataIndex: 'delete',
                 render: (text, record) => (
-                    <Popconfirm title="Sure to delete?" onConfirm={(event) => {event.preventDefault();deleteApartment(record.id)}}>
-                        <a>Delete</a>
+                    <Popconfirm title="Är du saker att du vill ta bort lägenhet?" onConfirm={(event) => {
+                        event.preventDefault();
+                        deleteApartment(record.id)
+                    }}>
+                        <button className={"unstyled-button"}>Ta bort</button>
                     </Popconfirm>
                 ),
             },
         ];
-        const components = {
-            body: {
-                cell: EditableCell,
-            },
-        };
-        const mergedColumns = columns.map(col => {
-            if (!col.editable) {
-                return col;
-            }
-
-            return {
-                ...col,
-                onCell: record => ({
-                    record,
-                    inputType: col.dataIndex === 'age' ? 'number' : 'text',
-                    dataIndex: col.dataIndex,
-                    title: col.title,
-                    editing: isEditing(record),
-                }),
-            };
-        });
-        return (
-            <div>
-
-                <Form form={form} component={false}>
-                    <Table
-                        components={components}
-                        bordered
-                        dataSource={data}
-                        columns={mergedColumns}
-                        rowClassName="editable-row"
-                        pagination={{
-                            onChange: cancel,
-                        }}
-                    />
-                </Form>
-            </div>
-
-        );
+        return(returns(columns,isEditing,form,data,cancel))
     };
-    return(
+    return (
         <div>
             <NewApartment {...props} update={props.update}/>
             <EditableTable/>

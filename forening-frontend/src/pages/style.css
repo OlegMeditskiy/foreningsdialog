@@ -1,4 +1,4 @@
-.btn-grayButton{
+.btn-grayButton {
     background-color: #4a4a4a;
     color: white;
     height: 45px;
@@ -6,7 +6,7 @@
     font-size: 24px;
 }
 
-.bebasStyle{
+.bebasStyle {
     font-size: 24px;
     font-family: "Bebas Neue";
 }
@@ -15,24 +15,26 @@
 Login
 */
 
-.login{
+.login {
     margin-top: 100px;
 }
 
-.login-block{
+.login-block {
     padding: 25px;
     margin: 0 auto;
     max-width: 500px;
 }
-.login-logo{
+
+.login-logo {
     width: 100%;
 }
-.navbar{
+
+.navbar {
     height: 50px;
     background-color: #4a4a4a;
 }
 
-.list-container{
+.list-container {
     margin: 0 auto;
     margin: 0 auto;
     margin-top: 40px;
@@ -43,7 +45,7 @@ Login
 MAIN CONTENT
 */
 
-.logoAB{
+.logoAB {
     height: 50px;
     width: auto;
     margin-left: 50px;

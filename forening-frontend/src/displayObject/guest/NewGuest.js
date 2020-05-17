@@ -1,13 +1,15 @@
 import React, {Component} from "react";
-import {createNewApartment, createNewAssociation, createNewGuest, createNewHouse} from "../../util/APIUtils";
+
 import {notification} from "antd";
 import {Button, Form} from "react-bootstrap";
+import {createNewGuest} from "../../util/CreateAPI";
 
-export  default class NewGuest extends Component{
+export default class NewGuest extends Component {
     constructor(props) {
         super(props);
-        this.state={
-            email:''
+        this.state = {
+            email: '',
+            validated:false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -16,37 +18,52 @@ export  default class NewGuest extends Component{
     handleChange(event) {
 
         this.setState({[event.target.name]: event.target.value});
-        console.log(this.state)
     }
+
     handleSubmit(event) {
         event.preventDefault();
-        const createNewGuestRequest = {
-            apartmentId: this.props.match.params.apartmentId,
-            email:this.state.email
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+
         }
-        createNewGuest(createNewGuestRequest)
-            .then(response => {
-                notification.success({
+        else {
+            this.setState({validated:true})
+            const createNewGuestRequest = {
+                apartmentId: this.props.match.params.apartmentId,
+                email: this.state.email
+            }
+            createNewGuest(createNewGuestRequest)
+                .then(() => {
+                    notification.success({
+                        message: 'Föreningsdialog App',
+                        description: "Thank you! You have created new association!",
+                    });
+                    this.props.load();
+                }).catch(() => {
+                notification.error({
                     message: 'Föreningsdialog App',
-                    description: "Thank you! You have created new association!",
+                    description: 'Sorry! Something went wrong. Please try again!'
                 });
-                this.props.update();
-            }).catch(error => {
-            notification.error({
-                message: 'Föreningsdialog App',
-                description: error.message || 'Sorry! Something went wrong. Please try again!'
             });
-        });
+        }
+
 
     }
+
     render() {
 
         return (
             <div>
-                <Form onSubmit={this.handleSubmit}>
+                <Form noValidate validated={this.state.validated} onSubmit={this.handleSubmit}>
                     <Form.Group>
                         <Form.Label>E-mail</Form.Label>
-                        <Form.Control type={"email"} placeholder="Skriv in foreningsnamn" name={"email"} onChange={this.handleChange}/>
+                        <Form.Control required type={"email"} placeholder="Skriv in foreningsnamn" name={"email"}
+                                      onChange={this.handleChange}/>
+                        <Form.Control.Feedback type="invalid">
+                            Skriva in e-mail
+                        </Form.Control.Feedback>
                     </Form.Group>
                     <Button variant="primary" type="submit">
                         Submit

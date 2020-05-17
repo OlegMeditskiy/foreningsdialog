@@ -1,13 +1,13 @@
 package se.foreningsdialog.forening.models;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import se.foreningsdialog.forening.models.Organization;
-import se.foreningsdialog.forening.models.users.User;
 import se.foreningsdialog.forening.models.users.audit.UserDateAudit;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Getter
@@ -18,6 +18,6 @@ public class Association extends UserDateAudit {
     private Long id;
 
     @OneToMany
-    List<Organization> organizations;
+    private List<Organization> organizations;
 
 }
