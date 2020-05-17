@@ -43,6 +43,14 @@ export function deleteGuestFromAssociation(deleteGuestRequest) {
     })
 }
 
+export function deleteNews(deleteNews) {
+    return request({
+        url: API_BASE_URL + "/associationAdmin/delete/news",
+        method: 'DELETE',
+        body: JSON.stringify(deleteNews)
+    })
+}
+
 export function deleteDocumentType(deleteDocumentTypeRequest) {
     return request({
         url: API_BASE_URL + "/associationAdmin/delete/documentType",

@@ -3,6 +3,7 @@ import {Col, Container, Row, Tab, Tabs} from "react-bootstrap";
 import AssociationPage from "../association/AssociationPage";
 import Settings from "../../loanObjects/Settings";
 import {getOrganization} from "../../util/GetAPI";
+import ProtokolUpload from "../association/ProtokolUpload";
 
 class OrganizationInfo extends Component {
     constructor(props) {
@@ -75,6 +76,9 @@ class OrganizationInfo extends Component {
                                 <Col>Organisation + {this.state.organization.orgNumber}</Col>
                                 <Col>Area + {this.state.organization.totalArea}</Col>
                                 <Col>Lägenhet + {this.state.organization.numberOfApartments}</Col>
+                            </Row>
+                            <Row>
+                                <Col><ProtokolUpload {...this.props}/></Col>
                             </Row>
                         </Tab>
                         <Tab eventKey="associations" title={"Föreningar"}>

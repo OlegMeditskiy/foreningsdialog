@@ -18,7 +18,8 @@ class AssociationInfo extends Component {
                 contacts: [],
                 associationName: "",
                 createdBy: "",
-                documentTypes: []
+                documentTypes: [],
+                news:[]
             },
             isLoading: false,
             updated: 0,
@@ -98,7 +99,7 @@ class AssociationInfo extends Component {
                             <AssociationSettings/>
                         </Tab>
                         <Tab eventKey="news" title={"News"}>
-                            <News {...this.props}/>
+                            <News load={this.loadAssociation} news={this.state.association.news} {...this.props}/>
                         </Tab>
                     </Tabs>
                 </Container>

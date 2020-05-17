@@ -86,27 +86,6 @@ export function VillkorUpload(file) {
 
 }
 
-export function fileUpload2(createDocument) {
-    return requestFile({
-        url: API_BASE_URL + "/associationAdmin/createDocument",
-        method: 'POST',
-        body: JSON.stringify(createDocument)
-    })
-}
-
-export function checkUsernameAvailability(username) {
-    return request({
-        url: API_BASE_URL + "/user/checkUsernameAvailability?username=" + username,
-        method: 'GET'
-    });
-}
-
-export function checkEmailAvailability(email) {
-    return request({
-        url: API_BASE_URL + "/user/checkEmailAvailability?email=" + email,
-        method: 'GET'
-    });
-}
 
 
 

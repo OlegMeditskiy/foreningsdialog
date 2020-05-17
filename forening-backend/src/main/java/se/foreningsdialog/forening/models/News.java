@@ -3,6 +3,7 @@ package se.foreningsdialog.forening.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 import se.foreningsdialog.forening.models.users.audit.UserDateAudit;
 
 import javax.persistence.*;
@@ -17,6 +18,8 @@ public class News extends UserDateAudit {
 
     private String newsTitle;
 
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String newsText;
 
 

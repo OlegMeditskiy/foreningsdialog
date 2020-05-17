@@ -16,6 +16,7 @@ import se.foreningsdialog.forening.payload.LogoUploadRequest;
 import se.foreningsdialog.forening.payload.common.ApiResponse;
 import se.foreningsdialog.forening.payload.guestRegister.GuestRegisterResponse;
 import se.foreningsdialog.forening.payload.organization.NewOrganisationsRequest;
+import se.foreningsdialog.forening.payload.organization.OrganizationResponse;
 import se.foreningsdialog.forening.repository.AssociationNameRepository;
 import se.foreningsdialog.forening.repository.ContactPersonRepository;
 import se.foreningsdialog.forening.repository.HouseRepository;
@@ -193,6 +194,7 @@ public class AssociationAdminController {
         storageService.saveAs(file,filename);
         return ResponseEntity.ok().build();
     }
+
 
 
 }

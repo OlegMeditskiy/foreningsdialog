@@ -1,8 +1,12 @@
 import React, {Component} from "react";
-import {Button, Form} from "react-bootstrap";
+import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import {notification} from "antd";
 import {createNews} from "../../util/CreateAPI";
-
+import Moment from 'react-moment';
+import moment from 'moment/min/moment-with-locales';
+import 'moment-timezone';
+import './News.css'
+import {deleteNews} from "../../util/DeleteAPI";
 class News extends Component{
     constructor(props) {
         super(props);
@@ -14,6 +18,8 @@ class News extends Component{
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.deleteNewsFunction = this.deleteNewsFunction.bind(this);
+        this.loadNewsList=this.loadNewsList.bind(this);
     }
     handleChange(event) {
         this.setState({[event.target.name]: event.target.value});
@@ -31,6 +37,7 @@ class News extends Component{
                     message: 'Föreningsdialog App',
                     description: "Du har skapat nyhet",
                 });
+                this.props.load();
             }).catch(() => {
             notification.error({
                 message: 'Föreningsdialog App',
@@ -38,7 +45,79 @@ class News extends Component{
             });
         });
     }
+    loadNewsList(){
+        this.setState({
+            news: this.props.news,
+        })
+    }
+    componentDidMount(): void {
 
+        this.loadNewsList();
+    }
+    componentDidUpdate(nextProps) {
+
+        if (this.props.news !== nextProps.news) {
+            this.setState({
+                news: []
+            });
+            this.loadNewsList();
+        }
+    }
+    deleteNewsFunction(event,id) {
+        event.preventDefault();
+        const deleteNewsRequest = {
+            id: id
+        }
+        deleteNews(deleteNewsRequest)
+            .then(() => {
+                notification.success({
+                    message: 'Föreningsdialog App',
+                    description: "Du har tagit bort nyhet",
+                });
+                this.props.load();
+            }).catch(() => {
+            notification.error({
+                message: 'Föreningsdialog App',
+                description: 'Sorry! Something went wrong. Please try again!'
+            });
+        });
+    }
+    newsList(){
+        this.state.news.sort(function(a,b){
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+        const newsList = this.state.news.map((news,idx)=>{
+            return(
+                <div className={"news"} key={idx}>
+                    <div>
+                        <h4>{news.newsTitle}
+                            <Form onSubmit={event=>this.deleteNewsFunction(event, news.id)}>
+                                <Button variant="primary" type="submit">
+                                    Ta bort
+                                </Button>
+                            </Form></h4>
+                    </div>
+                    <div>
+                        <Moment format={"YYYY-MM-DD HH:mm"}>{news.createdAt}</Moment>
+                    </div>
+                    <br/>
+                    <div>
+
+                        {news.newsText.split("\n").map((i,key) => {
+                            return <p key={key}>{i}</p>;
+                        })}
+
+                    </div>
+
+                </div>
+            )
+        })
+        return(
+            <Container>
+                {newsList}
+            </Container>
+        )
+    }
     addNews(){
         return(
             <div>
@@ -62,8 +141,13 @@ class News extends Component{
         )
     }
     render() {
+
         return (
-            this.addNews()
+            <div>
+                {this.addNews()}
+                {this.newsList()}
+            </div>
+
         )
     }
 }

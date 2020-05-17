@@ -10,6 +10,7 @@ import se.foreningsdialog.forening.models.houses.Apartment;
 import se.foreningsdialog.forening.models.houses.Guest;
 import se.foreningsdialog.forening.models.houses.House;
 import se.foreningsdialog.forening.payload.DeleteDocumentTypeRequest;
+import se.foreningsdialog.forening.payload.DeleteNewsRequest;
 import se.foreningsdialog.forening.payload.apartment.DeleteApartmentRequest;
 import se.foreningsdialog.forening.payload.association.DeleteAssociationRequest;
 import se.foreningsdialog.forening.payload.common.ApiResponse;
@@ -49,8 +50,10 @@ public class AdminDeleteObjectsController {
 
     final
     DocumentRepository documentRepository;
+    final
+    NewsRepository newsRepository;
 
-    public AdminDeleteObjectsController(ApartmentRepository apartmentRepository, GuestRepository guestRepository, OrganizationRepository organizationRepository, HouseRepository houseRepository, AssociationNameRepository associationNameRepository, ContactPersonRepository contactPersonRepository, DocumentTypeRepository documentTypeRepository, DocumentRepository documentRepository) {
+    public AdminDeleteObjectsController(ApartmentRepository apartmentRepository, GuestRepository guestRepository, OrganizationRepository organizationRepository, HouseRepository houseRepository, AssociationNameRepository associationNameRepository, ContactPersonRepository contactPersonRepository, DocumentTypeRepository documentTypeRepository, DocumentRepository documentRepository, NewsRepository newsRepository) {
         this.apartmentRepository = apartmentRepository;
         this.guestRepository = guestRepository;
         this.organizationRepository = organizationRepository;
@@ -59,6 +62,7 @@ public class AdminDeleteObjectsController {
         this.contactPersonRepository = contactPersonRepository;
         this.documentTypeRepository = documentTypeRepository;
         this.documentRepository = documentRepository;
+        this.newsRepository = newsRepository;
     }
 
 
@@ -160,6 +164,13 @@ public class AdminDeleteObjectsController {
         document.setDocumentType(null);
         documentRepository.delete(document);
         return ResponseEntity.ok().body(new ApiResponse(true, "Dokument was deleted"));
+    }
+    @DeleteMapping("/news")
+    public ResponseEntity<?> document(@Valid @RequestBody DeleteNewsRequest deleteNewsRequest) {
+        News news = newsRepository.getOne(deleteNewsRequest.getId());
+        news.setAssociationName(null);
+        newsRepository.delete(news);
+        return ResponseEntity.ok().body(new ApiResponse(true, "News was deleted"));
     }
     @DeleteMapping("/organization")
     public ResponseEntity<?> organization(@Valid @RequestBody DeleteDocumentTypeRequest deleteDocumentTypeRequest) {

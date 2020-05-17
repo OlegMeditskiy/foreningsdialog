@@ -167,7 +167,6 @@ class DocumentUpload extends Component{
             filesList = files.map((doc, idx) =>
             {
                 const documents = doc.documents;
-                console.log(documents.length)
                 if (documents.length<1){
                     return (
                         <Col key={idx}>
@@ -181,7 +180,7 @@ class DocumentUpload extends Component{
                         <Col key={idx}>
                             <h5>{doc.typeName}</h5>
                             {doc.documents.map((document,idxDocument)=>{
-                                    console.log(document);
+
                                     return(
                                         <div key={idxDocument}>
                                             <a href={document.documentName} target={"_blank"}>{document.title}</a>
