@@ -33,7 +33,7 @@ const OrganizationTable =(props)=>{
                     message: 'Föreningsdialog App',
                     description: "Du har tagit bort organization",
                 });
-                props.load();
+                props.update();
             }).catch(() => {
             notification.error({
                 message: 'Föreningsdialog App',

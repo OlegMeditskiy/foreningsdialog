@@ -1,16 +1,16 @@
 package se.foreningsdialog.forening.controllers;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import se.foreningsdialog.forening.models.*;
 import se.foreningsdialog.forening.models.houses.Apartment;
 import se.foreningsdialog.forening.models.houses.Guest;
 import se.foreningsdialog.forening.models.houses.House;
 import se.foreningsdialog.forening.models.loanobjects.*;
 import se.foreningsdialog.forening.payload.MailRequest;
+import se.foreningsdialog.forening.payload.UpdateProtocolRequest;
 import se.foreningsdialog.forening.payload.apartment.SaveApartmentRequest;
 import se.foreningsdialog.forening.payload.association.SaveAssociationRequest;
 import se.foreningsdialog.forening.payload.common.ApiResponse;
@@ -21,8 +21,11 @@ import se.foreningsdialog.forening.payload.loanSettings.LoanSettingsRequest;
 import se.foreningsdialog.forening.payload.organization.SaveOrganizationRequest;
 import se.foreningsdialog.forening.repository.*;
 import se.foreningsdialog.forening.repository.loanObjects.*;
+import se.foreningsdialog.forening.storage.StorageService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/api/associationAdmin/save")
@@ -72,8 +75,9 @@ public class AdminSaveObjectController {
 
     final
     PoolRepository poolRepository;
+    final StorageService storageService;
 
-    public AdminSaveObjectController(AcceptOrganizationUpdateRepository acceptOrganizationUpdateRepository, ApartmentRepository apartmentRepository, GuestRepository guestRepository, EmailServiceImpl emailService, HouseRepository houseRepository, AssociationNameRepository associationNameRepository, ContactPersonRepository contactPersonRepository, GuestRegisterRepository guestRegisterRepository, OrganizationRepository organizationRepository, ExternLokalRepository externLokalRepository, GuestFlatRepository guestFlatRepository, LaundryRepository laundryRepository, ParkingRepository parkingRepository, PartyPlaceRepository partyPlaceRepository, PoolRepository poolRepository) {
+    public AdminSaveObjectController(AcceptOrganizationUpdateRepository acceptOrganizationUpdateRepository, ApartmentRepository apartmentRepository, GuestRepository guestRepository, EmailServiceImpl emailService, HouseRepository houseRepository, AssociationNameRepository associationNameRepository, ContactPersonRepository contactPersonRepository, GuestRegisterRepository guestRegisterRepository, OrganizationRepository organizationRepository, ExternLokalRepository externLokalRepository, GuestFlatRepository guestFlatRepository, LaundryRepository laundryRepository, ParkingRepository parkingRepository, PartyPlaceRepository partyPlaceRepository, PoolRepository poolRepository, StorageService storageService) {
         this.acceptOrganizationUpdateRepository = acceptOrganizationUpdateRepository;
         this.apartmentRepository = apartmentRepository;
         this.guestRepository = guestRepository;
@@ -89,6 +93,7 @@ public class AdminSaveObjectController {
         this.parkingRepository = parkingRepository;
         this.partyPlaceRepository = partyPlaceRepository;
         this.poolRepository = poolRepository;
+        this.storageService = storageService;
     }
 
 
@@ -120,6 +125,13 @@ public class AdminSaveObjectController {
         contactPerson.setContactTelephone(saveContactRequest.getContactTelephone());
         contactPersonRepository.save(contactPerson);
         return ResponseEntity.ok().body(new ApiResponse(true, "Organisationer var skapad, vänta på bekräfting"));
+    }
+    @PostMapping(value = "/protocol",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> saveContact(@RequestPart("file") @Valid @NotNull @NotBlank @RequestParam MultipartFile file,
+                                         @RequestPart ("properties") @Valid UpdateProtocolRequest updateProtocolRequest) {
+        String filename = "organisation_"+updateProtocolRequest.getId()+"_ÅrsProtokoll";
+        storageService.saveAs(file,filename);
+        return ResponseEntity.ok().body(new ApiResponse(true, "Protocol was updated"));
     }
 
     @PostMapping("/apartment")
@@ -262,4 +274,5 @@ public class AdminSaveObjectController {
 
         return ResponseEntity.ok().body(new ApiResponse(true, "Settings was saved"));
     }
+
 }

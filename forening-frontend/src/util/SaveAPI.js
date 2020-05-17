@@ -1,5 +1,5 @@
 import {API_BASE_URL} from "../constants";
-import {request} from "./APIUtils";
+import {request, requestFile} from "./APIUtils";
 
 export function saveAssociation(saveAssociationRequest) {
     return request({
@@ -17,6 +17,14 @@ export function saveHouse(saveHouseRequest) {
         body: JSON.stringify(saveHouseRequest)
     });
 
+}
+
+export function saveProtocol(file) {
+    return requestFile({
+        url: API_BASE_URL + "/associationAdmin/save/protocol",
+        method: 'POST',
+        body: file
+    });
 }
 
 export function saveContact(saveContactRequest) {

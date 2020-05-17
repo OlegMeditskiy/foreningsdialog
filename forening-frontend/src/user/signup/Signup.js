@@ -354,7 +354,6 @@ class Signup extends Component {
 
         }
         this.setState({validated:true})
-
     }
 
     isFormInvalid() {
