@@ -235,7 +235,7 @@ class Settings extends Component {
 
 
                 <Form onSubmit={this.handleSubmit}>
-                    <Button className={"pull-right saveSettingButton"} variant="primary" type="submit">
+                    <Button className={"pull-right saveSettingButton"} variant="secondary" type="submit">
                         Spara inställningar
                     </Button>
                 </Form>

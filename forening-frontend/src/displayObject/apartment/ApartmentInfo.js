@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Col, Container, Row, Tab, Tabs} from "react-bootstrap";
-import GuestPage from "../guest/GuestPage";
+import {Breadcrumb, Col, Container, Row, Tab, Tabs} from "react-bootstrap";
+import GuestsList from "../guest/GuestsList";
 import {getApartment} from "../../util/GetAPI";
 
 class ApartmentInfo extends Component {
@@ -12,7 +12,10 @@ class ApartmentInfo extends Component {
                 guests: [],
                 number: '',
                 area: '',
-                roomAndKitchen: ''
+                roomAndKitchen: '',
+                associationId:'',
+                houseId:'',
+                organizationId:''
             },
             isLoading: false,
             updated: 0,
@@ -62,19 +65,35 @@ class ApartmentInfo extends Component {
     }
 
     render() {
+        const organizationLink="http://localhost:3000/organisation/"+this.state.apartment.organizationId;
+        const associationLink="http://localhost:3000/association/"+this.state.apartment.associationId;
+        const houseLink="http://localhost:3000/house/"+this.state.apartment.houseId;
         return (
             <div>
+                <Breadcrumb>
+                    <Breadcrumb.Item href={organizationLink}>Organisation</Breadcrumb.Item>
+                    <Breadcrumb.Item href={associationLink}>Förening</Breadcrumb.Item>
+                    <Breadcrumb.Item href={houseLink}>Hus</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Lägenhet</Breadcrumb.Item>
+                </Breadcrumb>
                 <Container>
                     <Tabs defaultActiveKey='activated' id="uncontrolled-tab-example">
                         <Tab eventKey="activated" title={"Information"}>
+                            <h3>Information</h3>
                             <Row>
-                                <Col>Number + {this.state.apartment.number}</Col>
-                                <Col>Area + {this.state.apartment.area}</Col>
-                                <Col>RoomAndKitchen + {this.state.apartment.roomAndKitchen}</Col>
+                                <Col md={12}>
+                                    <b>Lägenhetsnummer:</b> {this.state.apartment.number}
+                                </Col>
+                                <Col md={12}>
+                                    <b>Area:</b> {this.state.apartment.area}
+                                </Col>
+                                <Col md={12}>
+                                    <b>Rum och kök:</b> {this.state.apartment.roomAndKitchen}
+                                </Col>
                             </Row>
                         </Tab>
                         <Tab eventKey="Guests" title={"Gäst"}>
-                            <GuestPage load={this.loadApartment} guests={this.state.apartment.guests} {...this.props}/>
+                            <GuestsList load={this.loadApartment} guests={this.state.apartment.guests} {...this.props}/>
                         </Tab>
                     </Tabs>
                 </Container>

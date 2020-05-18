@@ -23,7 +23,7 @@ class AppHeader extends Component {
         if (this.props.currentUser) {
             menuItems = [
                 <Menu.Item key="/">
-                    <Link to="/organisations">
+                    <Link to="/">
                         <HomeOutlined/>
                     </Link>
                 </Menu.Item>,

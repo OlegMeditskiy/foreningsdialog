@@ -35,14 +35,15 @@ export function saveContact(saveContactRequest) {
     });
 
 }
-export function saveOrganization(saveOrganizationRequest) {
+export function saveNews(saveNewsRequest) {
     return request({
-        url: API_BASE_URL + "/associationAdmin/save/organization",
+        url: API_BASE_URL + "/associationAdmin/save/news",
         method: 'POST',
-        body: JSON.stringify(saveOrganizationRequest)
+        body: JSON.stringify(saveNewsRequest)
     });
 
 }
+
 export function saveActivatedOrganization(updateOrganizationRequest) {
     return request({
         url: API_BASE_URL + "/associationAdmin/save/activatedOrganization",

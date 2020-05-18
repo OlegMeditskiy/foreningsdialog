@@ -12,7 +12,7 @@ import se.foreningsdialog.forening.storage.StorageService;
 @RequestMapping("/files")
 public class FilesController {
 
-    final StorageService storageService;
+    private final StorageService storageService;
 
     public FilesController(StorageService storageService) {
         this.storageService = storageService;
@@ -36,23 +36,10 @@ public class FilesController {
     }
 
 
-//    @GetMapping(value = "/{filename:.+}")
-//    @ResponseBody
-//    public String loadFiles(@PathVariable String filename) {
-//        Resource file = storageService.loadAsResource(filename);
-//        String[]split = file.getFilename().split("\\.(?=[^\\.]+$)");
-//        if (split[1].equals("pdf")){
-//            return "redirect:" + "http://localhost:8080/files/pdf/"+filename;
-//        }
-//        else {
-//            return "redirect:" + "http://localhost:8080/files/pdf/"+filename;
-//        }
-//    }
 @GetMapping(value = "/{filename:.+}")
 public ModelAndView loadFiles(@PathVariable String filename) {
     Resource file = storageService.loadAsResource(filename);
         String[]split = file.getFilename().split("\\.(?=[^\\.]+$)");
-    System.out.println(split[1]);
         if (split[1].equals("pdf")){
             return new ModelAndView("redirect:" + "http://localhost:8080/files/pdf/"+filename);
         }

@@ -31,6 +31,7 @@ export default class NewHouse extends Component {
 
         }
         else {
+            event.preventDefault();
             this.setState({validated:true})
             const createNewHouseRequest = {
                 associationId: this.props.match.params.associationId,
@@ -52,8 +53,7 @@ export default class NewHouse extends Component {
                 });
             });
         }
-
-
+        this.setState({validated:true})
     }
 
     render() {
@@ -63,24 +63,32 @@ export default class NewHouse extends Component {
                 <Form noValidate validated={this.state.validated} onSubmit={this.handleSubmit}>
                     <Form.Group>
                         <Form.Label>Gatuadress</Form.Label>
-                        <Form.Control required type={"text"} placeholder="Skriv in foreningsnamn" name={"street"}
-                                      onChange={this.handleChange}/>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Ort</Form.Label>
-                        <Form.Control required type={"text"} placeholder="Skriv in foreningsnamn" name={"city"}
-                                      onChange={this.handleChange}/>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Postnummer</Form.Label>
-                        <Form.Control required type={"number"} placeholder="Skriv in foreningsnamn" name={"zipCode"}
+                        <Form.Control required type={"text"} placeholder="Skriv in gatuadress" name={"street"}
                                       onChange={this.handleChange}/>
                         <Form.Control.Feedback type="invalid">
-                            Skriva in huset
+                            Skriva in gatuadress
                         </Form.Control.Feedback>
                     </Form.Group>
-                    <Button variant="primary" type="submit">
-                        Submit
+
+                    <Form.Group>
+                        <Form.Label>Ort</Form.Label>
+                        <Form.Control required type={"text"} placeholder="Skriv in ort" name={"city"}
+                                      onChange={this.handleChange}/>
+                        <Form.Control.Feedback type="invalid">
+                            Skriva in ort
+                        </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label>Postnummer</Form.Label>
+                        <Form.Control required type={"number"} placeholder="Skriv in postnummer" name={"zipCode"}
+                                      onChange={this.handleChange}/>
+                        <Form.Control.Feedback type="invalid">
+                            Skriva in postnummer
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                    <Button variant="secondary" type="submit">
+                        Lägga till
                     </Button>
                 </Form>
             </div>

@@ -30,6 +30,7 @@ export default class NewContact extends Component {
 
         }
         else {
+            event.preventDefault();
             this.setState({validated:true})
             const createNewContactRequest = {
                 associationId: this.props.match.params.associationId,
@@ -51,7 +52,7 @@ export default class NewContact extends Component {
                 });
             });
         }
-
+        this.setState({validated:true})
 
     }
 
@@ -62,7 +63,7 @@ export default class NewContact extends Component {
                 <Form noValidate validated={this.state.validated} onSubmit={this.handleSubmit}>
                     <Form.Group>
                         <Form.Label>Namn</Form.Label>
-                        <Form.Control required type={"text"} placeholder="Skriv in foreningsnamn" name={"contactName"}
+                        <Form.Control required type={"text"} placeholder="Skriv in namn" name={"contactName"}
                                       onChange={this.handleChange}/>
                         <Form.Control.Feedback type="invalid">
                             Skriva in namn
@@ -70,7 +71,7 @@ export default class NewContact extends Component {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>E-mail</Form.Label>
-                        <Form.Control required type={"email"} placeholder="Skriv in foreningsnamn" name={"contactTelephone"}
+                        <Form.Control required type={"email"} placeholder="Skriv in e-mail" name={"contactTelephone"}
                                       onChange={this.handleChange}/>
                         <Form.Control.Feedback type="invalid">
                             Skriva in e-mail
@@ -78,14 +79,14 @@ export default class NewContact extends Component {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Telefonnummer</Form.Label>
-                        <Form.Control required type={"text"} placeholder="Skriv in foreningsnamn" name={"contactEmail"}
+                        <Form.Control required type={"number"} placeholder="Skriv in telefonnummer" name={"contactEmail"}
                                       onChange={this.handleChange}/>
                         <Form.Control.Feedback type="invalid">
                             Skriva in telefonnummer
                         </Form.Control.Feedback>
                     </Form.Group>
-                    <Button variant="primary" type="submit">
-                        Submit
+                    <Button variant="secondary" type="submit">
+                        Lägga till
                     </Button>
                 </Form>
             </div>

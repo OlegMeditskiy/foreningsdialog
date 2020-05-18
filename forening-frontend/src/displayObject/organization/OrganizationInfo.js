@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {Col, Container, Row, Tab, Tabs} from "react-bootstrap";
-import AssociationPage from "../association/AssociationPage";
+import {Breadcrumb, Col, Container, Row, Tab, Tabs} from "react-bootstrap";
+import AssociationsList from "../association/AssociationsList";
 import Settings from "../../loanObjects/Settings";
 import {getOrganization} from "../../util/GetAPI";
 import ProtokolUpload from "../association/ProtokolUpload";
-
+import "./Tab.css";
 class OrganizationInfo extends Component {
     constructor(props) {
         super(props);
@@ -67,23 +67,41 @@ class OrganizationInfo extends Component {
     }
 
     render() {
+
         return (
             <div>
                 <Container>
+                <div className={"site-block"}>
+                    <Breadcrumb>
+                    <Breadcrumb.Item active>Organisation</Breadcrumb.Item>
+                </Breadcrumb>
+                </div>
+                <div>
+                </div>
+
                     <Tabs defaultActiveKey='activated' id="uncontrolled-tab-example">
                         <Tab eventKey="activated" title={"Information"}>
-                            <Row>
-                                <Col>Organisation + {this.state.organization.orgNumber}</Col>
-                                <Col>Area + {this.state.organization.totalArea}</Col>
-                                <Col>Lägenhet + {this.state.organization.numberOfApartments}</Col>
+                            <br/>
+                            <h3>Information</h3>
+                            <Row className={"site-block"}>
+                                <Col md={12}>
+                                    <b>Organisation:</b> {this.state.organization.orgNumber}
+                                </Col>
+                                <Col md={12}>
+                                    <b>Total area:</b> {this.state.organization.totalArea}
+                                </Col>
+                                <Col md={12}>
+                                    <b>Antal lägenheter:</b> {this.state.organization.numberOfApartments}
+                                </Col>
                             </Row>
-                            <Row>
-                                <Col><ProtokolUpload {...this.props}/></Col>
+                            <Row className={"site-block"}>
+                                <Col>
+                                    <ProtokolUpload {...this.props}/></Col>
                             </Row>
                         </Tab>
                         <Tab eventKey="associations" title={"Föreningar"}>
-                            <AssociationPage load={this.loadOrganisation}
-                                             associations={this.state.organization.associations} {...this.props}/>
+                            <AssociationsList load={this.loadOrganisation}
+                                              associations={this.state.organization.associations} {...this.props}/>
                         </Tab>
                         <Tab eventKey="settings" title={"Inställningar"}>
                             <Settings loan={this.state.organization.loanObjects} {...this.props} />

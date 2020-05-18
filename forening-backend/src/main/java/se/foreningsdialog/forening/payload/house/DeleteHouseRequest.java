@@ -6,6 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DeleteHouseRequest {
-    Long associationId;
     Long houseId;
 }

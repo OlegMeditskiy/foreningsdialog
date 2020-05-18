@@ -20,6 +20,8 @@ public class AssociationName extends UserDateAudit {
 
     private String associationName;
 
+    private String logo;
+
     @ManyToOne
     @JoinTable(name = "organizations_associations", joinColumns = @JoinColumn(name = "association_id"), inverseJoinColumns = @JoinColumn(name = "organization_id"))
     @JsonBackReference

@@ -24,8 +24,9 @@ export default class AddNew extends Component {
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
-
         }
+        else{
+            event.preventDefault();
             this.setState({validated:true})
             const createNewAssociationRequest = {
                 userId: this.props.currentUser.id,
@@ -45,6 +46,9 @@ export default class AddNew extends Component {
                     description: error.message || 'Sorry! Something went wrong. Please try again!'
                 });
             });
+        }
+        this.setState({validated:true})
+
 
 
     }
@@ -61,8 +65,8 @@ export default class AddNew extends Component {
                             Skriva in föreningsnamn
                         </Form.Control.Feedback>
                     </Form.Group>
-                    <Button variant="primary" type="submit">
-                        Submit
+                    <Button variant="secondary" type="submit">
+                        Lägga till
                     </Button>
                 </Form>
             </div>

@@ -5,7 +5,7 @@ import {saveAssociation} from "../../util/SaveAPI";
 import {returns} from "./EditableCell";
 
 
-const AssociaionTable = (props) => {
+const AssociationTable = (props) => {
     function redirectToAssociation(event, record) {
         return props.history.push({pathname: `/association/${record.id}`})
     }
@@ -86,7 +86,7 @@ const AssociaionTable = (props) => {
         }
     };
 
-
+    function compareByAlph (a, b) { if (a > b) { return -1; } if (a < b) { return 1; } return 0; }
     const columns = [
         {
             title: 'Förening',
@@ -105,7 +105,7 @@ const AssociaionTable = (props) => {
             dataIndex: 'associationName',
             key: 'associationName',
             sorter: {
-                compare: (a, b) => a.associationName - b.associationName
+                compare: (a, b) =>compareByAlph(a.associationName,b.associationName)
             },
             editable: true
         },
@@ -144,7 +144,7 @@ const AssociaionTable = (props) => {
             title: 'Ta bort',
             dataIndex: 'delete',
             render: (text, record) => (
-                <Popconfirm title="Är du saker att du vill ta bort förening?" onConfirm={(event) => {
+                <Popconfirm title="Är du säker att du vill ta bort förening?" onConfirm={(event) => {
                     event.preventDefault();
                     deleteAssociation(record.id)
                 }}>
@@ -160,4 +160,4 @@ const AssociaionTable = (props) => {
 };
 
 
-export default AssociaionTable;
+export default AssociationTable;

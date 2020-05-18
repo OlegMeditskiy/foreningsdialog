@@ -16,7 +16,8 @@ import java.util.List;
 public class AssociationNameResponse {
     private Long id;
     private String associationName;
-
+    private String logo;
+    private Long organizationId;
     @OneToMany
     private List<ContactPerson> contacts;
 

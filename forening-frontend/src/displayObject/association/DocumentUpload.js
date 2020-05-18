@@ -210,8 +210,8 @@ class DocumentUpload extends Component{
                                       placeholder="Enter type name"/>
                     </Form.Group>
 
-                    <Button variant="primary" type="submit">
-                        Submit
+                    <Button variant="secondary" type="submit">
+                        Lägga till
                     </Button>
                 </Form>
             </div>
@@ -249,10 +249,10 @@ class DocumentUpload extends Component{
 
     deleteDocumentType() {
         return (
-            <div>
+            <div className={"site-block"}>
                 <Form onSubmit={this.handleSubmitRemove}>
                     {this.removeTypeName()}
-                    <Button variant="primary" type="submit">
+                    <Button variant="danger" type="submit">
                         Ta bort
                     </Button>
                 </Form>
@@ -263,7 +263,7 @@ class DocumentUpload extends Component{
         return (
             <div>
                 <Form onSubmit={event=>this.handleDeleteDocument(event,id)}>
-                    <Button variant="primary" type="submit">
+                    <Button variant="danger" type="submit">
                         Ta bort
                     </Button>
                 </Form>
@@ -297,7 +297,7 @@ class DocumentUpload extends Component{
                                 />
                             </Form.Group>
                         <Form.Group>
-                            <Button type="submit">Upload</Button>
+                            <Button variant={"secondary"} type="submit">Ladda upp</Button>
                         </Form.Group>
                         </Form>
                     </Col>

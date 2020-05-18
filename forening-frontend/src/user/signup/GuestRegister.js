@@ -136,7 +136,7 @@ class GuestRegister extends Component {
                                 onChange={this.handleChange}
                             />
                         </Form.Group>
-                        <Button variant="primary" type="submit">Register</Button>
+                        <Button variant="secondary" type="submit">Register</Button>
                     </Form>
                 </div>
             )

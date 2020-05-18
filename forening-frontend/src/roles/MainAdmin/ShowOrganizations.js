@@ -309,7 +309,7 @@ const ShowOrganizations = (props) => {
             let newTotalArea;
             let newNumberOfApartments;
             if (accept.newOrganizationNumber!==accept.oldOrganizationNumber) {
-                console.log(accept)
+
                     newOrgNumber=<div>
                         <p>
                             Gammal organisationsnummer: {accept.oldOrganizationNumber}
@@ -320,7 +320,7 @@ const ShowOrganizations = (props) => {
                     </div>
             }
             if (accept.newTotalArea !== accept.oldTotalArea) {
-                console.log(accept)
+
                 newTotalArea=<div>
                         <p>
                             Gammal total area: {accept.oldTotalArea}

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Button, Form} from "react-bootstrap";
-import {signup} from "../../util/AuthorizationAPI";
 import {notification} from "antd";
 import {saveProtocol} from "../../util/SaveAPI";
 
@@ -20,14 +19,6 @@ class ProtokolUpload extends Component{
         })
     }
     handleSubmit(event) {
-        event.preventDefault();
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-            console.log("false");
-        }
-        else{
             event.preventDefault();
             const formData = new FormData();
             formData.append('file', this.state.protokol)
@@ -40,28 +31,17 @@ class ProtokolUpload extends Component{
                         message: 'Föreningsdialog App',
                         description: "Du har uppdaterat årsprotokol!",
                     });
-                    this.props.history.push("/login");
                 }).catch(error => {
-                if (this.state.validated===true){
                     notification.error({
                         message: 'Föreningsdialog App',
-                        description: 'Fylla i alla former på rätt sätt!'
+                        description: 'Sorry! Something went wrong. Please try again!'
                     });
-                }
-                else {
-                    notification.error({
-                        message: 'Föreningsdialog App',
-                        description: error.message || 'Sorry! Something went wrong. Please try again!'
-                    });
-                }
 
             });
 
-        }
-        this.setState({validated:true})
     }
     render() {
-        console.log(this.state.protokol)
+
         return (<div>
             <Form onSubmit={this.handleSubmit}>
                 <Form.Group>
@@ -72,7 +52,7 @@ class ProtokolUpload extends Component{
                         onChange={this.handleOnFileChange}
                     />
                 </Form.Group>
-                <Button variant="primary" type="submit">Uppdatera</Button>
+                <Button variant="secondary" type="submit">Uppdatera</Button>
             </Form>
         </div>)
     }

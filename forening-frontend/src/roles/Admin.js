@@ -15,7 +15,6 @@ const Admin = (props) => {
             return "nothing";
         }
     }
-
     if (!props.currentUser) {
         return <Redirect
             to={{

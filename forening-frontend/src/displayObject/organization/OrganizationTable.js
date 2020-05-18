@@ -156,7 +156,7 @@ const OrganizationTable =(props)=>{
             title: 'Ta bort',
             dataIndex: 'delete',
             render: (text, record) => (
-                <Popconfirm title="Är du saker att du vill ta bort lägenhet?" onConfirm={(event) => {
+                <Popconfirm title="Är du säker att du vill ta bort organisation?" onConfirm={(event) => {
                     event.preventDefault();
                     deleteOrganizationFunction(record.id)
                 }}>

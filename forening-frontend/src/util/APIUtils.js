@@ -35,12 +35,13 @@ export const requestFile = (options) => {
     options = Object.assign({}, defaults, options);
 
     return fetch(options.url, options)
-        .then(response => {
-                if (response.ok) {
-                    alert("File uploaded successfully.")
+        .then(response =>
+            response.json().then(json => {
+                if (!response.ok) {
+                    return Promise.reject(json);
                 }
-
-            }
+                return json;
+            })
         );
 };
 

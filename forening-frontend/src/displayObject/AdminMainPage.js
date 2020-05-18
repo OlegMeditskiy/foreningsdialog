@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import {Link, Route, Switch} from 'react-router-dom';
 import LoadingIndicator from "../common/LoadingIndicator";
-import OrganisationPage from "./organization/OrganisationPage";
+import OrganizationsList from "./organization/OrganizationsList";
 import OrganizationInfo from "./organization/OrganizationInfo";
 import AssociationInfo from "./association/AssociationInfo";
 import HouseInfo from "./house/HouseInfo";
 import ApartmentInfo from "./apartment/ApartmentInfo";
 import {getUserCreatedOrganizationss} from "../util/GetAPI";
 
-class AssociationList extends Component {
+class AdminMainPage extends Component {
 
     constructor(props) {
         super(props);
@@ -84,11 +84,10 @@ class AssociationList extends Component {
 
     render() {
         return (
-            <div className="polls-container">
-                <Link to={"/organisations"}>Organisationer</Link>
+            <div>
                 <Switch>
-                    <Route path={`${this.props.match.path}organisations/`}
-                           render={(props) => <OrganisationPage currentUser={this.props.currentUser}
+                    <Route path={`${this.props.match.path}/`}
+                           render={(props) => <OrganizationsList currentUser={this.props.currentUser}
                                                                 organizations={this.state.organizations}  {...props}
                                                                 update={this.update}/>}>
                     </Route>
@@ -111,14 +110,10 @@ class AssociationList extends Component {
                                                              username={this.props.username} {...props}/>}>
                     </Route>
                 </Switch>
-                {
-                    this.state.isLoading ?
-                        <LoadingIndicator/> : null
-                }
             </div>
         );
     }
 }
 
 
-export default AssociationList;
+export default AdminMainPage;

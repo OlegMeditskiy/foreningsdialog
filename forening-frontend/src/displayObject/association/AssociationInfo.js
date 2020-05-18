@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {Col, Container, Row, Tab, Tabs} from "react-bootstrap";
+import {Breadcrumb, Col, Container, Row, Tab, Tabs} from "react-bootstrap";
 
-import HousesPage from "../house/HousePage";
-import ContactPage from "../contact/ContactPage";
+import HousesList from "../house/HousesList";
+import ContactsList from "../contact/ContactsList";
 import AssociationSettings from "./AssociationSettings";
 import {getAssociation} from "../../util/GetAPI";
 import DocumentUpload from "./DocumentUpload";
 import News from "./News";
+import LogoUpload from "./LogoUpload";
 
 class AssociationInfo extends Component {
     constructor(props) {
@@ -19,7 +20,9 @@ class AssociationInfo extends Component {
                 associationName: "",
                 createdBy: "",
                 documentTypes: [],
-                news:[]
+                news:[],
+                logo:'',
+                organizationId:''
             },
             isLoading: false,
             updated: 0,
@@ -70,37 +73,46 @@ class AssociationInfo extends Component {
     }
 
     render() {
+        const organizationLink="http://localhost:3000/organisation/"+this.state.association.organizationId;
+
         return (
             <div>
+                <Breadcrumb>
+                    <Breadcrumb.Item href={organizationLink}>Organisation</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Förening</Breadcrumb.Item>
+                </Breadcrumb>
                 <Container>
-                    <Tabs defaultActiveKey='activated' id="uncontrolled-tab-example">
-                        <Tab eventKey="activated" title={"Information"}>
-                            <Row>
-                                <Col>Association Name + {this.state.association.associationName}</Col>
-                            </Row>
+                    <Tabs defaultActiveKey='information' id="uncontrolled-tab-example">
+                        <Tab eventKey="information" title={"Information"}>
+                            <br/>
+                                <h3>Information</h3>
+                                <Row className={"site-block"}>
+                                    <Col md={12}>
+                                        <b>Föreningsnamn:</b> {this.state.association.associationName}
+                                    </Col>
+                                </Row>
                         </Tab>
                         <Tab eventKey="houses" title={"Hus"}>
-                            <HousesPage load={this.loadAssociation}
+                            <HousesList load={this.loadAssociation}
                                         houses={this.state.association.houses} {...this.props}/>
                         </Tab>
                         <Tab eventKey="contacts" title={"Kontakter"}>
-                            <ContactPage load={this.loadAssociation}
-                                         contacts={this.state.association.contacts} {...this.props}/>
+                            <ContactsList load={this.loadAssociation}
+                                          contacts={this.state.association.contacts} {...this.props}/>
                         </Tab>
-                        {/*<Tab eventKey="Files upload" title={"Files upload"}>*/}
-                        {/*    <FileUpload load={this.loadAssociation}*/}
-                        {/*                documents={this.state.association.documentTypes} {...this.props} />*/}
-                        {/*</Tab>*/}
+                        <Tab eventKey="Logo upload" title={"Logo"}>
+                            <LogoUpload load={this.loadAssociation} logo={this.state.association.logo} {...this.props} />
+                        </Tab>
                         <Tab eventKey="dokumenter" title={"Dokumenter"}>
                             <DocumentUpload load={this.loadAssociation}
                                         documents={this.state.association.documentTypes} {...this.props} />
                         </Tab>
-                        <Tab eventKey="settings" title={"Inställningar"}>
-                            <AssociationSettings/>
-                        </Tab>
                         <Tab eventKey="news" title={"News"}>
                             <News load={this.loadAssociation} news={this.state.association.news} {...this.props}/>
                         </Tab>
+                        {/*<Tab eventKey="settings" title={"Inställningar"}>*/}
+                        {/*    <AssociationSettings/>*/}
+                        {/*</Tab>*/}
                     </Tabs>
                 </Container>
             </div>

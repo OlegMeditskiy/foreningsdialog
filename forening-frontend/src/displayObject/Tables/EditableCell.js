@@ -1,5 +1,6 @@
 import {Form, Input, InputNumber, Table} from "antd";
 import React from "react";
+const { TextArea } = Input;
 
 export const editableCell = ({
                                  editing,
@@ -11,7 +12,7 @@ export const editableCell = ({
                                  children,
                                  ...restProps
                              }) => {
-    const inputNode = inputType === 'number' ? <InputNumber/> : <Input/>;
+    const inputNode = inputType === 'textarea' ? <TextArea/> : <Input/>;
     return (
         <td {...restProps}>
             {editing ? (
@@ -50,7 +51,7 @@ export const returns=(columns,isEditing,form,data,cancel)=> {
             ...col,
             onCell: record => ({
                 record,
-                inputType: col.dataIndex === 'age' ? 'number' : 'text',
+                inputType: col.dataIndex === 'newsText' ? 'textarea' : 'text',
                 dataIndex: col.dataIndex,
                 title: col.title,
                 editing: isEditing(record),

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Modal, Tab, Tabs} from "react-bootstrap";
+import {Container, Modal, Tab, Tabs} from "react-bootstrap";
 import {withRouter} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import '../../user/signup/Signup.css';
@@ -8,12 +8,12 @@ import '../list.css';
 import OrganizationTable from "./OrganizationTable";
 import {saveActivatedOrganization, saveDeclinedOrganization, saveNotActivatedOrganization} from "../../util/SaveAPI";
 
-const OrganizationsPage = (props) => {
+const OrganizationsList = (props) => {
     const activated = []
     const notActivated = []
     const declined = []
     props.organizations.forEach((org, idx) => {
-        console.log(org);
+
         if (org.activated) {
             activated.push({
                 key: idx,
@@ -55,28 +55,29 @@ const OrganizationsPage = (props) => {
     const handleShow = () => setShow(true);
     return (
         <div>
-            <Button variant="primary" onClick={handleShow}>
-                Ny organisation
-            </Button>
+            <Container>
+                <div className={"site-block"}>
+                    <Button variant="secondary" onClick={handleShow}>
+                        Ny organisation
+                    </Button>
+                </div>
+                <div className={"site-block"}>
+                    <Tabs defaultActiveKey='activated' id="uncontrolled-tab-example">
+                        <Tab eventKey="activated" title={"Bekräftade (" + activated.length + ")"}>
+                            <OrganizationTable originData={activated} update={props.update} saveMethod={saveActivatedOrganization} {...props}/>
+                        </Tab>
+                        <Tab eventKey="not activated" title={"Väntar på bekräfting (" + notActivated.length + ")"}>
+                            <OrganizationTable originData={notActivated} update={props.update} saveMethod={saveNotActivatedOrganization} {...props}/>
+                        </Tab>
+                        <Tab eventKey="declined" title={"Neckade (" + declined.length + ")"}>
+                            <OrganizationTable originData={declined} update={props.update} saveMethod={saveDeclinedOrganization} {...props}/>
+                        </Tab>
 
-            <Tabs defaultActiveKey='activated' id="uncontrolled-tab-example">
-                <Tab eventKey="activated" title={"Bekräftade (" + activated.length + ")"}>
-                    <OrganizationTable originData={activated} update={props.update} saveMethod={saveActivatedOrganization} {...props}/>
-                    {/*<Table*/}
-                    {/*    dataSource={activated}  columns={columns}/>*/}
-                </Tab>
-                <Tab eventKey="not activated" title={"Väntar på bekräfting (" + notActivated.length + ")"}>
-                    {/*<Table*/}
-                    {/*    dataSource={notActivated}  columns={columns}/>*/}
-                    <OrganizationTable originData={notActivated} update={props.update} saveMethod={saveNotActivatedOrganization} {...props}/>
-                </Tab>
-                <Tab eventKey="declined" title={"Neckade (" + declined.length + ")"}>
-                    <OrganizationTable originData={declined} update={props.update} saveMethod={saveDeclinedOrganization} {...props}/>
-                    {/*<Table*/}
-                    {/*    dataSource={declined}  columns={columns}/>*/}
-                </Tab>
+                    </Tabs>
+                </div>
+            </Container>
 
-            </Tabs>
+
 
             <Modal show={show} onHide={handleClose} dialogClassName="modal-90w">
                 <Modal.Header closeButton>
@@ -97,4 +98,4 @@ const OrganizationsPage = (props) => {
 }
 
 
-export default withRouter(OrganizationsPage);
+export default withRouter(OrganizationsList);

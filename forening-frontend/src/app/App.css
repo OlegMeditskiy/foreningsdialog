@@ -1,5 +1,11 @@
-
 .app-content {
     margin-top: 64px;
+}
+.app-container{
+    background-color: lightgray;
+}
+.site-block{
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 

@@ -340,13 +340,13 @@ class CreateNewOrganisations extends Component {
         return (
 
             <Form onSubmit={this.handleSubmit} className="signup-form">
-                <Button className="signup-form-button" onClick={this.addNewOrganization}>Lägga organisation</Button>
+                <Button variant={"secondary"} className="signup-form-button" onClick={this.addNewOrganization}>Lägga organisation</Button>
                 <Accordion defaultActiveKey="0">
                     <OrganizationInput remove={this.remove} errors={this.state.errors} handleChange={this.handleChange}
                                        addContact={this.addNewContact} addHouse={this.addNewHouse}
                                        addAssociation={this.addNewAssociation} organizations={organizations}/>
                 </Accordion>
-                <Button variant="primary" type="submit">Register</Button>
+                <Button variant="secondary" type="submit">Register</Button>
             </Form>
 
         );

@@ -1,8 +1,8 @@
 import React from 'react';
 import AddNew from "./AddNew";
-import AssociaionTable from "../Tables/AssociaionTable";
+import AssociationTable from "../Tables/AssociationTable";
 
-const AssociationPage = (props) => {
+const AssociationsList = (props) => {
     const originData = []
 
     props.associations.forEach((association, idx) => {
@@ -18,12 +18,18 @@ const AssociationPage = (props) => {
 
     return (
         <div>
-            <AddNew {...props} update={props.update}/>
-            <AssociaionTable originData={originData} {...props} />
+            <div className={"site-block"}>
+                <AddNew {...props} update={props.update}/>
+            </div>
+            <div className={"site-block"}>
+                <AssociationTable originData={originData} {...props} />
+            </div>
+
+
         </div>
     );
 
 
 }
 
-export default AssociationPage;
+export default AssociationsList;

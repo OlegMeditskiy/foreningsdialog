@@ -12,11 +12,10 @@ import se.foreningsdialog.forening.models.ContactPerson;
 import se.foreningsdialog.forening.models.Organization;
 import se.foreningsdialog.forening.models.houses.House;
 import se.foreningsdialog.forening.models.loanobjects.*;
-import se.foreningsdialog.forening.payload.LogoUploadRequest;
+import se.foreningsdialog.forening.payload.association.LogoUploadRequest;
 import se.foreningsdialog.forening.payload.common.ApiResponse;
 import se.foreningsdialog.forening.payload.guestRegister.GuestRegisterResponse;
 import se.foreningsdialog.forening.payload.organization.NewOrganisationsRequest;
-import se.foreningsdialog.forening.payload.organization.OrganizationResponse;
 import se.foreningsdialog.forening.repository.AssociationNameRepository;
 import se.foreningsdialog.forening.repository.ContactPersonRepository;
 import se.foreningsdialog.forening.repository.HouseRepository;
@@ -37,41 +36,41 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/associationAdmin")
 public class AssociationAdminController {
 
-    final
+    private final
     OrganizationRepository organizationRepository;
 
 
-    final
+    private final
     AssociationNameRepository associationNameRepository;
 
-    final
+    private final
     GuestService guestService;
 
 
-    final StorageService storageService;
+    private final StorageService storageService;
 
-    final
+    private final
     ExternLokalRepository externLokalRepository;
 
-    final
+    private final
     GuestFlatRepository guestFlatRepository;
 
-    final
+    private final
     LaundryRepository laundryRepository;
 
-    final
+    private final
     ParkingRepository parkingRepository;
 
-    final
+    private final
     PartyPlaceRepository partyPlaceRepository;
 
-    final
+    private final
     PoolRepository poolRepository;
 
-    final
+    private final
     ContactPersonRepository contactPersonRepository;
 
-    final
+    private final
     HouseRepository houseRepository;
 
     public AssociationAdminController(OrganizationRepository organizationRepository, AssociationNameRepository associationNameRepository, GuestService guestService, StorageService storageService, ExternLokalRepository externLokalRepository, GuestFlatRepository guestFlatRepository, LaundryRepository laundryRepository, ParkingRepository parkingRepository, PartyPlaceRepository partyPlaceRepository, PoolRepository poolRepository, ContactPersonRepository contactPersonRepository, HouseRepository houseRepository) {
@@ -91,7 +90,7 @@ public class AssociationAdminController {
 
 
     @PostMapping("/createOrganizations")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody NewOrganisationsRequest signUpRequest) {
+    public ResponseEntity<?> createOrganizations(@Valid @RequestBody NewOrganisationsRequest signUpRequest) {
         //Creating new Organizations
         for (Organization organization : signUpRequest.getAssociation().getOrganizations()) {
             organization.setCreatedBy(signUpRequest.getUserId());
@@ -191,7 +190,10 @@ public class AssociationAdminController {
             @RequestPart("file") @Valid @NotNull @NotBlank  @RequestParam MultipartFile file,
             @RequestPart ("properties") @Valid LogoUploadRequest logoUploadRequest) {
         String filename = "association_"+logoUploadRequest.getAssociationId()+"_Logo";
-        storageService.saveAs(file,filename);
+        String logoURL = "http://localhost:8080/files/"+storageService.saveAsString(file,filename);
+        AssociationName associationName = associationNameRepository.getOne(logoUploadRequest.getAssociationId());
+        associationName.setLogo(logoURL);
+        associationNameRepository.save(associationName);
         return ResponseEntity.ok().build();
     }
 

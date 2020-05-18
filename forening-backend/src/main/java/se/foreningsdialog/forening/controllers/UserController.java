@@ -2,7 +2,6 @@ package se.foreningsdialog.forening.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import se.foreningsdialog.forening.exception.ResourceNotFoundException;
@@ -28,22 +27,20 @@ import java.util.List;
 @RequestMapping("/api")
 public class UserController {
 
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private OrganizationService organizationService;
-
-    @Autowired
-    private AssociationService associationService;
-    @Autowired
-    private HouseService houseService;
-    @Autowired
-    private ApartmentService apartmentService;
-
-
+    private final UserRepository userRepository;
+    private final OrganizationService organizationService;
+    private final AssociationService associationService;
+    private final HouseService houseService;
+    private final ApartmentService apartmentService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    public UserController(UserRepository userRepository, OrganizationService organizationService, AssociationService associationService, HouseService houseService, ApartmentService apartmentService) {
+        this.userRepository = userRepository;
+        this.organizationService = organizationService;
+        this.associationService = associationService;
+        this.houseService = houseService;
+        this.apartmentService = apartmentService;
+    }
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
@@ -65,14 +62,6 @@ public class UserController {
         return new UserProfile(user.getId(), user.getUsername(), user.getCreatedAt());
     }
 
-
-    //    @GetMapping("/users/{username}/organizations1")
-//    public PagedResponse<OrganizationResponse> getOrganizationsCreatedBy1(@PathVariable(value = "username") String username,
-//                                                                       @CurrentUser UserPrincipal currentUser,
-//                                                                       @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
-//                                                                       @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-//        return organizationService.getOrganizationsCreatedBy(username, currentUser, page, size);
-//    }
     @GetMapping("/users/{username}/organizations")
     public List<OrganizationResponse> getOrganizationsCreatedBy(@PathVariable(value = "username") String username) {
 
@@ -98,12 +87,6 @@ public class UserController {
     public ApartmentResponse getApartment(@PathVariable(value = "username") String username, @PathVariable(value = "apartmentId") Long apartmentId) {
         return apartmentService.getApartmentCreatedBy(username, apartmentId);
     }
-
-//    @GetMapping("/user/checkEmailAvailability")
-//    public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
-//        Boolean isAvailable = !userRepository.existsByEmail(email);
-//        return new UserIdentityAvailability(isAvailable);
-//    }
 
 
 }

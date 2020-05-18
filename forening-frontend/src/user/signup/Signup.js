@@ -318,7 +318,6 @@ class Signup extends Component {
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
-            console.log("false");
         }
         else{
             event.preventDefault();
@@ -373,7 +372,6 @@ class Signup extends Component {
 
     render() {
         let {organizations} = this.state.association
-        console.log(this.state.GDPR);
         return (
             <div className="signup-container">
                 <h1 className="page-title">Registreting</h1>
@@ -431,8 +429,8 @@ class Signup extends Component {
                             {/*    feedback="You must agree before submitting."*/}
                             {/*/>*/}
                         </Form.Group>
-                        <Button variant="primary" type="submit">Register</Button>
-                        <Button className="signup-form-button" onClick={this.addNewOrganization}>Lägga
+                        <Button variant="secondary" type="submit">Register</Button>
+                        <Button className="signup-form-button" variant={"secondary"} onClick={this.addNewOrganization}>Lägga
                             organisation</Button>
                         <Accordion defaultActiveKey="0">
                             <OrganizationInput handleOnFileChange={this.handleOnFileChange} remove={this.remove} errors={this.state.errors}

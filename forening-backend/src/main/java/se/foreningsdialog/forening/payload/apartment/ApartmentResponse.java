@@ -13,6 +13,12 @@ public class ApartmentResponse {
 
     private Long id;
 
+    private Long houseId;
+
+    private Long organizationId;
+
+    private Long associationId;
+
     @OneToMany
     private List<Guest> guests;
 

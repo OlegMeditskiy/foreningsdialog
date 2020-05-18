@@ -8,5 +8,4 @@ import se.foreningsdialog.forening.models.AssociationName;
 @Setter
 public class DeleteAssociationRequest {
     AssociationName association;
-    Long organizationId;
 }

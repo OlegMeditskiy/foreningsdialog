@@ -95,7 +95,7 @@ const OrganizationInput = (props) => {
                                 </Form.Group>
 
                                 <div className={"association"}>
-                                    <Button className="signup-form-button"
+                                    <Button variant={"secondary"} className="signup-form-button"
                                             onClick={(event) => props.addAssociation(event, idx)}>Lägga
                                         förening</Button>
                                     <Accordion defaultActiveKey="0">

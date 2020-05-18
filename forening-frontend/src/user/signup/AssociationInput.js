@@ -53,7 +53,7 @@ const AssociationInput = (props) => {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                                 <div className={"contact"}>
-                                    <Button className="signup-form-button"
+                                    <Button variant={"secondary"} className="signup-form-button"
                                             onClick={(event) => props.addContact(event, props.organization, idx)}>Lägga
                                         contact</Button>
                                     <Accordion defaultActiveKey={"0"}>
@@ -64,7 +64,7 @@ const AssociationInput = (props) => {
                                 </div>
                                 <div className={"house"}>
                                     <Accordion defaultActiveKey={"0"}>
-                                        <Button className="signup-form-button"
+                                        <Button variant={"secondary"} className="signup-form-button"
                                                 onClick={(event) => props.addHouse(event, props.organization, idx)}>Lägga
                                             hus</Button>
                                         <HouseInput remove={props.remove} handleChange={props.handleChange}

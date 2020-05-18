@@ -1,4 +1,4 @@
-package se.foreningsdialog.forening.payload;
+package se.foreningsdialog.forening.payload.organization;
 
 import lombok.Getter;
 

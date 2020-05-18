@@ -6,7 +6,7 @@ import NewGuest from "./NewGuest";
 import {deleteGuestFromAssociation} from "../../util/DeleteAPI";
 import {saveGuest, sendMailToGuest} from "../../util/SaveAPI";
 
-const GuestPage = (props) => {
+const GuestsList = (props) => {
     const originData = []
     props.guests.forEach((guest, idx) => {
         originData.push({
@@ -115,7 +115,7 @@ const GuestPage = (props) => {
             }
         };
 
-
+        function compareByAlph (a, b) { if (a > b) { return -1; } if (a < b) { return 1; } return 0; }
         const columns = [
             {
                 title: 'Namn',
@@ -130,7 +130,7 @@ const GuestPage = (props) => {
                 dataIndex: 'email',
                 key: 'email',
                 sorter: {
-                    compare: (a, b) => a.area - b.area
+                    compare: (a, b) => compareByAlph(a.email,b.email)
                 },
                 editable: true,
             },
@@ -168,7 +168,7 @@ const GuestPage = (props) => {
                 title: 'Ta bort',
                 dataIndex: 'taBort',
                 render: (text, record) => (
-                    <Popconfirm title="Är du saker att du vill ta bort gäst?" onConfirm={(event) => {
+                    <Popconfirm title="Är du säker att du vill ta bort gäst?" onConfirm={(event) => {
                         event.preventDefault();
                         deleteGuest(record.id)
                     }}>
@@ -200,4 +200,4 @@ return(returns(columns,isEditing,form,data,cancel))
     );
 }
 
-export default GuestPage;
+export default GuestsList;

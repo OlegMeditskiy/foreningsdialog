@@ -13,7 +13,8 @@ import java.util.List;
 @Setter
 public class HouseResponse {
     private Long id;
-
+    private Long associationId;
+    private Long organizationId;
     private String street;
 
     private String city;

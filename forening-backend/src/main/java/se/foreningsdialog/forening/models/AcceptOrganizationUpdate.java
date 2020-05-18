@@ -22,8 +22,8 @@ public class AcceptOrganizationUpdate {
     private int oldTotalArea;
 
     private String newOrganizationNumber;
-    private Integer newNumberOfApartments;
-    private Integer newTotalArea;
+    private int newNumberOfApartments;
+    private int newTotalArea;
 
     public AcceptOrganizationUpdate() {
     }

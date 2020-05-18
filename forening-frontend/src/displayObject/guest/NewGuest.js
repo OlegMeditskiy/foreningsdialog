@@ -29,6 +29,7 @@ export default class NewGuest extends Component {
 
         }
         else {
+            event.preventDefault();
             this.setState({validated:true})
             const createNewGuestRequest = {
                 apartmentId: this.props.match.params.apartmentId,
@@ -48,7 +49,7 @@ export default class NewGuest extends Component {
                 });
             });
         }
-
+        this.setState({validated:true})
 
     }
 
@@ -59,14 +60,14 @@ export default class NewGuest extends Component {
                 <Form noValidate validated={this.state.validated} onSubmit={this.handleSubmit}>
                     <Form.Group>
                         <Form.Label>E-mail</Form.Label>
-                        <Form.Control required type={"email"} placeholder="Skriv in foreningsnamn" name={"email"}
+                        <Form.Control required type={"email"} placeholder="Skriv in e-mail" name={"email"}
                                       onChange={this.handleChange}/>
                         <Form.Control.Feedback type="invalid">
                             Skriva in e-mail
                         </Form.Control.Feedback>
                     </Form.Group>
-                    <Button variant="primary" type="submit">
-                        Submit
+                    <Button variant="secondary" type="submit">
+                        Lägga till
                     </Button>
                 </Form>
             </div>

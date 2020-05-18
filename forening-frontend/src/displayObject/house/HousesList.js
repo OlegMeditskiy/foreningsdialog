@@ -1,22 +1,27 @@
 import React, {useState} from "react";
 import {Form, notification, Popconfirm} from "antd";
-import NewContact from "./NewContact";
-import {deleteContactFromAssociation} from "../../util/DeleteAPI";
-import {saveContact} from "../../util/SaveAPI";
+import NewHouse from "./NewHouse";
+import {deleteHouseFromAssociation} from "../../util/DeleteAPI";
+import {saveHouse} from "../../util/SaveAPI";
 import {returns} from "../Tables/EditableCell";
 
-const ContactPage = (props) => {
+const HousesList = (props) => {
+    function redirectToHouse(event, record) {
+        return props.history.push({pathname: `/house/${record.id}`})
+    }
+
     const originData = []
 
-    props.contacts.forEach((contact, idx) => {
+    props.houses.forEach((house, idx) => {
         originData.push({
             key: idx,
-            id: contact.id,
-            contactName: contact.contactName,
-            contactEmail: contact.contactEmail,
-            contactTelephone: contact.contactTelephone,
+            id: house.id,
+            street: house.street,
+            city: house.city,
+            zipCode: house.zipCode,
         })
     });
+
 
 
     const EditableTable = () => {
@@ -35,16 +40,16 @@ const ContactPage = (props) => {
             setEditingKey('');
         };
 
-        const deleteContact = async id => {
-            const deleteContactRequest = {
+        const deleteHouse = async id => {
+            const deleteHouseRequest = {
                 associationId: props.match.params.associationId,
-                contactId: id
+                houseId: id
             }
-            deleteContactFromAssociation(deleteContactRequest)
+            deleteHouseFromAssociation(deleteHouseRequest)
                 .then(() => {
                     notification.success({
                         message: 'Föreningsdialog App',
-                        description: "You have deleted association",
+                        description: "Du har tagit bort hus",
                     });
                     props.load();
                 }).catch(() => {
@@ -56,6 +61,7 @@ const ContactPage = (props) => {
 
         }
         const save = async key => {
+
             try {
                 const row = await form.validateFields();
                 const newData = [...data];
@@ -71,15 +77,15 @@ const ContactPage = (props) => {
                     setEditingKey('');
                 }
 
-                const saveContactRequest = {
-                    contactId: newData[index].id,
-                    contactEmail: newData[index].contactEmail,
-                    contactName: newData[index].contactName,
-                    contactTelephone: newData[index].contactTelephone,
+                const saveHouseRequest = {
+                    houseId: newData[index].id,
+                    street: newData[index].street,
+                    city: newData[index].city,
+                    zipCode: newData[index].zipCode,
 
                 };
 
-                saveContact(saveContactRequest)
+                saveHouse(saveHouseRequest)
                     .then(() => {
                         notification.success({
                             message: 'Föreningsdialog App',
@@ -97,35 +103,42 @@ const ContactPage = (props) => {
                 console.log('Validate Failed:', errInfo);
             }
         };
-
-
-
-
+        function compareByAlph (a, b) { if (a > b) { return -1; } if (a < b) { return 1; } return 0; }
         const columns = [
+
             {
-                title: 'Namn',
-                dataIndex: 'contactName',
-                key: 'contactName',
+                title: 'Öppna',
+                key: 'action',
+                render: (text, record) => (
+                    <span>
+                <button className={"unstyled-button"} onClick={event => {
+                    redirectToHouse(event, record)
+                }}>Öppna</button>
+      </span>
+                ),
+            },
+            {
+                title: 'Gatudaddress',
+                dataIndex: 'street',
+                key: 'street',
+                sorter: (a, b) => compareByAlph(a.street,b.street),
+                editable: true,
+            },
+            {
+                title: 'Ort',
+                dataIndex: 'city',
+                key: 'city',
                 sorter: {
-                    compare: (a, b) => a.contactName - b.contactName
+                    compare: (a, b) => compareByAlph(a.city,b.city)
                 },
                 editable: true,
             },
             {
-                title: 'E-mail',
-                dataIndex: 'contactEmail',
-                key: 'contactEmail',
+                title: 'Postnummer',
+                dataIndex: 'zipCode',
+                key: 'zipCode',
                 sorter: {
-                    compare: (a, b) => a.contactEmail - b.contactEmail
-                },
-                editable: true,
-            },
-            {
-                title: 'Telefonnummer',
-                dataIndex: 'contactTelephone',
-                key: 'contactTelephone',
-                sorter: {
-                    compare: (a, b) => a.contactTelephone - b.contactTelephone
+                    compare: (a, b) => a.zipCode - b.zipCode
                 },
                 editable: true,
             },
@@ -163,9 +176,9 @@ const ContactPage = (props) => {
                 title: 'Ta bort',
                 dataIndex: 'delete',
                 render: (text, record) => (
-                    <Popconfirm title="Är du säker att du vill ta bort?" onConfirm={(event) => {
+                    <Popconfirm title="Är du säker att du vill ta bort hus?" onConfirm={(event) => {
                         event.preventDefault();
-                        deleteContact(record.id)
+                        deleteHouse(record.id)
                     }}>
                         <button className={"unstyled-button"}>Ta bort</button>
                     </Popconfirm>
@@ -176,13 +189,10 @@ const ContactPage = (props) => {
     };
     return (
         <div>
-            <NewContact {...props} update={props.update}/>
-            <EditableTable/>
-            {/*<Table*/}
-            {/*    dataSource={dataSource} onChange={onChange} columns={columns} />;*/}
-
+            <div className={"site-block"}><NewHouse {...props} update={props.update}/></div>
+            <div className={"site-block"}><EditableTable/></div>
         </div>
     );
 }
 
-export default ContactPage;
+export default HousesList;

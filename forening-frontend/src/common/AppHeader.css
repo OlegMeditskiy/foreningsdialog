@@ -7,13 +7,31 @@
     line-height: 64px;
     font-size: 21px;
     display: inline-block;
+    color: white;
 }
 
 .app-title a:hover {
     text-decoration: none;
+    color: black;
+}
+.ant-menu-horizontal > .ant-menu-item-selected > a{
+    color: white;
+}
+.ant-menu-horizontal > .ant-menu-item-selected > a:hover{
+    color: black;
+}
+.ant-menu-horizontal > .ant-menu-item > a{
+    color: white;
+}
+.ant-menu-horizontal > .ant-menu-item > a:hover{
+    color: black;
+}
+.ant-menu-horizontal > .ant-menu-item:hover, .ant-menu-horizontal > .ant-menu-submenu:hover, .ant-menu-horizontal > .ant-menu-item-active, .ant-menu-horizontal > .ant-menu-submenu-active, .ant-menu-horizontal > .ant-menu-item-open, .ant-menu-horizontal > .ant-menu-submenu-open, .ant-menu-horizontal > .ant-menu-item-selected, .ant-menu-horizontal > .ant-menu-submenu-selected{
+
 }
 
 .app-header {
+    background-color: gray;
     position: fixed;
     width: 100%;
     box-shadow: 0 2px 8px #f0f1f2;
@@ -23,9 +41,11 @@
 
 .app-menu {
     float: right;
+    background-color: gray;
 }
 
 .app-menu > li {
+
     padding: 0 20px;
 }
 
@@ -35,11 +55,13 @@
 }
 
 .app-menu > li > a > i {
+
     margin-right: 0 !important;
 }
 
 .profile-dropdown-menu {
     min-width: 180px;
+
 }
 
 .profile-menu .user-full-name-info {

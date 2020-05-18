@@ -30,6 +30,7 @@ export default class NewApartment extends Component {
             event.stopPropagation();
         }
         else {
+            event.preventDefault();
             this.setState({validated:true})
             const createNewApartmentRequest = {
                 houseId: this.props.match.params.houseId,
@@ -51,6 +52,7 @@ export default class NewApartment extends Component {
                 });
             });
         }
+        this.setState({validated:true})
     }
 
     render() {
@@ -60,7 +62,7 @@ export default class NewApartment extends Component {
                 <Form noValidate validated={this.state.validated} onSubmit={this.handleSubmit}>
                     <Form.Group>
                         <Form.Label>Lägenhetsnummer</Form.Label>
-                        <Form.Control required type={"number"} placeholder="Skriv in foreningsnamn" name={"number"}
+                        <Form.Control required type={"number"} placeholder="Skriv in lägenhetsnummer" name={"number"}
                                       onChange={this.handleChange}/>
                         <Form.Control.Feedback type="invalid">
                             Skriva in lägenhetsnummer
@@ -68,7 +70,7 @@ export default class NewApartment extends Component {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Area</Form.Label>
-                        <Form.Control required type={"number"} placeholder="Skriv in foreningsnamn" name={"roomAndKitchen"}
+                        <Form.Control required type={"number"} placeholder="Skriv in area" name={"roomAndKitchen"}
                                       onChange={this.handleChange}/>
                         <Form.Control.Feedback type="invalid">
                             Skriva in area
@@ -77,14 +79,14 @@ export default class NewApartment extends Component {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Rum och kök</Form.Label>
-                        <Form.Control  required type={"number"} placeholder="Skriv in foreningsnamn" name={"area"}
+                        <Form.Control  required type={"number"} placeholder="Skriv in rum och kök" name={"area"}
                                       onChange={this.handleChange}/>
                         <Form.Control.Feedback type="invalid">
                             Skriva in rum och kök
                         </Form.Control.Feedback>
                     </Form.Group>
-                    <Button variant="primary" type="submit">
-                        Submit
+                    <Button variant="secondary" type="submit">
+                        Lägga till
                     </Button>
                 </Form>
             </div>

@@ -7,11 +7,10 @@ import org.springframework.stereotype.Repository;
 import se.foreningsdialog.forening.models.Organization;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface OrganizationRepository extends JpaRepository<Organization, Long> {
-    Optional<Organization> findById(Long id);
+
 
     Page<Organization> findByCreatedBy(Long userId, Pageable pageable);
 

@@ -1,26 +1,29 @@
 import React, {useState} from "react";
 import {Form, notification, Popconfirm} from "antd";
+import {deleteNews} from "../../util/DeleteAPI";
+import {saveNews} from "../../util/SaveAPI";
 import {returns} from "../Tables/EditableCell";
-import NewApartment from "./NewApartment";
-import {deleteApartmentFromAssociation} from "../../util/DeleteAPI";
-import {saveApartment} from "../../util/SaveAPI";
+import Moment from 'react-moment';
+import 'moment-timezone';
+const NewsList = (props) => {
 
-const ApartmentsPage = (props) => {
     const originData = []
-    props.apartments.forEach((apartment, idx) => {
+    const news = props.news;
+    news.sort(function(a,b){
+        return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
+    news.forEach((news, idx) => {
         originData.push({
             key: idx,
-            id: apartment.id,
-            number: apartment.number,
-            area: apartment.area,
-            roomAndKitchen: apartment.roomAndKitchen,
-            guests: apartment.guests
+            id: news.id,
+            newsText:news.newsText,
+            newsTitle:news.newsTitle,
+            createdAt:news.createdAt
         })
     });
 
-    function redirectToApartment(event, record) {
-        return props.history.push({pathname: `/apartment/${record.id}`})
-    }
+
 
     const EditableTable = () => {
         const [form] = Form.useForm();
@@ -38,16 +41,15 @@ const ApartmentsPage = (props) => {
             setEditingKey('');
         };
 
-        const deleteApartment = async id => {
-            const deleteApartmentRequest = {
-                houseId: props.match.params.houseId,
-                apartmentId: id
+        const deleteNewsFunction = async id => {
+            const deleteNewsRequest = {
+                id: id
             }
-            deleteApartmentFromAssociation(deleteApartmentRequest)
+            deleteNews(deleteNewsRequest)
                 .then(() => {
                     notification.success({
                         message: 'Föreningsdialog App',
-                        description: "Du har tagit bort lägenhet",
+                        description: "Du har tagit bort nyhet",
                     });
                     props.load();
                 }).catch(() => {
@@ -74,20 +76,19 @@ const ApartmentsPage = (props) => {
                     setEditingKey('');
                 }
 
-                const saveApartmentRequest = {
-                    apartmentId: newData[index].id,
-                    number: newData[index].number,
-                    area: newData[index].area,
-                    roomAndKitchen: newData[index].roomAndKitchen,
-
+                const saveNewsRequest = {
+                    newsText: newData[index].newsText,
+                    newsTitle: newData[index].newsTitle,
+                    newsId: newData[index].id,
                 };
 
-                saveApartment(saveApartmentRequest)
+                saveNews(saveNewsRequest)
                     .then(() => {
                         notification.success({
                             message: 'Föreningsdialog App',
-                            description: "You have updated association",
+                            description: "Du har uppdaterat nyhet",
                         });
+                        props.load();
                     }).catch(() => {
                     notification.error({
                         message: 'Föreningsdialog App',
@@ -96,47 +97,35 @@ const ApartmentsPage = (props) => {
                 });
 
             } catch (errInfo) {
-
+                console.log('Validate Failed:', errInfo);
             }
         };
 
-
+        function compareByAlph (a, b) { if (a > b) { return -1; } if (a < b) { return 1; } return 0; }
         const columns = [
             {
-                title: 'Lägenhet',
-                key: 'action',
-                render: (text, record) => (
-                    <span>
-                <button className={"unstyled-button"}
-                        onClick={event => redirectToApartment(event, record)}>Öppna</button>
-      </span>
-                ),
-            },
-            {
-                title: 'Lägenhetsnummer',
-                dataIndex: 'number',
-                key: 'number',
+                title: 'Datum',
+                dataIndex: 'createdAt',
+                key: 'createdAt',
+                render:(text)=><Moment format={"YYYY-MM-DD HH:mm"}>{text}</Moment>,
                 sorter: {
-                    compare: (a, b) => a.number - b.number
+                    compare: (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
                 },
                 editable: true,
             },
             {
-                title: 'Area',
-                dataIndex: 'area',
-                key: 'area',
+                title: 'Nyhet titel',
+                dataIndex: 'newsTitle',
+                key: 'newsTitle',
                 sorter: {
-                    compare: (a, b) => a.area - b.area
+                    compare: (a, b) => compareByAlph(a.newsTitle,b.newsTitle)
                 },
                 editable: true,
             },
             {
-                title: 'Rum och Kök',
-                dataIndex: 'roomAndKitchen',
-                key: 'roomAndKitchen',
-                sorter: {
-                    compare: (a, b) => a.roomAndKitchen - b.roomAndKitchen
-                },
+                title: 'Nyhet text',
+                dataIndex: 'newsText',
+                key: 'newsText',
                 editable: true,
             },
             {
@@ -173,9 +162,9 @@ const ApartmentsPage = (props) => {
                 title: 'Ta bort',
                 dataIndex: 'delete',
                 render: (text, record) => (
-                    <Popconfirm title="Är du saker att du vill ta bort lägenhet?" onConfirm={(event) => {
+                    <Popconfirm title="Är du säker att du vill ta bort nyhet?" onConfirm={(event) => {
                         event.preventDefault();
-                        deleteApartment(record.id)
+                        deleteNewsFunction(record.id)
                     }}>
                         <button className={"unstyled-button"}>Ta bort</button>
                     </Popconfirm>
@@ -186,13 +175,9 @@ const ApartmentsPage = (props) => {
     };
     return (
         <div>
-            <NewApartment {...props} update={props.update}/>
-            <EditableTable/>
-            {/*<Table*/}
-            {/*    dataSource={dataSource} onChange={onChange} columns={columns} />;*/}
-
+            <div className={"site-block"}><EditableTable/></div>
         </div>
     );
 }
 
-export default ApartmentsPage;
+export default NewsList;

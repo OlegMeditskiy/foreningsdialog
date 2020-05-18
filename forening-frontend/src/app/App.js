@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
 import {Route, Switch, withRouter} from 'react-router-dom';
-
 import {ACCESS_TOKEN} from '../constants';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
@@ -23,7 +22,7 @@ class App extends Component {
         super(props);
         this.state = {
             currentUser: null,
-            isAuthenticated: false,
+            isAuthenticated: null,
             isLoading: false
         }
         this.handleLogout = this.handleLogout.bind(this);
@@ -91,37 +90,33 @@ class App extends Component {
             return <LoadingIndicator/>
         }
         return (
+                <Layout className="app-container">
+                    <AppHeader isAuthenticated={this.state.isAuthenticated}
+                               currentUser={this.state.currentUser}
+                               onLogout={this.handleLogout}/>
+                    <Content className="app-content">
+                        <div className="container">
+                            <Switch>
 
-            <Layout className="app-container">
-                <AppHeader isAuthenticated={this.state.isAuthenticated}
-                           currentUser={this.state.currentUser}
-                           onLogout={this.handleLogout}/>
-                <Content className="app-content">
-                    <div className="container">
-                        <Switch>
-                            {/*<Route exact path='/' component={Signup}/>*/}
-                            <Route path="/login"
-                                   render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
-                            <Route path="/signup" component={Signup}/>
-                            <Route path="/users/:username"
-                                   render={(props) => <Profile isAuthenticated={this.state.isAuthenticated}
-                                                               currentUser={this.state.currentUser} {...props}  />}>
-                            </Route>
-                            <Route path="/guestRegister/:uniqueKey"
-                                   render={(props) => <GuestRegister {...props}  />}>
-                            </Route>
-                            {/*<Route*/}
-                            {/*    path="/"*/}
-                            {/*    render={(props)=><Admin authenticated={this.state.isAuthenticated} path="/" currentUser={this.state.currentUser} {...props} handleLogout={this.handleLogout}/>}></Route>*/}
-                            <PrivateRoute authenticated={this.state.isAuthenticated} path="/"
-                                          currentUser={this.state.currentUser} component={Admin}
-                                          handleLogout={this.handleLogout}/>
-                            <Route component={NotFound}/>
-                        </Switch>
-                    </div>
-                </Content>
-            </Layout>
-        );
+                                <Route path="/login"
+                                       render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
+                                <Route path="/signup" component={Signup}/>
+                                <Route path="/users/:username"
+                                       render={(props) => <Profile isAuthenticated={this.state.isAuthenticated}
+                                                                   currentUser={this.state.currentUser} {...props}  />}>
+                                </Route>
+                                <Route path="/guestRegister/:uniqueKey"
+                                       render={(props) => <GuestRegister {...props}  />}>
+                                </Route>
+                                {(this.state.isAuthenticated!==null)?<PrivateRoute authenticated={this.state.isAuthenticated} path="/" handleLogout={this.handleLogout}
+                                                                                   currentUser={this.state.currentUser} component={Admin} />:null}
+                                <Route component={NotFound}/>
+                            </Switch>
+                        </div>
+                    </Content>
+                </Layout>
+            );
+
     }
 }
 

@@ -10,7 +10,7 @@ class NotFound extends Component {
                 status="404"
                 title="404"
                 subTitle="Sorry, page not found."
-                extra={<Button type="primary">Back Home</Button>}
+                extra={<Button type="secondary">Back Home</Button>}
             />
         );
     }
