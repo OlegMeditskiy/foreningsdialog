@@ -31,7 +31,6 @@ export default class NewContact extends Component {
         }
         else {
             event.preventDefault();
-            this.setState({validated:true})
             const createNewContactRequest = {
                 associationId: this.props.match.params.associationId,
                 contactEmail: this.state.contactEmail,
