@@ -182,7 +182,7 @@ public class AssociationAdminController {
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity uploadFile(@RequestParam MultipartFile file) {
         storageService.store(file);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(new ApiResponse(true, "File var laddat upp."));
     }
 
     @PostMapping(value = "/logoUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -194,7 +194,7 @@ public class AssociationAdminController {
         AssociationName associationName = associationNameRepository.getOne(logoUploadRequest.getAssociationId());
         associationName.setLogo(logoURL);
         associationNameRepository.save(associationName);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(new ApiResponse(true, "Logo var uppdaterat."));
     }
 
 

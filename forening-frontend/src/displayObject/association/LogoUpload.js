@@ -7,7 +7,8 @@ class LogoUpload extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false
+            isLoading: false,
+            logo:null
         }
         this.uploadAssociationLogo = this.uploadAssociationLogo.bind(this);
         this.handleOnFileChange = this.handleOnFileChange.bind(this);
@@ -24,9 +25,9 @@ class LogoUpload extends Component {
             .then(() => {
                 notification.success({
                     message: 'Föreningsdialog App',
-                    description: "File was uploaded",
+                    description: "Du har uppdaterat logo",
                 });
-                this.props.load();
+                // this.props.load();
             }).catch(() => {
             notification.error({
                 message: 'Föreningsdialog App',

@@ -56,7 +56,6 @@ public class AdminCreateObjectsController {
     @PostMapping("/house")
     public ResponseEntity<?> createHouse(@Valid @RequestBody NewHouseRequest newHouseRequest) {
         return houseService.createHouse(newHouseRequest);
-
     }
 
     @PostMapping("/contact")

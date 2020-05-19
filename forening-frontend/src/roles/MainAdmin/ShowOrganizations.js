@@ -74,7 +74,7 @@ const ShowOrganizations = (props) => {
             .then(() => {
                 notification.success({
                     message: 'Föreningsdialog App',
-                    description: "You have decline organization " + organizationId,
+                    description: "Du har neckat organisation " + organizationId,
                 });
                 props.load();
             }).catch(() => {

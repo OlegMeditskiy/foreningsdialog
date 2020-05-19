@@ -72,7 +72,7 @@ const AssociationTable = (props) => {
                 .then(() => {
                     notification.success({
                         message: 'Föreningsdialog App',
-                        description: "You have updated association",
+                        description: "Du har uppdaterat förening",
                     });
                 }).catch(() => {
                 notification.error({

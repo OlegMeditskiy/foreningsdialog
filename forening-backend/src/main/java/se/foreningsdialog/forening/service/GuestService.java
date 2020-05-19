@@ -67,22 +67,17 @@ public class GuestService {
 
     public ResponseEntity<?> sendMailToMember(MailRequest mailRequest) {
         Guest guest = guestRepository.getOne(mailRequest.getGuestId());
-        System.out.println(guest);
         String address = guest.getApartment().getHouse().getStreet();
-        System.out.println("Address:" + address);
         int number = guest.getApartment().getNumber();
         int area = guest.getApartment().getArea();
         int roomAndKitchen = guest.getApartment().getRoomAndKitchen();
-        System.out.println(number + " " + " " + area + " " + roomAndKitchen);
         if (guest.getGuestRegister() != null) {
-            System.out.println("exists");
             GuestRegister guestRegister = guestRegisterRepository.findByGuestId(guest.getId());
             String to = guest.getEmail();
             String subject = "Testing from Spring Boot";
             String text = "localhost:3000/guestRegister/" + guestRegister.getUniqueKey();
             emailService.sendSimpleMessage(to, subject, text);
         } else {
-            System.out.println("createGuest");
             GuestRegister guestRegister = new GuestRegister(address, number, area, roomAndKitchen);
             guestRegisterRepository.save(guestRegister);
             guest.setGuestRegister(guestRegister);

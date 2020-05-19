@@ -44,7 +44,7 @@ const ContactsList = (props) => {
                 .then(() => {
                     notification.success({
                         message: 'Föreningsdialog App',
-                        description: "You have deleted association",
+                        description: "Du har tagit bort kontakt",
                     });
                     props.load();
                 }).catch(() => {
@@ -83,7 +83,7 @@ const ContactsList = (props) => {
                     .then(() => {
                         notification.success({
                             message: 'Föreningsdialog App',
-                            description: "You have updated association",
+                            description: "Du har uppdaterat kontakt",
                         });
                         // props.update();
                     }).catch(() => {

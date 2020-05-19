@@ -100,7 +100,7 @@ const GuestsList = (props) => {
                     .then(() => {
                         notification.success({
                             message: 'Föreningsdialog App',
-                            description: "You have updated association",
+                            description: "Du har uppdaterat gäst",
                         });
                         // props.update();
                     }).catch(() => {

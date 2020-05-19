@@ -85,7 +85,7 @@ const ApartmentsList = (props) => {
                     .then(() => {
                         notification.success({
                             message: 'Föreningsdialog App',
-                            description: "You have updated association",
+                            description: "Du har uppdaterat lägenhet",
                         });
                     }).catch(() => {
                     notification.error({
