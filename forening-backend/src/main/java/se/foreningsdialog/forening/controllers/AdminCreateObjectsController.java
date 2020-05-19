@@ -70,7 +70,7 @@ public class AdminCreateObjectsController {
     }
 
     @PostMapping("/guest")
-    public ResponseEntity<?> createApartment(@Valid @RequestBody NewGuestRequest newGuestRequest) {
+    public ResponseEntity<?> createGuest(@Valid @RequestBody NewGuestRequest newGuestRequest) {
         return guestService.createGuest(newGuestRequest);
     }
 

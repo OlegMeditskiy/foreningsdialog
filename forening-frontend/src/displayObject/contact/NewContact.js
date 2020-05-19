@@ -48,7 +48,7 @@ export default class NewContact extends Component {
                 }).catch(error => {
                 notification.error({
                     message: 'Föreningsdialog App',
-                    description: error.message || 'Sorry! Something went wrong. Please try again!'
+                    description: 'Sorry! Something went wrong. Please try again!'
                 });
             });
         }
