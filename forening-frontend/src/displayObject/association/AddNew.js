@@ -37,7 +37,7 @@ export default class AddNew extends Component {
                 .then(response => {
                     notification.success({
                         message: 'Föreningsdialog App',
-                        description: "Thank you! You have created new association!",
+                        description: "Du har skapat förening",
                     });
                     this.props.load();
                 }).catch(error => {

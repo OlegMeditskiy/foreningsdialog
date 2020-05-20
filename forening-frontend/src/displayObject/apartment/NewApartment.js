@@ -42,7 +42,7 @@ export default class NewApartment extends Component {
                 .then(() => {
                     notification.success({
                         message: 'Föreningsdialog App',
-                        description: "Thank you! You have created new association!",
+                        description: "Du har skapat lägenhet",
                     });
                     this.props.load();
                 }).catch(() => {

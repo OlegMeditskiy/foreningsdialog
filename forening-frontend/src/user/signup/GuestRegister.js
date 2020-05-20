@@ -111,10 +111,12 @@ class GuestRegister extends Component {
         } else {
             return (
                 <div>
-                    <p>{this.state.address}</p>
-                    <p>{this.state.number}</p>
-                    <p>{this.state.area}</p>
-                    <p>{this.state.roomAndKitchen}</p>
+                    <h5>Information om hus</h5>
+                    <p>Gatuadress:{this.state.address}</p>
+                    <h5>Information om lägenhet</h5>
+                    <p>Lägenhetsnummer: {this.state.number}</p>
+                    <p>Area: {this.state.area}</p>
+                    <p>Rum och kök: {this.state.roomAndKitchen}</p>
                     <Form onSubmit={this.handleSubmit} className="signup-form">
                         <Form.Group>
                             <Form.Control
@@ -123,7 +125,7 @@ class GuestRegister extends Component {
                                 type="text"
                                 autoComplete="new-email"
                                 className={"username"}
-                                placeholder="Username"
+                                placeholder="Användernamn"
                                 onChange={this.handleChange}
                             />
                         </Form.Group>
@@ -134,7 +136,7 @@ class GuestRegister extends Component {
                                 type="password"
                                 autoComplete="new-password"
                                 className={"password"}
-                                placeholder="A password between 6 to 20 characters"
+                                placeholder="Lösenord mellan 6 och 20 symboler"
                                 onChange={this.handleChange}
                             />
                         </Form.Group>
@@ -144,11 +146,11 @@ class GuestRegister extends Component {
                                 name="name"
                                 type="text"
                                 className={"name"}
-                                placeholder="name"
+                                placeholder="Namn"
                                 onChange={this.handleChange}
                             />
                         </Form.Group>
-                        <Button variant="secondary" type="submit">Register</Button>
+                        <Button variant="secondary" type="submit">Registrera</Button>
                     </Form>
                 </div>
             )

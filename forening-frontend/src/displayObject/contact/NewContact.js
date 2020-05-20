@@ -41,7 +41,7 @@ export default class NewContact extends Component {
                 .then(response => {
                     notification.success({
                         message: 'Föreningsdialog App',
-                        description: "Thank you! You have created new association!",
+                        description: "Du har skapat kontakt",
                     });
                     this.props.load();
                 }).catch(error => {
