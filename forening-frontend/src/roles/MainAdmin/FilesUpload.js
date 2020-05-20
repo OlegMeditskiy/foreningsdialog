@@ -22,7 +22,7 @@ class FileUpload extends Component {
             .then(() => {
                 notification.success({
                     message: 'Föreningsdialog App',
-                    description: "File was uploaded",
+                    description: "Filen var laddat upp",
                 });
             }).catch(() => {
             notification.error({
@@ -39,7 +39,7 @@ class FileUpload extends Component {
             .then(() => {
                 notification.success({
                     message: 'Föreningsdialog App',
-                    description: "File was uploaded",
+                    description: "Fillen var laddat upp",
                 });
             }).catch(() => {
             notification.error({

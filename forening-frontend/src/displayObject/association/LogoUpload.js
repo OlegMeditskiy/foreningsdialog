@@ -71,7 +71,7 @@ class LogoUpload extends Component {
                                     // custom
                                 />
                             </Form.Group>
-                        <Button variant={"secondary"} type="submit">Upload</Button>
+                        <Button variant={"secondary"} type="submit">Ladda upp</Button>
                     </Form></Col>
                 </Row>
             </Container>

@@ -107,7 +107,7 @@ class AssociationInfo extends Component {
                             <DocumentUpload load={this.loadAssociation}
                                         documents={this.state.association.documentTypes} {...this.props} />
                         </Tab>
-                        <Tab eventKey="news" title={"News"}>
+                        <Tab eventKey="news" title={"Nyheter"}>
                             <News load={this.loadAssociation} news={this.state.association.news} {...this.props}/>
                         </Tab>
                         {/*<Tab eventKey="settings" title={"Inställningar"}>*/}

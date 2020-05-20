@@ -67,9 +67,9 @@ const Login = (props) => {
                     </Form.Item>
                     <Form.Item>
                         <Button type="secondary" htmlType="submit" className="login-form-button">
-                            Log in
+                            Logga in
                         </Button>
-                        Or <a href="/signup">register now!</a>
+                        Or <a href="/signup">registrera nu!</a>
                     </Form.Item>
                 </Form>
             </div>
@@ -77,64 +77,7 @@ const Login = (props) => {
     );
 };
 
-// class Login extends Component {
-//     render() {
-//         const AntWrappedLoginForm = Form.create()(LoginForm)
-//         return (
-//             <div className="login-container">
-//                 <h1 className="page-title">Login</h1>
-//                 <div className="login-content">
-//                     <AntWrappedLoginForm onLogin={this.props.onLogin} />
-//                 </div>
-//             </div>
-//         );
-//     }
-// }
-//
-// class LoginForm extends Component {
-//     constructor(props) {
-//         super(props);
-//         this.handleSubmit = this.handleSubmit.bind(this);
-//     }
-//
-//
-//
-//     render() {
-//         const { getFieldDecorator } = this.props.form;
-//         return (
-//             <Form onSubmit={this.handleSubmit} className="login-form">
-//                 <FormItem>
-//                     {getFieldDecorator('username', {
-//                         rules: [{ required: true, message: 'Please input your email!' }],
-//                     })(
-//                     <Input
-//                         type="email"
-//                         prefix={<Icon type="user" />}
-//                         size="large"
-//                         name="username"
-//                         placeholder="E-mail" />
-//                     )}
-//                 </FormItem>
-//                 <FormItem>
-//                 {getFieldDecorator('password', {
-//                     rules: [{ required: true, message: 'Please input your Password!' }],
-//                 })(
-//                     <Input
-//                         prefix={<Icon type="lock" />}
-//                         size="large"
-//                         name="password"
-//                         type="password"
-//                         placeholder="Password"  />
-//                 )}
-//                 </FormItem>
-//                 <FormItem>
-//                     <Button type="secondary" htmlType="submit" size="large" className="login-form-button">Login</Button>
-//                     Or <Link to="/signup">register now!</Link>
-//                 </FormItem>
-//             </Form>
-//         );
-//     }
-// }
+
 
 
 export default Login;
