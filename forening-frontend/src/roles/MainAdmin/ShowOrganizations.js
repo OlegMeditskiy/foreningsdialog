@@ -116,6 +116,7 @@ const ShowOrganizations = (props) => {
     function ShowActivated() {
         return (
             activated.map((organisation, idx) => {
+                let organizationProtokol = "http://localhost:8080/files/organisation_"+organisation.id+"_ArsProtokoll.pdf";
                     return (
                         <div className={"organisations"} key={idx}>
                             <div>
@@ -124,6 +125,7 @@ const ShowOrganizations = (props) => {
                                     <li>Organisationsnummer: {organisation.orgNumber}</li>
                                     <li>Total area: {organisation.totalArea}</li>
                                     <li>Antal lägenheter: {organisation.numberOfApartments}</li>
+                                    <li><a href={organizationProtokol} target={"_blank"}>Protokol</a></li>
                                 </ul>
                             </div>
                             <div className={"associations"}>
@@ -177,6 +179,7 @@ const ShowOrganizations = (props) => {
     function ShowDeclined() {
         return (
             declined.map((organisation, idx) => {
+                let organizationProtokol = "http://localhost:8080/files/organisation_"+organisation.id+"_ArsProtokoll.pdf";
                     return (
                         <div className={"organisations"} key={idx}>
                             <div>
@@ -185,6 +188,7 @@ const ShowOrganizations = (props) => {
                                     <li>Organisationsnummer: {organisation.orgNumber}</li>
                                     <li>Total area: {organisation.totalArea}</li>
                                     <li>Antal lägenheter: {organisation.numberOfApartments}</li>
+                                    <li><a href={organizationProtokol}></a></li>
                                 </ul>
                             </div>
                             <div className={"associations"}>
@@ -223,6 +227,7 @@ const ShowOrganizations = (props) => {
                                                     )
                                                 })}
                                             </div>
+
                                         </div>
                                     )
                                 })}
@@ -238,6 +243,7 @@ const ShowOrganizations = (props) => {
     function ShowNotActivated() {
         return (
             notActivated.map((organisation, idx) => {
+                let organizationProtokol = "http://localhost:8080/files/organisation_"+organisation.id+"_ArsProtokoll.pdf";
                     return (
                         <div className={"organisations"} key={idx}>
                             <div>
@@ -246,6 +252,7 @@ const ShowOrganizations = (props) => {
                                     <li>Organisationsnummer: {organisation.orgNumber}</li>
                                     <li>Total area: {organisation.totalArea}</li>
                                     <li>Antal lägenheter: {organisation.numberOfApartments}</li>
+                                    <li><a href={organizationProtokol}></a></li>
                                 </ul>
                             </div>
                             <div className={"associations"}>

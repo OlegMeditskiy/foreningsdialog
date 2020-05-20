@@ -203,7 +203,7 @@ public class AuthService {
         for (Organization organization : signUpRequest.getAssociation().getOrganizations()) {
             organization.setCreatedBy(user.getId());
             organizationRepository.save(organization);
-            String filename = "organisation_"+organization.getId()+"_ÅrsProtokoll";
+            String filename = "organisation_"+organization.getId()+"_ArsProtokoll";
             storageService.saveAs(file,filename);
 
             ExternLokalSettings externLokal = new ExternLokalSettings();

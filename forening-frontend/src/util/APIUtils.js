@@ -45,14 +45,6 @@ export const requestFile = (options) => {
         );
 };
 
-export function fileUpload(file) {
-    return requestFile({
-        url: API_BASE_URL + "/associationAdmin/upload",
-        method: 'POST',
-        body: file
-    })
-
-}
 export function createNewDocument(file) {
     return requestFile({
         url: API_BASE_URL + "/associationAdmin/create/document",

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Link, Route, Switch} from 'react-router-dom';
-import LoadingIndicator from "../common/LoadingIndicator";
+import {Route, Switch} from 'react-router-dom';
 import OrganizationsList from "./organization/OrganizationsList";
 import OrganizationInfo from "./organization/OrganizationInfo";
 import AssociationInfo from "./association/AssociationInfo";
@@ -91,7 +90,6 @@ class AdminMainPage extends Component {
                                                                 organizations={this.state.organizations}  {...props}
                                                                 update={this.update}/>}>
                     </Route>
-
                     <Route path={`${this.props.match.path}organisation/:organisationId`}
                            render={(props) => <OrganizationInfo currentUser={this.props.currentUser}
                                                                 update={this.update}

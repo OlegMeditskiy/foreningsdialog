@@ -69,7 +69,7 @@ public class AdminSaveObjectController {
     @PostMapping(value = "/protocol",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> saveContact(@RequestPart("file") @Valid @NotNull @NotBlank @RequestParam MultipartFile file,
                                          @RequestPart ("properties") @Valid UpdateProtocolRequest updateProtocolRequest) {
-        String filename = "organisation_"+updateProtocolRequest.getId()+"_ÅrsProtokoll";
+        String filename = "organisation_"+updateProtocolRequest.getId()+"_ArsProtokoll";
         storageService.saveAs(file,filename);
         return ResponseEntity.ok().body(new ApiResponse(true, "Protocol was updated"));
     }
