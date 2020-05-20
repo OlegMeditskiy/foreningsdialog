@@ -38,6 +38,7 @@ public class GuestService {
         GuestRegister guestRegister = guestRegisterRepository.findByUniqueKey(uniqueKey);
         GuestRegisterResponse guestRegisterResponse = new GuestRegisterResponse();
         guestRegisterResponse.setAddress(guestRegister.getAddress());
+        guestRegisterResponse.setId(guestRegister.getGuest().getId());
         guestRegisterResponse.setArea(guestRegister.getArea());
         guestRegisterResponse.setNumber(guestRegister.getNumber());
         guestRegisterResponse.setRoomAndKitchen(guestRegister.getRoomAndKitchen());
@@ -75,13 +76,12 @@ public class GuestService {
             GuestRegister guestRegister = guestRegisterRepository.findByGuestId(guest.getId());
             String to = guest.getEmail();
             String subject = "Testing from Spring Boot";
-            String text = "localhost:3000/guestRegister/" + guestRegister.getUniqueKey();
+            String text = "http://localhost:3000/guestRegister/" + guestRegister.getUniqueKey();
             emailService.sendSimpleMessage(to, subject, text);
         } else {
             GuestRegister guestRegister = new GuestRegister(address, number, area, roomAndKitchen);
+            guestRegister.setGuest(guest);
             guestRegisterRepository.save(guestRegister);
-            guest.setGuestRegister(guestRegister);
-            guestRepository.save(guest);
             String to = guest.getEmail();
             String subject = "Testing from Spring Boot";
             String text = "localhost:3000/guestRegister/" + guestRegister.getUniqueKey();

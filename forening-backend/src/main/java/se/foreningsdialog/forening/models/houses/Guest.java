@@ -1,6 +1,7 @@
 package se.foreningsdialog.forening.models.houses;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import se.foreningsdialog.forening.models.GuestRegister;
@@ -19,8 +20,9 @@ public class Guest {
 
     private String email;
 
-    @OneToOne(mappedBy = "guest", cascade = CascadeType.ALL)
-    GuestRegister guestRegister;
+    @OneToOne(mappedBy = "guest")
+    @JsonManagedReference
+    private GuestRegister guestRegister;
 
     @ManyToOne
     @JoinTable(name = "apartment_guests", joinColumns = @JoinColumn(name = "guest_id"), inverseJoinColumns = @JoinColumn(name = "apartment_id"))

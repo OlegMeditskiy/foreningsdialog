@@ -8,16 +8,9 @@ import java.util.UUID;
 @Getter
 @Setter
 public class GuestRegisterRequest {
-    String username;
-    String password;
-    UUID uniqueKey;
-
-    @Override
-    public String toString() {
-        return "GuestRegisterRequest{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", uniqueKey=" + uniqueKey +
-                '}';
-    }
+    private String username;
+    private String password;
+    private UUID uniqueKey;
+    private Long guestId;
+    private String name;
 }

@@ -8,6 +8,7 @@ class GuestRegister extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            id:"",
             username: "",
             password: "",
             address: "",
@@ -16,7 +17,8 @@ class GuestRegister extends Component {
             roomAndKitchen: 0,
             isLoading: false,
             uniqueKey: '',
-            activated: false
+            activated: false,
+            name:''
         }
         this.loadGuestUser = this.loadGuestUser.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -37,7 +39,8 @@ class GuestRegister extends Component {
                 roomAndKitchen: response.roomAndKitchen,
                 isLoading: false,
                 uniqueKey: uniqueKey,
-                activated: response.activated
+                activated: response.activated,
+                id:response.id,
             });
         }).catch(error => {
             if (error.status === 404) {
@@ -72,7 +75,9 @@ class GuestRegister extends Component {
         const signupRequest = {
             username: this.state.username,
             password: this.state.password,
-            uniqueKey: this.state.uniqueKey
+            uniqueKey: this.state.uniqueKey,
+            name:this.state.name,
+            guestId:this.state.id
         };
         signupGuest(signupRequest)
             .then(() => {
@@ -95,12 +100,9 @@ class GuestRegister extends Component {
 
     }
 
-    Activated() {
-
-
-    }
 
     render() {
+         console.log(this.state.id)
 
         if (this.state.activated) {
             return (
@@ -133,6 +135,16 @@ class GuestRegister extends Component {
                                 autoComplete="new-password"
                                 className={"password"}
                                 placeholder="A password between 6 to 20 characters"
+                                onChange={this.handleChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Control
+                                size="large"
+                                name="name"
+                                type="text"
+                                className={"name"}
+                                placeholder="name"
                                 onChange={this.handleChange}
                             />
                         </Form.Group>

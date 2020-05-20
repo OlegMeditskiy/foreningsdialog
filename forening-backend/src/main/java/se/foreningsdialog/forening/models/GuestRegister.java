@@ -1,5 +1,6 @@
 package se.foreningsdialog.forening.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -23,9 +24,10 @@ public class GuestRegister {
     private int area;
     private int roomAndKitchen;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "guest_register_guest", joinColumns = @JoinColumn(name = "guest_register_id"), inverseJoinColumns = @JoinColumn(name = "guest_id"))
-    Guest guest;
+    @JsonBackReference
+    private Guest guest;
 
     @Type(type = "uuid-char")
     private UUID uniqueKey = UUID.randomUUID();

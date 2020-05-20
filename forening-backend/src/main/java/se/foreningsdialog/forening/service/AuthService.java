@@ -15,6 +15,7 @@ import se.foreningsdialog.forening.models.AssociationName;
 import se.foreningsdialog.forening.models.ContactPerson;
 import se.foreningsdialog.forening.models.GuestRegister;
 import se.foreningsdialog.forening.models.Organization;
+import se.foreningsdialog.forening.models.houses.Guest;
 import se.foreningsdialog.forening.models.houses.House;
 import se.foreningsdialog.forening.models.loanobjects.*;
 import se.foreningsdialog.forening.models.users.Admin;
@@ -87,8 +88,10 @@ public class AuthService {
     PoolRepository poolRepository;
     private final
     GuestRegisterRepository guestRegisterRepository;
+    private final
+    GuestRepository guestRepository;
 
-    public AuthService(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, OrganizationRepository organizationRepository, HouseRepository houseRepository, StorageService storageService, AssociationNameRepository associationNameRepository, ContactPersonRepository contactPersonRepository, PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider, ExternLokalRepository externLokalRepository, GuestFlatRepository guestFlatRepository, LaundryRepository laundryRepository, ParkingRepository parkingRepository, PartyPlaceRepository partyPlaceRepository, PoolRepository poolRepository, GuestRegisterRepository guestRegisterRepository) {
+    public AuthService(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, OrganizationRepository organizationRepository, HouseRepository houseRepository, StorageService storageService, AssociationNameRepository associationNameRepository, ContactPersonRepository contactPersonRepository, PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider, ExternLokalRepository externLokalRepository, GuestFlatRepository guestFlatRepository, LaundryRepository laundryRepository, ParkingRepository parkingRepository, PartyPlaceRepository partyPlaceRepository, PoolRepository poolRepository, GuestRegisterRepository guestRegisterRepository, GuestRepository guestRepository) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -106,6 +109,7 @@ public class AuthService {
         this.partyPlaceRepository = partyPlaceRepository;
         this.poolRepository = poolRepository;
         this.guestRegisterRepository = guestRegisterRepository;
+        this.guestRepository = guestRepository;
     }
     public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -127,7 +131,9 @@ public class AuthService {
         }
         // Creating user's account
         GuestUser user = new GuestUser(guestRegisterRequest.getUsername(), guestRegisterRequest.getPassword());
-
+        Guest guest = guestRepository.getOne(guestRegisterRequest.getGuestId());
+        guest.setName(guestRegisterRequest.getName());
+        guestRepository.save(guest);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Set<Role> roles = new LinkedHashSet<>();
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
@@ -150,7 +156,6 @@ public class AuthService {
         guestRegisterRepository.save(guestRegister);
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
-//        return ResponseEntity.ok().body("Created");
     }
     public ResponseEntity<?> registerMainAdmin(SignUpRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
