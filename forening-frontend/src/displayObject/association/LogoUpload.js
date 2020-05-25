@@ -27,7 +27,6 @@ class LogoUpload extends Component {
                     message: 'Föreningsdialog App',
                     description: "Du har uppdaterat logo",
                 });
-                // this.props.load();
             }).catch(() => {
             notification.error({
                 message: 'Föreningsdialog App',
@@ -68,7 +67,6 @@ class LogoUpload extends Component {
                                     id="logo"
                                     name="logo"
                                     onChange={this.handleOnFileChange}
-                                    // custom
                                 />
                             </Form.Group>
                         <Button variant={"secondary"} type="submit">Ladda upp</Button>

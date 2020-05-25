@@ -7,9 +7,6 @@ import './Profile.css';
 import NotFound from '../../common/NotFound';
 import ServerError from '../../common/ServerError';
 import {getUserProfile} from "../../util/GetAPI";
-
-// const TabPane = Tabs.TabPane;
-
 class Profile extends Component {
     constructor(props) {
         super(props);
@@ -73,9 +70,6 @@ class Profile extends Component {
             return <ServerError/>;
         }
 
-        // const tabBarStyle = {
-        //     textAlign: 'center'
-        // };
 
         return (
             <div className="profile">

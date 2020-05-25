@@ -148,7 +148,6 @@ class DocumentUpload extends Component{
 
     componentDidUpdate(nextProps) {
         if (this.props.documents !== nextProps.documents) {
-            // Reset State
             this.setState({
                 documents: []
             });

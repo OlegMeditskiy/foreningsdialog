@@ -102,7 +102,6 @@ const GuestsList = (props) => {
                             message: 'Föreningsdialog App',
                             description: "Du har uppdaterat gäst",
                         });
-                        // props.update();
                     }).catch(() => {
                     notification.error({
                         message: 'Föreningsdialog App',

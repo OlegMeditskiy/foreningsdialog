@@ -62,7 +62,7 @@ class AssociationInfo extends Component {
     componentDidUpdate(nextProps) {
 
         if (this.props.isAuthenticated !== nextProps.isAuthenticated) {
-            // Reset State
+
             this.setState({
                 association: {},
                 isLoading: false,
@@ -110,9 +110,7 @@ class AssociationInfo extends Component {
                         <Tab eventKey="news" title={"Nyheter"}>
                             <News load={this.loadAssociation} news={this.state.association.news} {...this.props}/>
                         </Tab>
-                        {/*<Tab eventKey="settings" title={"Inställningar"}>*/}
-                        {/*    <AssociationSettings/>*/}
-                        {/*</Tab>*/}
+
                     </Tabs>
                 </Container>
             </div>

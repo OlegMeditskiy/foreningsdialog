@@ -56,7 +56,6 @@ class OrganizationInfo extends Component {
 
     componentDidUpdate(nextProps) {
         if (this.props.isAuthenticated !== nextProps.isAuthenticated) {
-            // Reset State
             this.setState({
                 organization: {},
                 isLoading: false,

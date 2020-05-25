@@ -54,7 +54,6 @@ public class FileSystemStorageService implements StorageService {
     public void saveAs(MultipartFile file, String name) {
         String[] tokens = file.getOriginalFilename().split("\\.(?=[^\\.]+$)");
         String filename = name+"."+tokens[1];
-//        String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file " + filename);

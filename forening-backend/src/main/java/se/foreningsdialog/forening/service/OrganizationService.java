@@ -40,7 +40,6 @@ public class OrganizationService {
         this.storageService = storageService;
     }
 
-    //Organization admin service
 
 
     public List<OrganizationResponse> getAllOrganizationsCreatedBy(String username) {
@@ -179,8 +178,6 @@ public class OrganizationService {
         }
     }
 
-
-    /*MAIN ADMIN SERVICE*/
 
 
     public List<AcceptOrganizationResponse> getUpdatedOrganizations() {

@@ -83,42 +83,6 @@ class News extends Component{
             });
         });
     }
-    // newsList(){
-    //     this.state.news.sort(function(a,b){
-    //         return new Date(b.createdAt) - new Date(a.createdAt);
-    //     });
-    //     const newsList = this.state.news.map((news,idx)=>{
-    //         return(
-    //             <div className={"news"} key={idx}>
-    //                 <div>
-    //                     <h4>{news.newsTitle}
-    //                         <Form onSubmit={event=>this.deleteNewsFunction(event, news.id)}>
-    //                             <Button variant="danger" type="submit">
-    //                                 Ta bort
-    //                             </Button>
-    //                         </Form></h4>
-    //                 </div>
-    //                 <div>
-    //                     <Moment format={"YYYY-MM-DD HH:mm"}>{news.createdAt}</Moment>
-    //                 </div>
-    //                 <br/>
-    //                 <div>
-    //
-    //                     {news.newsText.split("\n").map((i,key) => {
-    //                         return <p key={key}>{i}</p>;
-    //                     })}
-    //
-    //                 </div>
-    //
-    //             </div>
-    //         )
-    //     })
-    //     return(
-    //         <Container>
-    //             {newsList}
-    //         </Container>
-    //     )
-    // }
 
     addNews(){
         return(
@@ -147,7 +111,6 @@ class News extends Component{
         return (
             <div>
                 {this.addNews()}
-                {/*{this.newsList()}*/}
                 <NewsList news={this.state.news} {...this.props}/>
             </div>
 

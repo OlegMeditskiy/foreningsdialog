@@ -22,14 +22,6 @@ const AssociationInput = (props) => {
                                 <FontAwesomeIcon icon={faTrash}/>
                             </Button>
                         </Accordion.Toggle>
-                        {/*<Card.Header>*/}
-                        {/*    <Button data-organization={props.organization} data-association={props.association} className={"pull-right"} variant={"danger"} onClick={(event)=>props.remove(event,idx,'house')} >*/}
-                        {/*        <FontAwesomeIcon icon={faTrash}/>*/}
-                        {/*    </Button>*/}
-                        {/*    <CustomToggle eventKey={'house'+idx}>*/}
-                        {/*        Hus {idx+1}*/}
-                        {/*    </CustomToggle>*/}
-                        {/*</Card.Header>*/}
                         <Accordion.Collapse eventKey={'association' + idx} id={'organisation' + {idx}}>
                             <Card.Body>
 

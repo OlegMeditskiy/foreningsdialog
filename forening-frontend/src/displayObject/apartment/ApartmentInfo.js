@@ -54,7 +54,6 @@ class ApartmentInfo extends Component {
     componentDidUpdate(nextProps) {
 
         if (this.props.isAuthenticated !== nextProps.isAuthenticated) {
-            // Reset State
             this.setState({
                 house: {},
                 isLoading: false,

@@ -129,7 +129,7 @@ public class AuthService {
             return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
-        // Creating user's account
+
         GuestUser user = new GuestUser(guestRegisterRequest.getUsername(), guestRegisterRequest.getPassword());
         Guest guest = guestRepository.getOne(guestRegisterRequest.getGuestId());
         guest.setName(guestRegisterRequest.getName());
@@ -163,7 +163,7 @@ public class AuthService {
                     HttpStatus.BAD_REQUEST);
         }
 
-        // Creating user's account
+
         MainAdmin user = new MainAdmin(signUpRequest.getUsername(), signUpRequest.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Set<Role> roles = new LinkedHashSet<>();
@@ -188,7 +188,7 @@ public class AuthService {
                     HttpStatus.BAD_REQUEST);
         }
 
-        // Creating user's account
+
         Admin user = new Admin(signUpRequest.getUsername(), signUpRequest.getPassword());
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -204,7 +204,7 @@ public class AuthService {
 
         User result = userRepository.save(user);
 
-        //Creating new Organizations
+
         for (Organization organization : signUpRequest.getAssociation().getOrganizations()) {
             organization.setCreatedBy(user.getId());
             organizationRepository.save(organization);

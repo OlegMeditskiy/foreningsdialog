@@ -330,7 +330,6 @@ class CreateNewOrganisations extends Component {
             this.state.username.validateStatus === 'success' &&
             this.state.email.validateStatus === 'success' &&
             this.state.password.validateStatus === 'success'
-            // && this.state.address.validateStatus === 'success'
         );
     }
 

@@ -91,7 +91,6 @@ const HousesList = (props) => {
                             message: 'Föreningsdialog App',
                             description: "Du har uppdaterat hus",
                         });
-                        // props.update();
                     }).catch(() => {
                     notification.error({
                         message: 'Föreningsdialog App',

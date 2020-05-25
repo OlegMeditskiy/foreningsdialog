@@ -373,18 +373,15 @@ const ShowOrganizations = (props) => {
             <Tabs defaultActiveKey='activated' id="uncontrolled-tab-example">
                 <Tab eventKey="activated" title={"Bekräftade (" + activated.length + ")"}>
                     <ShowActivated/>
-                    {/*<Table*/}
-                    {/*    dataSource={activated} onChange={onChange} columns={columns}/>*/}
+
                 </Tab>
                 <Tab eventKey="not activated" title={"Inte bekräftade (" + notActivated.length + ")"}>
                     <ShowNotActivated/>
-                    {/*<Table*/}
-                    {/*    dataSource={notActivated} onChange={onChange} columns={columns}/>*/}
+
                 </Tab>
                 <Tab eventKey="declined" title={"Blev neckat (" + declined.length + ")"}>
                     <ShowDeclined/>
-                    {/*<Table*/}
-                    {/*    dataSource={notActivated} onChange={onChange} columns={columns}/>*/}
+
                 </Tab>
                 <Tab eventKey="accept" title={"To accept (" + props.accept.length + ")"}>
                     <Container>
@@ -393,8 +390,6 @@ const ShowOrganizations = (props) => {
                         </Row>
                     </Container>
 
-                    {/*<Table*/}
-                    {/*    dataSource={notActivated} onChange={onChange} columns={columns}/>*/}
                 </Tab>
             </Tabs>
 

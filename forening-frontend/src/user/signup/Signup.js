@@ -360,7 +360,6 @@ class Signup extends Component {
             this.state.username.validateStatus === 'success' &&
             this.state.email.validateStatus === 'success' &&
             this.state.password.validateStatus === 'success'
-            // && this.state.address.validateStatus === 'success'
         );
     }
     handleOnFileChange = (e) => {
@@ -423,11 +422,7 @@ class Signup extends Component {
                             </Form.Check>
                         </Form.Group>
                         <Form.Group controlId="formBasicCheckbox">
-                            {/*<Form.Check*/}
-                            {/*    required*/}
-                            {/*    label="Agree to terms and conditions"*/}
-                            {/*    feedback="You must agree before submitting."*/}
-                            {/*/>*/}
+
                         </Form.Group>
                         <Button variant="secondary" type="submit">Register</Button>
                         <Button className="signup-form-button" variant={"secondary"} onClick={this.addNewOrganization}>Lägga

@@ -41,10 +41,6 @@ const OrganizationInput = (props) => {
                                         className={"orgNumber"}
                                         onChange={props.handleChange}
                                     />
-
-                                    {/*<Form.Control.Feedback type="invalid">*/}
-                                    {/*    Skriva in organisationsnummer*/}
-                                    {/*</Form.Control.Feedback>*/}
                                     {props.errors.orgNumber.length > 0 &&
                                     <span className='error'>{props.errors.orgNumber}</span>}
                                 </Form.Group>
@@ -90,7 +86,6 @@ const OrganizationInput = (props) => {
                                         id="protokol"
                                         name="protokol"
                                         onChange={props.handleOnFileChange}
-                                        // custom
                                     />
                                 </Form.Group>
 

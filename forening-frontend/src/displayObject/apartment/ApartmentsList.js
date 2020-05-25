@@ -188,8 +188,7 @@ const ApartmentsList = (props) => {
         <div>
             <NewApartment {...props} update={props.update}/>
             <EditableTable/>
-            {/*<Table*/}
-            {/*    dataSource={dataSource} onChange={onChange} columns={columns} />;*/}
+
 
         </div>
     );

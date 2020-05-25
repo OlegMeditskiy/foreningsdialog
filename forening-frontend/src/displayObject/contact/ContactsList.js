@@ -85,7 +85,6 @@ const ContactsList = (props) => {
                             message: 'Föreningsdialog App',
                             description: "Du har uppdaterat kontakt",
                         });
-                        // props.update();
                     }).catch(() => {
                     notification.error({
                         message: 'Föreningsdialog App',

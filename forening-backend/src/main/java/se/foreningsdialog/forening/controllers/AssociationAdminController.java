@@ -91,7 +91,7 @@ public class AssociationAdminController {
 
     @PostMapping("/createOrganizations")
     public ResponseEntity<?> createOrganizations(@Valid @RequestBody NewOrganisationsRequest signUpRequest) {
-        //Creating new Organizations
+
         for (Organization organization : signUpRequest.getAssociation().getOrganizations()) {
             organization.setCreatedBy(signUpRequest.getUserId());
             organizationRepository.save(organization);
